@@ -1,1 +1,102 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Пикуко 3 — тесты и игры от пользователей</title>
+<style>
+  :root{
+    --red:#d0162c;
+    --yellow:#f4e238;
+    --white:#ffffff;
+    --text:#1d1d1d;
+    --muted:#6b6b6b;
+    --card-border:#eeeeee;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:var(--white);color:var(--text)}
+  a{text-decoration:none;color:inherit}
 
+  header{display:flex;align-items:center;justify-content:space-between;
+    padding:14px 24px;background:var(--white);border-bottom:4px solid var(--yellow);
+    position:sticky;top:0}
+  .logo{font-size:26px;font-weight:800;color:var(--red);letter-spacing:.5px}
+  .logo span{display:inline-block;background:var(--yellow);color:var(--red);
+    border-radius:10px;padding:0 8px;margin-left:4px}
+  nav{display:flex;gap:10px}
+  .btn{display:inline-block;font-weight:700;font-size:15px;padding:10px 18px;border-radius:12px;cursor:pointer;border:none}
+  .btn-create{background:var(--red);color:var(--white)}
+  .btn-create:hover{background:#a81223}
+  .btn-profile{background:var(--yellow);color:var(--red)}
+  .btn-profile:hover{background:#e0cb1f}
+
+  .hero{text-align:center;padding:48px 20px 32px;background:linear-gradient(180deg,var(--yellow) 0%,var(--white) 100%)}
+  .hero h1{font-size:34px;color:var(--red);margin-bottom:10px}
+  .hero p{color:var(--muted);font-size:17px}
+
+  .tests{padding:24px;max-width:1100px;margin:0 auto}
+  .tests h2{color:var(--red);margin-bottom:16px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px}
+  .card{border:2px solid var(--card-border);border-radius:16px;padding:16px;background:var(--white);
+    transition:transform .15s,border-color .15s}
+  .card:hover{transform:translateY(-4px);border-color:var(--yellow)}
+  .card .ava{width:100%;height:110px;border-radius:12px;background:var(--yellow);
+    display:flex;align-items:center;justify-content:center;font-size:52px;margin-bottom:12px}
+  .card h3{font-size:17px;margin-bottom:6px}
+  .card .author{color:var(--muted);font-size:14px}
+
+  footer{text-align:center;color:var(--muted);padding:24px;font-size:14px;border-top:4px solid var(--yellow);margin-top:32px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Пикуко<span>3</span></div>
+  <nav>
+    <a href="#" class="btn btn-create" id="createBtn">Создать</a>
+    <a href="#" class="btn btn-profile" id="profileBtn">Профиль</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <h1>Тесты и игры, созданные людьми</h1>
+  <p>Проходи, оценивай — или создай свой!</p>
+</section>
+
+<section class="tests">
+  <h2>Тесты пользователей</h2>
+  <div class="grid" id="testGrid"></div>
+</section>
+
+<footer>Пикуко 3 — пока что сайт для друзей 💛</footer>
+
+<script>
+  // Временные тесты-заглушки, пока нет базы данных
+  const tests = [
+    {ava:'🦸', title:'Какой ты супергерой?', author:'Даня'},
+    {ava:'🍕', title:'Какая пицца ты сегодня?', author:'Марина'},
+    {ava:'🐉', title:'Какой дракон тебя охраняет?', author:'Тимур'},
+    {ava:'🎮', title:'Какой ты игрок?', author:'Кирилл'}
+  ];
+
+  const grid = document.getElementById('testGrid');
+  tests.forEach(t => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `<div class="ava">${t.ava}</div><h3>${t.title}</h3><div class="author">от ${t.author}</div>`;
+    grid.appendChild(card);
+  });
+
+  // Заглушки для кнопок (позже заменим на настоящие страницы)
+  document.getElementById('createBtn').onclick = e => {
+    e.preventDefault();
+    alert('Сначала создайте аккаунт! (Эта функция появится на следующем этапе)');
+  };
+  document.getElementById('profileBtn').onclick = e => {
+    e.preventDefault();
+    alert('Страница профиля появится на следующем этапе');
+  };
+</script>
+
+</body>
+</html>
