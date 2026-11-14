@@ -20,7 +20,7 @@
   header{display:flex;align-items:center;justify-content:space-between;
     padding:14px 24px;background:var(--white);border-bottom:4px solid var(--yellow);
     position:sticky;top:0;z-index:10}
-  .logo{font-size:26px;font-weight:800;color:var(--red);letter-spacing:.5px}
+  .logo{font-size:26px;font-weight:800;color:var(--red);letter-spacing:.5px;cursor:pointer}
   .logo span{display:inline-block;background:var(--yellow);color:var(--red);
     border-radius:10px;padding:0 8px;margin-left:4px}
   nav{display:flex;gap:10px;align-items:center}
@@ -29,9 +29,12 @@
   .btn-create:hover{background:#a81223}
   .btn-profile{background:var(--yellow);color:var(--red)}
   .btn-profile:hover{background:#e0cb1f}
-  .user-chip{display:flex;align-items:center;gap:8px;background:var(--yellow);border-radius:12px;padding:6px 12px;font-weight:700;color:var(--red)}
-  .user-chip .mini{font-size:12px;font-weight:600;cursor:pointer;color:var(--muted);margin-left:4px}
-  .user-chip .mini:hover{color:var(--red)}
+  .user-chip{display:flex;align-items:center;gap:8px;background:var(--yellow);border-radius:12px;padding:6px 12px;font-weight:700;color:var(--red);cursor:pointer}
+  .user-chip:hover{background:#e0cb1f}
+
+  /* Стили для картинок-аватарок */
+  .img-ava{width:32px;height:32px;border-radius:50%;object-fit:cover;background:#fff;}
+  .big-img-ava{width:120px;height:120px;border-radius:50%;object-fit:cover;background:#fff;border:4px solid var(--yellow);}
 
   .hero{text-align:center;padding:48px 20px 32px;background:linear-gradient(180deg,var(--yellow) 0%,var(--white) 100%)}
   .hero h1{font-size:34px;color:var(--red);margin-bottom:10px}
@@ -41,19 +44,30 @@
   .tests h2{color:var(--red);margin-bottom:16px}
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px}
   .card{border:2px solid var(--card-border);border-radius:16px;padding:16px;background:var(--white);
-    transition:transform .15s,border-color .15s}
+    transition:transform .15s,border-color .15s;display:flex;flex-direction:column;align-items:center;text-align:center}
   .card:hover{transform:translateY(-4px);border-color:var(--yellow)}
-  .card .ava{width:100%;height:110px;border-radius:12px;background:var(--yellow);
-    display:flex;align-items:center;justify-content:center;font-size:52px;margin-bottom:12px}
+  
+  .card .test-icon{width:100%;height:110px;border-radius:12px;background:var(--yellow);
+    display:flex;align-items:center;justify-content:center;font-size:52px;margin-bottom:12px;overflow:hidden}
+  .card .test-icon img{width:100%;height:100%;object-fit:cover}
+  
   .card h3{font-size:17px;margin-bottom:6px}
   .card .author{color:var(--muted);font-size:14px}
 
+  /* Стили для страницы профиля */
+  #profilePage{display:none;padding:40px 24px;max-width:800px;margin:0 auto}
+  .profile-header{display:flex;align-items:center;gap:24px;margin-bottom:32px;background:#fafafa;padding:24px;border-radius:20px;border:2px solid var(--card-border)}
+  .profile-info h2{font-size:28px;color:var(--red);margin-bottom:8px}
+  .profile-info p{color:var(--muted);font-size:16px;margin-bottom:16px;font-style:italic}
+  .btn-settings{background:#eee;color:var(--text);font-size:14px;padding:8px 16px}
+  .btn-settings:hover{background:#ddd}
+
   footer{text-align:center;color:var(--muted);padding:24px;font-size:14px;border-top:4px solid var(--yellow);margin-top:32px}
 
-  /* Модальное окно */
+  /* Модальные окна */
   .modal-back{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;z-index:100}
   .modal-back.open{display:flex}
-  .modal{background:var(--white);border-radius:18px;padding:24px;width:92%;max-width:400px;border-top:6px solid var(--red)}
+  .modal{background:var(--white);border-radius:18px;padding:24px;width:92%;max-width:400px;border-top:6px solid var(--red);max-height:90vh;overflow-y:auto}
   .modal h2{color:var(--red);margin-bottom:4px}
   .modal .sub{color:var(--muted);font-size:14px;margin-bottom:14px}
   .tabs{display:flex;gap:8px;margin-bottom:16px}
@@ -63,10 +77,8 @@
   .field label{display:block;font-size:13px;font-weight:700;color:var(--muted);margin-bottom:4px}
   .field input{width:100%;padding:11px 12px;border:2px solid #e2e2e2;border-radius:10px;font-size:15px}
   .field input:focus{outline:none;border-color:var(--red)}
-  .ava-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;margin-bottom:12px}
-  .ava-opt{font-size:24px;text-align:center;padding:6px 0;border-radius:10px;cursor:pointer;border:2px solid transparent}
-  .ava-opt.sel{border-color:var(--red);background:#fff3f4}
-  .modal .btn{width:100%;font-size:16px;padding:12px}
+  
+  .modal .btn{width:100%;font-size:16px;padding:12px;margin-top:8px}
   .msg{font-size:14px;margin-top:10px;min-height:18px}
   .msg.err{color:var(--red)}
   .msg.ok{color:#1a9e3f}
@@ -77,21 +89,37 @@
 <body>
 
 <header>
-  <div class="logo">Пикуко<span>3</span></div>
-  <nav id="navBox">
-    <a href="#" class="btn btn-create" id="createBtn">Создать</a>
-  </nav>
+  <div class="logo" id="logoBtn">Пикуко<span>3</span></div>
+  <nav id="navBox"></nav>
 </header>
 
-<section class="hero">
-  <h1>Тесты и игры, созданные людьми</h1>
-  <p>Проходи, оценивай — или создай свой!</p>
-</section>
+<!-- Главная страница -->
+<div id="mainPage">
+  <section class="hero">
+    <h1>Тесты и игры, созданные людьми</h1>
+    <p>Проходи, оценивай — или создай свой!</p>
+  </section>
 
-<section class="tests">
-  <h2>Тесты пользователей</h2>
-  <div class="grid" id="testGrid"></div>
-</section>
+  <section class="tests">
+    <h2>Тесты пользователей</h2>
+    <div class="grid" id="testGrid"></div>
+  </section>
+</div>
+
+<!-- Страница профиля -->
+<div id="profilePage">
+  <div class="profile-header">
+    <img id="profBigAva" class="big-img-ava" src="" alt="Аватар">
+    <div class="profile-info">
+      <h2 id="profLogin">Логин</h2>
+      <p id="profStatus">Статус не установлен</p>
+      <button class="btn btn-settings" id="openSettingsBtn">⚙️ Настройки профиля</button>
+    </div>
+  </div>
+  
+  <h2 style="color:var(--red);margin-bottom:16px;">Мои тесты</h2>
+  <div class="grid" id="myTestGrid"></div>
+</div>
 
 <footer>Пикуко 3 — пока что сайт для друзей 💛</footer>
 
@@ -113,65 +141,190 @@
       <label>Пароль</label>
       <input id="passInput" type="password" maxlength="60" placeholder="минимум 6 символов">
     </div>
+    
+    <!-- Выбор файла при регистрации -->
     <div id="avaBlock" style="display:none">
-      <div class="field"><label>Аватарка</label></div>
-      <div class="ava-grid" id="avaGrid"></div>
+      <div class="field">
+        <label>Аватарка (выберите файл)</label>
+        <input type="file" id="regAvaFile" accept="image/*" style="padding:8px; border:2px solid #e2e2e2; border-radius:10px; width:100%;">
+      </div>
     </div>
+    
     <button class="btn btn-create" id="authAction">Войти</button>
     <div class="msg" id="authMsg"></div>
   </div>
 </div>
 
+<!-- Окно настроек профиля -->
+<div class="modal-back" id="settingsBack">
+  <div class="modal">
+    <span class="close-x" id="settingsClose">&times;</span>
+    <h2>Настройки</h2>
+    <div class="sub">Измените аватарку и статус</div>
+    
+    <div class="field">
+      <label>Новая аватарка (выберите файл)</label>
+      <input type="file" id="settingsAvaFile" accept="image/*" style="padding:8px; border:2px solid #e2e2e2; border-radius:10px; width:100%;">
+    </div>
+    
+    <div class="field">
+      <label>Статус</label>
+      <input id="settingsStatus" maxlength="50" placeholder="например, Люблю пиццу 🍕">
+    </div>
+    
+    <button class="btn btn-create" id="saveSettingsBtn">Сохранить</button>
+    <div class="msg" id="settingsMsg"></div>
+  </div>
+</div>
+
+<!-- Окно создания теста -->
+<div class="modal-back" id="createBack">
+  <div class="modal">
+    <span class="close-x" id="createClose">&times;</span>
+    <h2>Создать тест</h2>
+    <div class="sub">Придумай название и загрузи картинку</div>
+    <div class="field">
+      <label>Название теста</label>
+      <input id="testTitle" maxlength="50" placeholder="например, Какой ты кот?">
+    </div>
+    <div class="field">
+      <label>Картинка для теста (выберите файл)</label>
+      <input type="file" id="testAvaFile" accept="image/*" style="padding:8px; border:2px solid #e2e2e2; border-radius:10px; width:100%;">
+    </div>
+    <button class="btn btn-create" id="testAction">Создать тест</button>
+    <div class="msg" id="testMsg"></div>
+  </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  // ====== ВСТАВЬТЕ СВОИ ДАННЫЕ ИЗ SUPABASE (Settings -> API) ======
   const SUPABASE_URL = "https://lniuacahjlwcwoyxqntz.supabase.co";
   const SUPABASE_KEY = "sb_publishable_pa1-ktdc8x-P4T3pIJzBMg_jWTnMj9_";
-  // ==============================================================
   const FAKE_DOMAIN = "@pikuko3.local";
   const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  const avatars = ['🙂','😎','🦊','🐱','🐶','🐼','🦉','🐸','🦁','🐯','🦄','🐙','🍕','🎮','🚀','🌵'];
-  let pickedAvatar = '🙂';
-
-  // ---- Временные тесты-заглушки (настоящие появятся в редакторе) ----
-  const tests = [
-    {ava:'🦸', title:'Какой ты супергерой?', author:'Пример'},
-    {ava:'🍕', title:'Какая пицца ты сегодня?', author:'Пример'},
-    {ava:'🐉', title:'Какой дракон тебя охраняет?', author:'Пример'}
-  ];
-  const grid = document.getElementById('testGrid');
-  tests.forEach(t => {
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.innerHTML = '<div class="ava">' + t.ava + '</div><h3>' + t.title + '</h3><div class="author">от ' + t.author + '</div>';
-    grid.appendChild(card);
-  });
-
-  // ---- Состояние аккаунта ----
+  const DEFAULT_AVA = "https://ui-avatars.com/api/?background=f4e238&color=d0162c&bold=true&name=";
   let currentUser = null;
   let currentProfile = null;
 
+  const mainPage = document.getElementById('mainPage');
+  const profilePage = document.getElementById('profilePage');
+
+  function getAvatarUrl(url, loginName) {
+    if (url && url.startsWith('http')) return url;
+    return DEFAULT_AVA + encodeURIComponent(loginName || 'User');
+  }
+
+  // --- Функция загрузки картинки в Supabase Storage ---
+  async function uploadImage(file) {
+    if (!file) return null;
+    
+    // Генерируем уникальное имя файла
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+    
+    // Загружаем в бакет 'avatars'
+    const { data, error } = await sb.storage
+      .from('avatars')
+      .upload(fileName, file);
+
+    if (error) throw error;
+
+    // Получаем публичную ссылку
+    const { data: { publicUrl } } = sb.storage
+      .from('avatars')
+      .getPublicUrl(fileName);
+
+    return publicUrl;
+  }
+
+  // --- Загрузка всех тестов на главную ---
+  async function loadAllTests() {
+    const grid = document.getElementById('testGrid');
+    grid.innerHTML = '<p style="color:var(--muted)">Загрузка...</p>';
+    const { data, error } = await sb.from('tests').select(`title, avatar, profiles(login)`).order('created_at', { ascending: false });
+
+    grid.innerHTML = '';
+    if (error || !data) { grid.innerHTML = '<p style="color:var(--red)">Ошибка загрузки</p>'; return; }
+    if (data.length === 0) { grid.innerHTML = '<p style="color:var(--muted)">Пока нет тестов. Создайте первый!</p>'; return; }
+
+    data.forEach(t => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      const authorName = t.profiles ? t.profiles.login : 'Неизвестный';
+      
+      let iconHtml = '';
+      if (t.avatar && t.avatar.startsWith('http')) {
+        iconHtml = `<img src="${t.avatar}" alt="icon">`;
+      } else {
+        iconHtml = `<span>${t.avatar || '🦸'}</span>`; 
+      }
+
+      card.innerHTML = `
+        <div class="test-icon">${iconHtml}</div>
+        <h3>${escapeHtml(t.title)}</h3>
+        <div class="author">от ${escapeHtml(authorName)}</div>
+      `;
+      grid.appendChild(card);
+    });
+  }
+
+  // --- Загрузка ЛИЧНЫХ тестов (для профиля) ---
+  async function loadMyTests() {
+    if (!currentUser) return;
+    const grid = document.getElementById('myTestGrid');
+    grid.innerHTML = '<p style="color:var(--muted)">Загрузка...</p>';
+    const { data, error } = await sb.from('tests').select('title, avatar').eq('author_id', currentUser.id).order('created_at', { ascending: false });
+
+    grid.innerHTML = '';
+    if (error) { grid.innerHTML = '<p style="color:var(--red)">Ошибка</p>'; return; }
+    if (data.length === 0) { grid.innerHTML = '<p style="color:var(--muted)">Вы ещё не создали ни одного теста.</p>'; return; }
+
+    data.forEach(t => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      
+      let iconHtml = '';
+      if (t.avatar && t.avatar.startsWith('http')) {
+        iconHtml = `<img src="${t.avatar}" alt="icon">`;
+      } else {
+        iconHtml = `<span>${t.avatar || '🦸'}</span>`; 
+      }
+
+      card.innerHTML = `<div class="test-icon">${iconHtml}</div><h3>${escapeHtml(t.title)}</h3>`;
+      grid.appendChild(card);
+    });
+  }
+
+  // --- Навигация ---
   function renderNav() {
     const nav = document.getElementById('navBox');
-    nav.innerHTML = '<a href="#" class="btn btn-create" id="createBtn">Создать</a>';
+    nav.innerHTML = '';
+    
+    const createBtn = document.createElement('a');
+    createBtn.href = '#'; createBtn.className = 'btn btn-create'; createBtn.textContent = 'Создать';
+    createBtn.onclick = (e) => {
+      e.preventDefault();
+      if (currentUser) { openCreate(); }
+      else { openAuth('Сначала войдите в аккаунт!'); }
+    };
+    nav.appendChild(createBtn);
+
     if (currentUser && currentProfile) {
       const chip = document.createElement('div');
       chip.className = 'user-chip';
-      chip.innerHTML = '<span>' + currentProfile.avatar + '</span><span>' + escapeHtml(currentProfile.login) + '</span><span class="mini" id="logoutBtn">выйти</span>';
+      chip.innerHTML = `
+        <img src="${getAvatarUrl(currentProfile.avatar, currentProfile.login)}" class="img-ava" alt="ava">
+        <span>${escapeHtml(currentProfile.login)}</span>
+      `;
+      chip.onclick = showProfilePage;
       nav.appendChild(chip);
-      document.getElementById('logoutBtn').onclick = async () => { await sb.auth.signOut(); };
     } else {
       const btn = document.createElement('a');
-      btn.href = '#'; btn.className = 'btn btn-profile'; btn.id = 'profileBtn'; btn.textContent = 'Профиль';
+      btn.href = '#'; btn.className = 'btn btn-profile'; btn.textContent = 'Профиль';
+      btn.onclick = (e) => { e.preventDefault(); openAuth('Войдите в аккаунт'); };
       nav.appendChild(btn);
-      btn.onclick = e => { e.preventDefault(); openAuth('Войдите в аккаунт'); };
     }
-    document.getElementById('createBtn').onclick = e => {
-      e.preventDefault();
-      if (currentUser) { alert('Редактор тестов появится на следующем этапе'); }
-      else { openAuth('Сначала создайте аккаунт!'); }
-    };
   }
 
   function escapeHtml(s){return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
@@ -184,29 +337,31 @@
 
   sb.auth.onAuthStateChange(async (event, session) => {
     if (session) { currentUser = session.user; await loadProfile(session.user); }
-    else { currentUser = null; currentProfile = null; renderNav(); }
+    else { currentUser = null; currentProfile = null; renderNav(); showMainPage(); }
   });
 
-  // ---- Окно входа/регистрации ----
+  function showMainPage() {
+    mainPage.style.display = 'block';
+    profilePage.style.display = 'none';
+    loadAllTests();
+  }
+  function showProfilePage() {
+    mainPage.style.display = 'none';
+    profilePage.style.display = 'block';
+    document.getElementById('profBigAva').src = getAvatarUrl(currentProfile.avatar, currentProfile.login);
+    document.getElementById('profLogin').textContent = currentProfile.login;
+    document.getElementById('profStatus').textContent = currentProfile.status || 'Статус не установлен';
+    loadMyTests();
+  }
+  document.getElementById('logoBtn').onclick = showMainPage;
+
+  // --- Окно входа/регистрации ---
   const back = document.getElementById('authBack');
   const tabLogin = document.getElementById('tabLogin');
   const tabReg = document.getElementById('tabReg');
   const avaBlock = document.getElementById('avaBlock');
-  const avaGrid = document.getElementById('avaGrid');
   const msg = document.getElementById('authMsg');
   let mode = 'login';
-
-  avatars.forEach(a => {
-    const d = document.createElement('div');
-    d.className = 'ava-opt' + (a === pickedAvatar ? ' sel' : '');
-    d.textContent = a;
-    d.onclick = () => {
-      pickedAvatar = a;
-      document.querySelectorAll('.ava-opt').forEach(x => x.classList.remove('sel'));
-      d.classList.add('sel');
-    };
-    avaGrid.appendChild(d);
-  });
 
   function openAuth(note) {
     msg.textContent = ''; msg.className = 'msg';
@@ -231,12 +386,14 @@
   document.getElementById('authAction').onclick = async () => {
     const login = document.getElementById('loginInput').value.trim();
     const pass = document.getElementById('passInput').value;
+    const file = document.getElementById('regAvaFile').files[0]; // Получаем файл
     msg.className = 'msg';
 
     if (!/^[a-zA-Z0-9_]{3,20}$/.test(login)) { msg.classList.add('err'); msg.textContent = 'Логин: 3-20 символов, только буквы, цифры и _'; return; }
     if (pass.length < 6) { msg.classList.add('err'); msg.textContent = 'Пароль должен быть не короче 6 символов'; return; }
 
     const email = login.toLowerCase() + FAKE_DOMAIN;
+    
     if (mode === 'login') {
       const { error } = await sb.auth.signInWithPassword({ email, password: pass });
       if (error) { msg.classList.add('err'); msg.textContent = 'Неверный логин или пароль'; return; }
@@ -244,11 +401,27 @@
     } else {
       const { data: exists } = await sb.from('profiles').select('login').eq('login', login).maybeSingle();
       if (exists) { msg.classList.add('err'); msg.textContent = 'Такой логин уже занят'; return; }
+      
+      msg.textContent = 'Создаём аккаунт...';
       const { data, error } = await sb.auth.signUp({ email, password: pass });
       if (error) { msg.classList.add('err'); msg.textContent = 'Ошибка: ' + error.message; return; }
+      
       if (data.user) {
-        const { error: perr } = await sb.from('profiles').insert({ id: data.user.id, login, avatar: pickedAvatar });
+        let avaUrl = ''; // Если файл не выбран, будет пустая строка (покажется дефолтная ава)
+        
+        // Если пользователь выбрал файл — грузим его
+        if (file) {
+          try {
+            msg.textContent = 'Загрузка аватарки...';
+            avaUrl = await uploadImage(file);
+          } catch (err) {
+            msg.classList.add('err'); msg.textContent = 'Ошибка загрузки авы: ' + err.message; return;
+          }
+        }
+
+        const { error: perr } = await sb.from('profiles').insert({ id: data.user.id, login, avatar: avaUrl });
         if (perr) { msg.classList.add('err'); msg.textContent = 'Ошибка сохранения профиля'; return; }
+        
         msg.classList.add('ok'); msg.textContent = 'Аккаунт создан! Входим...';
         await sb.auth.signInWithPassword({ email, password: pass });
         back.classList.remove('open');
@@ -257,11 +430,121 @@
     document.getElementById('passInput').value = '';
   };
 
-  // Проверка сессии при загрузке
+  // --- Окно настроек профиля ---
+  const settingsBack = document.getElementById('settingsBack');
+
+  document.getElementById('openSettingsBtn').onclick = () => {
+    document.getElementById('settingsAvaFile').value = ''; // Очищаем выбор файла
+    document.getElementById('settingsStatus').value = currentProfile.status || '';
+    document.getElementById('settingsMsg').textContent = '';
+    settingsBack.classList.add('open');
+  };
+
+  document.getElementById('settingsClose').onclick = () => settingsBack.classList.remove('open');
+  settingsBack.onclick = e => { if (e.target === settingsBack) settingsBack.classList.remove('open'); };
+
+  document.getElementById('saveSettingsBtn').onclick = async () => {
+    const file = document.getElementById('settingsAvaFile').files[0];
+    const newStatus = document.getElementById('settingsStatus').value.trim();
+    const sMsg = document.getElementById('settingsMsg');
+    
+    sMsg.className = 'msg';
+    sMsg.textContent = 'Сохранение...';
+
+    let newAvaUrl = currentProfile.avatar; // По умолчанию старая ава
+
+    if (file) {
+      try {
+        sMsg.textContent = 'Загрузка аватарки...';
+        newAvaUrl = await uploadImage(file);
+      } catch (err) {
+        sMsg.classList.add('err'); sMsg.textContent = 'Ошибка загрузки: ' + err.message;
+        return;
+      }
+    }
+
+    const { error } = await sb.from('profiles').update({
+      avatar: newAvaUrl,
+      status: newStatus
+    }).eq('id', currentUser.id);
+
+    if (error) {
+      sMsg.classList.add('err'); sMsg.textContent = 'Ошибка: ' + error.message;
+    } else {
+      sMsg.classList.add('ok'); sMsg.textContent = 'Сохранено!';
+      currentProfile.avatar = newAvaUrl;
+      currentProfile.status = newStatus;
+      renderNav();
+      showProfilePage();
+      setTimeout(() => settingsBack.classList.remove('open'), 800);
+    }
+  };
+
+  // --- Окно создания теста ---
+  const createBack = document.getElementById('createBack');
+
+  function openCreate() {
+    document.getElementById('testMsg').textContent = '';
+    document.getElementById('testTitle').value = '';
+    document.getElementById('testAvaFile').value = '';
+    createBack.classList.add('open');
+  }
+  document.getElementById('createClose').onclick = () => createBack.classList.remove('open');
+  createBack.onclick = e => { if (e.target === createBack) createBack.classList.remove('open'); };
+
+  document.getElementById('testAction').onclick = async () => {
+    const title = document.getElementById('testTitle').value.trim();
+    const file = document.getElementById('testAvaFile').files[0];
+    const tMsg = document.getElementById('testMsg');
+    
+    tMsg.className = 'msg';
+
+    if (title.length < 3) {
+      tMsg.classList.add('err'); tMsg.textContent = 'Название должно быть не короче 3 символов';
+      return;
+    }
+
+    let finalAva = '🦸'; // Заглушка
+    if (file) {
+      tMsg.textContent = 'Загрузка картинки...';
+      try {
+        finalAva = await uploadImage(file);
+      } catch (err) {
+        tMsg.classList.add('err'); tMsg.textContent = 'Ошибка: ' + err.message;
+        return;
+      }
+    }
+
+    tMsg.textContent = 'Создаём...';
+    const { error } = await sb.from('tests').insert({
+      title: title,
+      avatar: finalAva,
+      author_id: currentUser.id
+    });
+
+    if (error) {
+      tMsg.classList.add('err'); tMsg.textContent = 'Ошибка: ' + error.message;
+    } else {
+      tMsg.classList.add('ok'); tMsg.textContent = 'Тест создан!';
+      setTimeout(() => {
+        createBack.classList.remove('open');
+        if (profilePage.style.display === 'block') loadMyTests();
+        else loadAllTests();
+      }, 800);
+    }
+  };
+
+  // --- Инициализация ---
   (async () => {
     const { data } = await sb.auth.getSession();
-    if (data.session) { currentUser = data.session.user; await loadProfile(data.session.user); }
-    else renderNav();
+    if (data.session) { 
+      currentUser = data.session.user; 
+      await loadProfile(data.session.user); 
+      showMainPage();
+    } else {
+      renderNav();
+      showMainPage();
+    }
   })();
 </script>
 
