@@ -32,7 +32,6 @@
   .user-chip{display:flex;align-items:center;gap:8px;background:var(--yellow);border-radius:12px;padding:6px 12px;font-weight:700;color:var(--red);cursor:pointer}
   .user-chip:hover{background:#e0cb1f}
 
-  /* Стили для картинок-аватарок */
   .img-ava{width:32px;height:32px;border-radius:50%;object-fit:cover;background:#fff;}
   .big-img-ava{width:120px;height:120px;border-radius:50%;object-fit:cover;background:#fff;border:4px solid var(--yellow);}
 
@@ -44,7 +43,7 @@
   .tests h2{color:var(--red);margin-bottom:16px}
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px}
   .card{border:2px solid var(--card-border);border-radius:16px;padding:16px;background:var(--white);
-    transition:transform .15s,border-color .15s;display:flex;flex-direction:column;align-items:center;text-align:center}
+    transition:transform .15s,border-color .15s;display:flex;flex-direction:column;align-items:center;text-align:center;cursor:pointer}
   .card:hover{transform:translateY(-4px);border-color:var(--yellow)}
   
   .card .test-icon{width:100%;height:110px;border-radius:12px;background:var(--yellow);
@@ -54,13 +53,20 @@
   .card h3{font-size:17px;margin-bottom:6px}
   .card .author{color:var(--muted);font-size:14px}
 
-  /* Стили для страницы профиля */
   #profilePage{display:none;padding:40px 24px;max-width:800px;margin:0 auto}
   .profile-header{display:flex;align-items:center;gap:24px;margin-bottom:32px;background:#fafafa;padding:24px;border-radius:20px;border:2px solid var(--card-border)}
   .profile-info h2{font-size:28px;color:var(--red);margin-bottom:8px}
   .profile-info p{color:var(--muted);font-size:16px;margin-bottom:16px;font-style:italic}
   .btn-settings{background:#eee;color:var(--text);font-size:14px;padding:8px 16px}
   .btn-settings:hover{background:#ddd}
+
+  /* --- Стили редактора --- */
+  #editorPage{display:none;padding:40px 24px;max-width:800px;margin:0 auto}
+  .editor-step{background:#fafafa;border:2px solid var(--card-border);border-radius:16px;padding:24px;margin-bottom:24px}
+  .editor-step h3{color:var(--red);margin-bottom:16px}
+  .result-item{display:flex;gap:16px;margin-bottom:16px;align-items:center;background:#fff;padding:12px;border-radius:12px;border:1px solid #eee}
+  .result-item img{width:60px;height:60px;border-radius:8px;object-fit:cover}
+  .question-item{background:#fff;padding:16px;border-radius:12px;border:1px solid #eee;margin-bottom:16px}
 
   footer{text-align:center;color:var(--muted);padding:24px;font-size:14px;border-top:4px solid var(--yellow);margin-top:32px}
 
@@ -75,8 +81,8 @@
   .tab.active{background:var(--yellow);color:var(--red)}
   .field{margin-bottom:12px}
   .field label{display:block;font-size:13px;font-weight:700;color:var(--muted);margin-bottom:4px}
-  .field input{width:100%;padding:11px 12px;border:2px solid #e2e2e2;border-radius:10px;font-size:15px}
-  .field input:focus{outline:none;border-color:var(--red)}
+  .field input, .field textarea, .field select{width:100%;padding:11px 12px;border:2px solid #e2e2e2;border-radius:10px;font-size:15px;font-family:inherit}
+  .field input:focus, .field textarea:focus{outline:none;border-color:var(--red)}
   
   .modal .btn{width:100%;font-size:16px;padding:12px;margin-top:8px}
   .msg{font-size:14px;margin-top:10px;min-height:18px}
@@ -99,7 +105,6 @@
     <h1>Тесты и игры, созданные людьми</h1>
     <p>Проходи, оценивай — или создай свой!</p>
   </section>
-
   <section class="tests">
     <h2>Тесты пользователей</h2>
     <div class="grid" id="testGrid"></div>
@@ -116,9 +121,32 @@
       <button class="btn btn-settings" id="openSettingsBtn">⚙️ Настройки профиля</button>
     </div>
   </div>
-  
   <h2 style="color:var(--red);margin-bottom:16px;">Мои тесты</h2>
   <div class="grid" id="myTestGrid"></div>
+</div>
+
+<!-- Редактор теста -->
+<div id="editorPage">
+  <h2 style="color:var(--red);margin-bottom:8px;">Редактор теста</h2>
+  <p id="editorTestTitle" style="color:var(--muted);margin-bottom:24px;font-size:18px;">Название теста</p>
+  
+  <div class="editor-step">
+    <h3>1. Результаты теста</h3>
+    <p style="font-size:14px;color:var(--muted);margin-bottom:16px;">Добавьте исходы (например, "Ты кот", "Ты собака"). Каждому результату нужна картинка.</p>
+    <div id="resultsList"></div>
+    <button class="btn btn-settings" id="addResultBtn">+ Добавить результат</button>
+  </div>
+
+  <div class="editor-step">
+    <h3>2. Вопросы</h3>
+    <p style="font-size:14px;color:var(--muted);margin-bottom:16px;">Добавьте вопросы. Каждый вариант ответа ведёт к одному из результатов.</p>
+    <div id="questionsList"></div>
+    <button class="btn btn-settings" id="addQuestionBtn" style="margin-bottom:16px;">+ Добавить вопрос</button>
+  </div>
+
+  <button class="btn btn-create" id="saveTestBtn" style="font-size:18px;padding:16px;">Сохранить и опубликовать тест</button>
+  <div class="msg" id="editorMsg"></div>
+  <button class="btn btn-settings" id="cancelEditorBtn" style="margin-top:12px;background:transparent;color:var(--muted);border:none;">Отмена</button>
 </div>
 
 <footer>Пикуко 3 — пока что сайт для друзей 💛</footer>
@@ -133,23 +161,11 @@
       <div class="tab active" id="tabLogin">Вход</div>
       <div class="tab" id="tabReg">Регистрация</div>
     </div>
-    <div class="field">
-      <label>Логин</label>
-      <input id="loginInput" maxlength="20" placeholder="например, danila_228">
-    </div>
-    <div class="field">
-      <label>Пароль</label>
-      <input id="passInput" type="password" maxlength="60" placeholder="минимум 6 символов">
-    </div>
-    
-    <!-- Выбор файла при регистрации -->
+    <div class="field"><label>Логин</label><input id="loginInput" maxlength="20" placeholder="например, danila_228"></div>
+    <div class="field"><label>Пароль</label><input id="passInput" type="password" maxlength="60" placeholder="минимум 6 символов"></div>
     <div id="avaBlock" style="display:none">
-      <div class="field">
-        <label>Аватарка (выберите файл)</label>
-        <input type="file" id="regAvaFile" accept="image/*" style="padding:8px; border:2px solid #e2e2e2; border-radius:10px; width:100%;">
-      </div>
+      <div class="field"><label>Аватарка (файл)</label><input type="file" id="regAvaFile" accept="image/*" style="padding:8px; border:2px solid #e2e2e2; border-radius:10px; width:100%;"></div>
     </div>
-    
     <button class="btn btn-create" id="authAction">Войти</button>
     <div class="msg" id="authMsg"></div>
   </div>
@@ -160,39 +176,57 @@
   <div class="modal">
     <span class="close-x" id="settingsClose">&times;</span>
     <h2>Настройки</h2>
-    <div class="sub">Измените аватарку и статус</div>
-    
-    <div class="field">
-      <label>Новая аватарка (выберите файл)</label>
-      <input type="file" id="settingsAvaFile" accept="image/*" style="padding:8px; border:2px solid #e2e2e2; border-radius:10px; width:100%;">
-    </div>
-    
-    <div class="field">
-      <label>Статус</label>
-      <input id="settingsStatus" maxlength="50" placeholder="например, Люблю пиццу 🍕">
-    </div>
-    
+    <div class="field"><label>Новая аватарка (файл)</label><input type="file" id="settingsAvaFile" accept="image/*" style="padding:8px; border:2px solid #e2e2e2; border-radius:10px; width:100%;"></div>
+    <div class="field"><label>Статус</label><input id="settingsStatus" maxlength="50" placeholder="например, Люблю пиццу 🍕"></div>
     <button class="btn btn-create" id="saveSettingsBtn">Сохранить</button>
     <div class="msg" id="settingsMsg"></div>
   </div>
 </div>
 
-<!-- Окно создания теста -->
+<!-- Окно создания теста (первый шаг - название и обложка) -->
 <div class="modal-back" id="createBack">
   <div class="modal">
     <span class="close-x" id="createClose">&times;</span>
-    <h2>Создать тест</h2>
-    <div class="sub">Придумай название и загрузи картинку</div>
-    <div class="field">
-      <label>Название теста</label>
-      <input id="testTitle" maxlength="50" placeholder="например, Какой ты кот?">
-    </div>
-    <div class="field">
-      <label>Картинка для теста (выберите файл)</label>
-      <input type="file" id="testAvaFile" accept="image/*" style="padding:8px; border:2px solid #e2e2e2; border-radius:10px; width:100%;">
-    </div>
-    <button class="btn btn-create" id="testAction">Создать тест</button>
+    <h2>Новый тест</h2>
+    <div class="sub">Шаг 1: Название и обложка</div>
+    <div class="field"><label>Название теста</label><input id="testTitle" maxlength="50" placeholder="например, Какой ты кот?"></div>
+    <div class="field"><label>Обложка теста (файл)</label><input type="file" id="testAvaFile" accept="image/*" style="padding:8px; border:2px solid #e2e2e2; border-radius:10px; width:100%;"></div>
+    <button class="btn btn-create" id="testAction">Далее: Редактор</button>
     <div class="msg" id="testMsg"></div>
+  </div>
+</div>
+
+<!-- Модалка для добавления результата -->
+<div class="modal-back" id="resultBack">
+  <div class="modal">
+    <span class="close-x" id="resultClose">&times;</span>
+    <h2>Новый результат</h2>
+    <div class="field"><label>Название (например, "Кот")</label><input id="resTitle" maxlength="40"></div>
+    <div class="field"><label>Описание</label><textarea id="resDesc" rows="2" maxlength="100"></textarea></div>
+    <div class="field"><label>Картинка результата (файл)</label><input type="file" id="resFile" accept="image/*" style="padding:8px; border:2px solid #e2e2e2; border-radius:10px; width:100%;"></div>
+    <button class="btn btn-create" id="saveResultBtn">Добавить</button>
+    <div class="msg" id="resMsg"></div>
+  </div>
+</div>
+
+<!-- Модалка для добавления вопроса -->
+<div class="modal-back" id="questionBack">
+  <div class="modal">
+    <span class="close-x" id="questionClose">&times;</span>
+    <h2>Новый вопрос</h2>
+    <div class="field"><label>Текст вопроса</label><input id="qText" maxlength="100" placeholder="например, Что ты любишь есть?"></div>
+    
+    <div style="display:flex;gap:10px;margin-bottom:12px;">
+      <div style="flex:1;"><label style="font-size:12px;color:var(--muted)">Вариант 1</label><input id="opt1" maxlength="40"></div>
+      <div style="flex:1;"><label style="font-size:12px;color:var(--muted)">Ведёт к</label><select id="res1"></select></div>
+    </div>
+    <div style="display:flex;gap:10px;margin-bottom:12px;">
+      <div style="flex:1;"><label style="font-size:12px;color:var(--muted)">Вариант 2</label><input id="opt2" maxlength="40"></div>
+      <div style="flex:1;"><label style="font-size:12px;color:var(--muted)">Ведёт к</label><select id="res2"></select></div>
+    </div>
+
+    <button class="btn btn-create" id="saveQuestionBtn">Добавить вопрос</button>
+    <div class="msg" id="qMsg"></div>
   </div>
 </div>
 
@@ -202,47 +236,41 @@
   const SUPABASE_KEY = "sb_publishable_pa1-ktdc8x-P4T3pIJzBMg_jWTnMj9_";
   const FAKE_DOMAIN = "@pikuko3.local";
   const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
   const DEFAULT_AVA = "https://ui-avatars.com/api/?background=f4e238&color=d0162c&bold=true&name=";
+
   let currentUser = null;
   let currentProfile = null;
+  
+  // Состояние редактора
+  let editingTestId = null;
+  let editorResults = []; // {tempId, title, desc, imageUrl}
+  let editorQuestions = []; // {text, options: [{text, resultTempId}]}
+  let tempIdCounter = 1;
 
   const mainPage = document.getElementById('mainPage');
   const profilePage = document.getElementById('profilePage');
+  const editorPage = document.getElementById('editorPage');
 
   function getAvatarUrl(url, loginName) {
     if (url && url.startsWith('http')) return url;
     return DEFAULT_AVA + encodeURIComponent(loginName || 'User');
   }
 
-  // --- Функция загрузки картинки в Supabase Storage ---
   async function uploadImage(file) {
     if (!file) return null;
-    
-    // Генерируем уникальное имя файла
     const fileExt = file.name.split('.').pop();
     const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
-    
-    // Загружаем в бакет 'avatars'
-    const { data, error } = await sb.storage
-      .from('avatars')
-      .upload(fileName, file);
-
+    const { error } = await sb.storage.from('avatars').upload(fileName, file);
     if (error) throw error;
-
-    // Получаем публичную ссылку
-    const { data: { publicUrl } } = sb.storage
-      .from('avatars')
-      .getPublicUrl(fileName);
-
+    const { data: { publicUrl } } = sb.storage.from('avatars').getPublicUrl(fileName);
     return publicUrl;
   }
 
-  // --- Загрузка всех тестов на главную ---
+  // --- Главная ---
   async function loadAllTests() {
     const grid = document.getElementById('testGrid');
     grid.innerHTML = '<p style="color:var(--muted)">Загрузка...</p>';
-    const { data, error } = await sb.from('tests').select(`title, avatar, profiles(login)`).order('created_at', { ascending: false });
+    const { data, error } = await sb.from('tests').select(`id, title, avatar, profiles(login)`).order('created_at', { ascending: false });
 
     grid.innerHTML = '';
     if (error || !data) { grid.innerHTML = '<p style="color:var(--red)">Ошибка загрузки</p>'; return; }
@@ -252,29 +280,19 @@
       const card = document.createElement('div');
       card.className = 'card';
       const authorName = t.profiles ? t.profiles.login : 'Неизвестный';
-      
-      let iconHtml = '';
-      if (t.avatar && t.avatar.startsWith('http')) {
-        iconHtml = `<img src="${t.avatar}" alt="icon">`;
-      } else {
-        iconHtml = `<span>${t.avatar || '🦸'}</span>`; 
-      }
-
-      card.innerHTML = `
-        <div class="test-icon">${iconHtml}</div>
-        <h3>${escapeHtml(t.title)}</h3>
-        <div class="author">от ${escapeHtml(authorName)}</div>
-      `;
+      let iconHtml = t.avatar && t.avatar.startsWith('http') ? `<img src="${t.avatar}" alt="icon">` : `<span>${t.avatar || '🦸'}</span>`;
+      card.innerHTML = `<div class="test-icon">${iconHtml}</div><h3>${escapeHtml(t.title)}</h3><div class="author">от ${escapeHtml(authorName)}</div>`;
+      // Здесь позже можно добавить клик для прохождения теста
       grid.appendChild(card);
     });
   }
 
-  // --- Загрузка ЛИЧНЫХ тестов (для профиля) ---
+  // --- Профиль ---
   async function loadMyTests() {
     if (!currentUser) return;
     const grid = document.getElementById('myTestGrid');
     grid.innerHTML = '<p style="color:var(--muted)">Загрузка...</p>';
-    const { data, error } = await sb.from('tests').select('title, avatar').eq('author_id', currentUser.id).order('created_at', { ascending: false });
+    const { data, error } = await sb.from('tests').select('id, title, avatar').eq('author_id', currentUser.id).order('created_at', { ascending: false });
 
     grid.innerHTML = '';
     if (error) { grid.innerHTML = '<p style="color:var(--red)">Ошибка</p>'; return; }
@@ -283,40 +301,24 @@
     data.forEach(t => {
       const card = document.createElement('div');
       card.className = 'card';
-      
-      let iconHtml = '';
-      if (t.avatar && t.avatar.startsWith('http')) {
-        iconHtml = `<img src="${t.avatar}" alt="icon">`;
-      } else {
-        iconHtml = `<span>${t.avatar || '🦸'}</span>`; 
-      }
-
+      let iconHtml = t.avatar && t.avatar.startsWith('http') ? `<img src="${t.avatar}" alt="icon">` : `<span>${t.avatar || '🦸'}</span>`;
       card.innerHTML = `<div class="test-icon">${iconHtml}</div><h3>${escapeHtml(t.title)}</h3>`;
       grid.appendChild(card);
     });
   }
 
-  // --- Навигация ---
   function renderNav() {
     const nav = document.getElementById('navBox');
     nav.innerHTML = '';
-    
     const createBtn = document.createElement('a');
     createBtn.href = '#'; createBtn.className = 'btn btn-create'; createBtn.textContent = 'Создать';
-    createBtn.onclick = (e) => {
-      e.preventDefault();
-      if (currentUser) { openCreate(); }
-      else { openAuth('Сначала войдите в аккаунт!'); }
-    };
+    createBtn.onclick = (e) => { e.preventDefault(); if (currentUser) openCreate(); else openAuth('Сначала войдите в аккаунт!'); };
     nav.appendChild(createBtn);
 
     if (currentUser && currentProfile) {
       const chip = document.createElement('div');
       chip.className = 'user-chip';
-      chip.innerHTML = `
-        <img src="${getAvatarUrl(currentProfile.avatar, currentProfile.login)}" class="img-ava" alt="ava">
-        <span>${escapeHtml(currentProfile.login)}</span>
-      `;
+      chip.innerHTML = `<img src="${getAvatarUrl(currentProfile.avatar, currentProfile.login)}" class="img-ava" alt="ava"><span>${escapeHtml(currentProfile.login)}</span>`;
       chip.onclick = showProfilePage;
       nav.appendChild(chip);
     } else {
@@ -340,22 +342,27 @@
     else { currentUser = null; currentProfile = null; renderNav(); showMainPage(); }
   });
 
-  function showMainPage() {
-    mainPage.style.display = 'block';
-    profilePage.style.display = 'none';
-    loadAllTests();
-  }
-  function showProfilePage() {
+  // --- Переключение экранов ---
+  function hideAllPages() {
     mainPage.style.display = 'none';
-    profilePage.style.display = 'block';
+    profilePage.style.display = 'none';
+    editorPage.style.display = 'none';
+  }
+  function showMainPage() { hideAllPages(); mainPage.style.display = 'block'; loadAllTests(); }
+  function showProfilePage() {
+    hideAllPages(); profilePage.style.display = 'block';
     document.getElementById('profBigAva').src = getAvatarUrl(currentProfile.avatar, currentProfile.login);
     document.getElementById('profLogin').textContent = currentProfile.login;
     document.getElementById('profStatus').textContent = currentProfile.status || 'Статус не установлен';
     loadMyTests();
   }
+  function showEditorPage() {
+    hideAllPages(); editorPage.style.display = 'block';
+    renderEditor();
+  }
   document.getElementById('logoBtn').onclick = showMainPage;
 
-  // --- Окно входа/регистрации ---
+  // --- Регистрация/Вход (копия из прошлого шага) ---
   const back = document.getElementById('authBack');
   const tabLogin = document.getElementById('tabLogin');
   const tabReg = document.getElementById('tabReg');
@@ -363,14 +370,9 @@
   const msg = document.getElementById('authMsg');
   let mode = 'login';
 
-  function openAuth(note) {
-    msg.textContent = ''; msg.className = 'msg';
-    document.getElementById('authSub').textContent = note || 'Войдите, чтобы создавать тесты';
-    back.classList.add('open');
-  }
+  function openAuth(note) { msg.textContent = ''; msg.className = 'msg'; document.getElementById('authSub').textContent = note || 'Войдите, чтобы создавать тесты'; back.classList.add('open'); }
   document.getElementById('authClose').onclick = () => back.classList.remove('open');
   back.onclick = e => { if (e.target === back) back.classList.remove('open'); };
-
   function setMode(m) {
     mode = m;
     tabLogin.classList.toggle('active', m === 'login');
@@ -386,14 +388,11 @@
   document.getElementById('authAction').onclick = async () => {
     const login = document.getElementById('loginInput').value.trim();
     const pass = document.getElementById('passInput').value;
-    const file = document.getElementById('regAvaFile').files[0]; // Получаем файл
+    const file = document.getElementById('regAvaFile').files[0];
     msg.className = 'msg';
-
     if (!/^[a-zA-Z0-9_]{3,20}$/.test(login)) { msg.classList.add('err'); msg.textContent = 'Логин: 3-20 символов, только буквы, цифры и _'; return; }
     if (pass.length < 6) { msg.classList.add('err'); msg.textContent = 'Пароль должен быть не короче 6 символов'; return; }
-
     const email = login.toLowerCase() + FAKE_DOMAIN;
-    
     if (mode === 'login') {
       const { error } = await sb.auth.signInWithPassword({ email, password: pass });
       if (error) { msg.classList.add('err'); msg.textContent = 'Неверный логин или пароль'; return; }
@@ -401,27 +400,14 @@
     } else {
       const { data: exists } = await sb.from('profiles').select('login').eq('login', login).maybeSingle();
       if (exists) { msg.classList.add('err'); msg.textContent = 'Такой логин уже занят'; return; }
-      
       msg.textContent = 'Создаём аккаунт...';
       const { data, error } = await sb.auth.signUp({ email, password: pass });
       if (error) { msg.classList.add('err'); msg.textContent = 'Ошибка: ' + error.message; return; }
-      
       if (data.user) {
-        let avaUrl = ''; // Если файл не выбран, будет пустая строка (покажется дефолтная ава)
-        
-        // Если пользователь выбрал файл — грузим его
-        if (file) {
-          try {
-            msg.textContent = 'Загрузка аватарки...';
-            avaUrl = await uploadImage(file);
-          } catch (err) {
-            msg.classList.add('err'); msg.textContent = 'Ошибка загрузки авы: ' + err.message; return;
-          }
-        }
-
+        let avaUrl = '';
+        if (file) { try { msg.textContent = 'Загрузка аватарки...'; avaUrl = await uploadImage(file); } catch (err) { msg.classList.add('err'); msg.textContent = 'Ошибка загрузки авы: ' + err.message; return; } }
         const { error: perr } = await sb.from('profiles').insert({ id: data.user.id, login, avatar: avaUrl });
         if (perr) { msg.classList.add('err'); msg.textContent = 'Ошибка сохранения профиля'; return; }
-        
         msg.classList.add('ok'); msg.textContent = 'Аккаунт создан! Входим...';
         await sb.auth.signInWithPassword({ email, password: pass });
         back.classList.remove('open');
@@ -430,16 +416,14 @@
     document.getElementById('passInput').value = '';
   };
 
-  // --- Окно настроек профиля ---
+  // --- Настройки профиля ---
   const settingsBack = document.getElementById('settingsBack');
-
   document.getElementById('openSettingsBtn').onclick = () => {
-    document.getElementById('settingsAvaFile').value = ''; // Очищаем выбор файла
+    document.getElementById('settingsAvaFile').value = '';
     document.getElementById('settingsStatus').value = currentProfile.status || '';
     document.getElementById('settingsMsg').textContent = '';
     settingsBack.classList.add('open');
   };
-
   document.getElementById('settingsClose').onclick = () => settingsBack.classList.remove('open');
   settingsBack.onclick = e => { if (e.target === settingsBack) settingsBack.classList.remove('open'); };
 
@@ -447,42 +431,21 @@
     const file = document.getElementById('settingsAvaFile').files[0];
     const newStatus = document.getElementById('settingsStatus').value.trim();
     const sMsg = document.getElementById('settingsMsg');
-    
-    sMsg.className = 'msg';
-    sMsg.textContent = 'Сохранение...';
-
-    let newAvaUrl = currentProfile.avatar; // По умолчанию старая ава
-
-    if (file) {
-      try {
-        sMsg.textContent = 'Загрузка аватарки...';
-        newAvaUrl = await uploadImage(file);
-      } catch (err) {
-        sMsg.classList.add('err'); sMsg.textContent = 'Ошибка загрузки: ' + err.message;
-        return;
-      }
-    }
-
-    const { error } = await sb.from('profiles').update({
-      avatar: newAvaUrl,
-      status: newStatus
-    }).eq('id', currentUser.id);
-
-    if (error) {
-      sMsg.classList.add('err'); sMsg.textContent = 'Ошибка: ' + error.message;
-    } else {
+    sMsg.className = 'msg'; sMsg.textContent = 'Сохранение...';
+    let newAvaUrl = currentProfile.avatar;
+    if (file) { try { sMsg.textContent = 'Загрузка аватарки...'; newAvaUrl = await uploadImage(file); } catch (err) { sMsg.classList.add('err'); sMsg.textContent = 'Ошибка загрузки: ' + err.message; return; } }
+    const { error } = await sb.from('profiles').update({ avatar: newAvaUrl, status: newStatus }).eq('id', currentUser.id);
+    if (error) { sMsg.classList.add('err'); sMsg.textContent = 'Ошибка: ' + error.message; } 
+    else {
       sMsg.classList.add('ok'); sMsg.textContent = 'Сохранено!';
-      currentProfile.avatar = newAvaUrl;
-      currentProfile.status = newStatus;
-      renderNav();
-      showProfilePage();
+      currentProfile.avatar = newAvaUrl; currentProfile.status = newStatus;
+      renderNav(); showProfilePage();
       setTimeout(() => settingsBack.classList.remove('open'), 800);
     }
   };
 
-  // --- Окно создания теста ---
+  // --- Создание теста (Шаг 1: обложка) ---
   const createBack = document.getElementById('createBack');
-
   function openCreate() {
     document.getElementById('testMsg').textContent = '';
     document.getElementById('testTitle').value = '';
@@ -496,57 +459,38 @@
     const title = document.getElementById('testTitle').value.trim();
     const file = document.getElementById('testAvaFile').files[0];
     const tMsg = document.getElementById('testMsg');
-    
     tMsg.className = 'msg';
-
-    if (title.length < 3) {
-      tMsg.classList.add('err'); tMsg.textContent = 'Название должно быть не короче 3 символов';
-      return;
-    }
-
-    let finalAva = '🦸'; // Заглушка
-    if (file) {
-      tMsg.textContent = 'Загрузка картинки...';
-      try {
-        finalAva = await uploadImage(file);
-      } catch (err) {
-        tMsg.classList.add('err'); tMsg.textContent = 'Ошибка: ' + err.message;
-        return;
-      }
-    }
-
+    if (title.length < 3) { tMsg.classList.add('err'); tMsg.textContent = 'Название должно быть не короче 3 символов'; return; }
+    
+    let finalAva = '🦸';
+    if (file) { tMsg.textContent = 'Загрузка картинки...'; try { finalAva = await uploadImage(file); } catch (err) { tMsg.classList.add('err'); tMsg.textContent = 'Ошибка: ' + err.message; return; } }
+    
     tMsg.textContent = 'Создаём...';
-    const { error } = await sb.from('tests').insert({
-      title: title,
-      avatar: finalAva,
-      author_id: currentUser.id
-    });
-
-    if (error) {
-      tMsg.classList.add('err'); tMsg.textContent = 'Ошибка: ' + error.message;
-    } else {
-      tMsg.classList.add('ok'); tMsg.textContent = 'Тест создан!';
-      setTimeout(() => {
-        createBack.classList.remove('open');
-        if (profilePage.style.display === 'block') loadMyTests();
-        else loadAllTests();
-      }, 800);
+    const { data, error } = await sb.from('tests').insert({ title: title, avatar: finalAva, author_id: currentUser.id }).select().single();
+    
+    if (error) { tMsg.classList.add('err'); tMsg.textContent = 'Ошибка: ' + error.message; } 
+    else {
+      createBack.classList.remove('open');
+      // Переходим в редактор
+      editingTestId = data.id;
+      document.getElementById('editorTestTitle').textContent = title;
+      editorResults = [];
+      editorQuestions = [];
+      tempIdCounter = 1;
+      showEditorPage();
     }
   };
 
-  // --- Инициализация ---
-  (async () => {
-    const { data } = await sb.auth.getSession();
-    if (data.session) { 
-      currentUser = data.session.user; 
-      await loadProfile(data.session.user); 
-      showMainPage();
-    } else {
-      renderNav();
-      showMainPage();
-    }
-  })();
-</script>
-
-</body>
-</html>
+  // --- Логика редактора ---
+  function renderEditor() {
+    const resList = document.getElementById('resultsList');
+    resList.innerHTML = '';
+    if (editorResults.length === 0) resList.innerHTML = '<p style="color:var(--muted);font-size:14px;margin-bottom:12px;">Пока нет результатов. Нажмите кнопку ниже.</p>';
+    
+    editorResults.forEach(r => {
+      const div = document.createElement('div');
+      div.className = 'result-item';
+      div.innerHTML = `
+        ${r.imageUrl ? `<img src="${r.imageUrl}">` : `<div style="width:60px;height:60px;background:#eee;border-radius:8px;display:flex;align-items:center;justify-content:center;">?</div>`}
+        <div style="flex:1;">
+          <strong style="color:var
