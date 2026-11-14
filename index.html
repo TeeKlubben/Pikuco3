@@ -230,8 +230,8 @@
   
   // Состояние редактора
   let editingTestId = null;
-  let editorResults = []; // {tempId, title, desc, imageUrl}
-  let editorQuestions = []; // {text, options: [{text, resultTempId}]}
+  let editorResults = []; 
+  let editorQuestions = []; 
   let tempIdCounter = 1;
 
   const mainPage = document.getElementById('mainPage');
@@ -253,7 +253,7 @@
     return publicUrl;
   }
 
-  // --- Загрузка главной ---
+  // --- Главная ---
   async function loadAllTests() {
     const grid = document.getElementById('testGrid');
     grid.innerHTML = '<p style="color:var(--muted)">Загрузка...</p>';
@@ -273,7 +273,7 @@
     });
   }
 
-  // --- Загрузка профиля ---
+  // --- Профиль ---
   async function loadMyTests() {
     if (!currentUser) return;
     const grid = document.getElementById('myTestGrid');
@@ -476,4 +476,186 @@
       const div = document.createElement('div');
       div.className = 'result-item';
       div.innerHTML = `
-        ${r.imageUrl ? `<img src="${r.imageUrl}">` : `<div style="width:60px;height:60px;background:#eee;border-radius:8px;display:flex;align-items:center;justify-content:center;">?</
+        ${r.imageUrl ? `<img src="${r.imageUrl}">` : `<div style="width:60px;height:60px;background:#eee;border-radius:8px;display:flex;align-items:center;justify-content:center;">?</div>`}
+        <div style="flex:1;">
+          <strong style="color:var(--red)">${escapeHtml(r.title)}</strong><br>
+          <span style="font-size:13px;color:var(--muted)">${escapeHtml(r.desc || '')}</span>
+        </div>
+      `;
+      resList.appendChild(div);
+    });
+
+    const qList = document.getElementById('questionsList');
+    qList.innerHTML = '';
+    if (editorQuestions.length === 0) qList.innerHTML = '<p style="color:var(--muted);font-size:14px;margin-bottom:12px;">Пока нет вопросов.</p>';
+    
+    editorQuestions.forEach((q, index) => {
+      const div = document.createElement('div');
+      div.className = 'question-item';
+      let optsHtml = q.options.map(o => {
+        const res = editorResults.find(r => r.tempId === o.resultTempId);
+        return `<div>• ${escapeHtml(o.text)} <span style="color:var(--red);font-size:12px;">(→ ${res ? escapeHtml(res.title) : '?'})</span></div>`;
+      }).join('');
+      
+      div.innerHTML = `
+        <strong>Вопрос ${index + 1}: ${escapeHtml(q.text)}</strong>
+        <div class="q-opts">${optsHtml}</div>
+      `;
+      qList.appendChild(div);
+    });
+  }
+
+  // Окно добавления результата
+  const resultBack = document.getElementById('resultBack');
+  document.getElementById('addResultBtn').onclick = () => {
+    document.getElementById('resTitle').value = '';
+    document.getElementById('resDesc').value = '';
+    document.getElementById('resFile').value = '';
+    document.getElementById('resMsg').textContent = '';
+    resultBack.classList.add('open');
+  };
+  document.getElementById('resultClose').onclick = () => resultBack.classList.remove('open');
+  resultBack.onclick = e => { if (e.target === resultBack) resultBack.classList.remove('open'); };
+
+  document.getElementById('saveResultBtn').onclick = async () => {
+    const title = document.getElementById('resTitle').value.trim();
+    const desc = document.getElementById('resDesc').value.trim();
+    const file = document.getElementById('resFile').files[0];
+    const rMsg = document.getElementById('resMsg');
+    rMsg.className = 'msg';
+    
+    if (title.length < 2) { rMsg.classList.add('err'); rMsg.textContent = 'Название слишком короткое'; return; }
+    
+    let imageUrl = '';
+    if (file) {
+      rMsg.textContent = 'Загрузка картинки...';
+      try { imageUrl = await uploadImage(file); } catch (err) { rMsg.classList.add('err'); rMsg.textContent = 'Ошибка: ' + err.message; return; }
+    }
+    
+    editorResults.push({ tempId: tempIdCounter++, title, desc, imageUrl });
+    resultBack.classList.remove('open');
+    renderEditor();
+  };
+
+  // Окно добавления вопроса
+  const questionBack = document.getElementById('questionBack');
+  document.getElementById('addQuestionBtn').onclick = () => {
+    if (editorResults.length < 2) { alert('Сначала добавьте хотя бы 2 результата!'); return; }
+    
+    document.getElementById('qText').value = '';
+    document.getElementById('opt1').value = '';
+    document.getElementById('opt2').value = '';
+    document.getElementById('qMsg').textContent = '';
+    
+    const res1 = document.getElementById('res1');
+    const res2 = document.getElementById('res2');
+    res1.innerHTML = ''; res2.innerHTML = '';
+    
+    editorResults.forEach(r => {
+      res1.innerHTML += `<option value="${r.tempId}">${escapeHtml(r.title)}</option>`;
+      res2.innerHTML += `<option value="${r.tempId}">${escapeHtml(r.title)}</option>`;
+    });
+    
+    if (editorResults.length > 1) res2.selectedIndex = 1;
+    
+    questionBack.classList.add('open');
+  };
+  document.getElementById('questionClose').onclick = () => questionBack.classList.remove('open');
+  questionBack.onclick = e => { if (e.target === questionBack) questionBack.classList.remove('open'); };
+
+  document.getElementById('saveQuestionBtn').onclick = () => {
+    const text = document.getElementById('qText').value.trim();
+    const opt1 = document.getElementById('opt1').value.trim();
+    const opt2 = document.getElementById('opt2').value.trim();
+    const r1 = parseInt(document.getElementById('res1').value);
+    const r2 = parseInt(document.getElementById('res2').value);
+    const qMsg = document.getElementById('qMsg');
+    qMsg.className = 'msg';
+    
+    if (text.length < 3) { qMsg.classList.add('err'); qMsg.textContent = 'Текст вопроса слишком короткий'; return; }
+    if (!opt1 || !opt2) { qMsg.classList.add('err'); qMsg.textContent = 'Заполните оба варианта ответа'; return; }
+    
+    editorQuestions.push({
+      text: text,
+      options: [
+        { text: opt1, resultTempId: r1 },
+        { text: opt2, resultTempId: r2 }
+      ]
+    });
+    
+    questionBack.classList.remove('open');
+    renderEditor();
+  };
+
+  // Сохранение всего теста в БД
+  document.getElementById('saveTestBtn').onclick = async () => {
+    const eMsg = document.getElementById('editorMsg');
+    eMsg.className = 'msg';
+    
+    if (editorResults.length < 2) { eMsg.classList.add('err'); eMsg.textContent = 'Нужно добавить минимум 2 результата!'; return; }
+    if (editorQuestions.length === 0) { eMsg.classList.add('err'); eMsg.textContent = 'Нужно добавить хотя бы 1 вопрос!'; return; }
+    
+    eMsg.textContent = 'Сохранение...';
+    
+    try {
+      // 1. Сохраняем результаты и запоминаем их реальные ID из базы
+      const resultIdMap = {}; // tempId -> real DB id
+      
+      for (const r of editorResults) {
+        const { data, error } = await sb.from('test_results').insert({
+          test_id: editingTestId,
+          title: r.title,
+          description: r.desc,
+          image_url: r.imageUrl
+        }).select().single();
+        
+        if (error) throw error;
+        resultIdMap[r.tempId] = data.id;
+      }
+      
+      // 2. Сохраняем вопросы, заменяя tempId на реальные ID
+      for (const q of editorQuestions) {
+        const mappedOptions = q.options.map(o => ({
+          text: o.text,
+          resultId: resultIdMap[o.resultTempId]
+        }));
+        
+        const { error } = await sb.from('test_questions').insert({
+          test_id: editingTestId,
+          question_text: q.text,
+          options: mappedOptions // JSONB колонка
+        });
+        
+        if (error) throw error;
+      }
+      
+      eMsg.classList.add('ok');
+      eMsg.textContent = 'Тест успешно опубликован!';
+      setTimeout(() => { showMainPage(); }, 1000);
+      
+    } catch (err) {
+      eMsg.classList.add('err');
+      eMsg.textContent = 'Ошибка сохранения: ' + err.message;
+    }
+  };
+
+  document.getElementById('cancelEditorBtn').onclick = () => {
+    if (confirm('Вы уверены? Несохранённые данные будут потеряны.')) showMainPage();
+  };
+
+  // --- Инициализация ---
+  (async () => {
+    const { data } = await sb.auth.getSession();
+    if (data.session) { 
+      currentUser = data.session.user; 
+      await loadProfile(data.session.user); 
+      showMainPage();
+    } else {
+      renderNav();
+      showMainPage();
+    }
+  })();
+</script>
+
+</body>
+</html>
