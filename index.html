@@ -10,22 +10,22 @@
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:var(--white);color:var(--text)}
-  a{text-decoration:none;color:inherit;cursor:pointer;}
+  a{text-decoration:none;color:inherit;cursor:pointer}
+  .page{display:none}
 
   header{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;background:var(--white);border-bottom:4px solid var(--yellow);position:sticky;top:0;z-index:10}
   .logo{font-size:26px;font-weight:800;color:var(--red);letter-spacing:.5px;cursor:pointer}
   .logo span{display:inline-block;background:var(--yellow);color:var(--red);border-radius:10px;padding:0 8px;margin-left:4px}
   nav{display:flex;gap:10px;align-items:center}
-  .btn{display:inline-block;font-weight:700;font-size:15px;padding:10px 18px;border-radius:12px;cursor:pointer;border:none;text-align:center;}
+  .btn{display:inline-block;font-weight:700;font-size:15px;padding:10px 18px;border-radius:12px;cursor:pointer;border:none;text-align:center}
   .btn-create{background:var(--red);color:var(--white)}
   .btn-create:hover{background:#a81223}
   .btn-profile{background:var(--yellow);color:var(--red)}
   .btn-profile:hover{background:#e0cb1f}
   .user-chip{display:flex;align-items:center;gap:8px;background:var(--yellow);border-radius:12px;padding:6px 12px;font-weight:700;color:var(--red);cursor:pointer}
   .user-chip:hover{background:#e0cb1f}
-
-  .img-ava{width:32px;height:32px;border-radius:50%;object-fit:cover;background:#fff;}
-  .big-img-ava{width:120px;height:120px;border-radius:50%;object-fit:cover;background:#fff;border:4px solid var(--yellow);}
+  .img-ava{width:32px;height:32px;border-radius:50%;object-fit:cover;background:#fff}
+  .big-img-ava{width:120px;height:120px;border-radius:50%;object-fit:cover;background:#fff;border:4px solid var(--yellow)}
 
   .hero{text-align:center;padding:48px 20px 32px;background:linear-gradient(180deg,var(--yellow) 0%,var(--white) 100%)}
   .hero h1{font-size:34px;color:var(--red);margin-bottom:10px}
@@ -39,85 +39,131 @@
   .card .test-icon{width:100%;height:110px;border-radius:12px;background:var(--yellow);display:flex;align-items:center;justify-content:center;font-size:52px;margin-bottom:12px;overflow:hidden}
   .card .test-icon img{width:100%;height:100%;object-fit:cover}
   .card h3{font-size:17px;margin-bottom:6px}
-  .card .author{color:var(--muted);font-size:14px;transition:color .15s;}
-  .card .author:hover{color:var(--red);text-decoration:underline;}
+  .card .desc{font-size:13px;color:var(--muted);margin-bottom:8px}
+  .card .author{color:var(--muted);font-size:14px}
+  .card .author:hover{color:var(--red);text-decoration:underline}
 
   /* Профиль */
-  #profilePage{display:none;padding:40px 24px;max-width:800px;margin:0 auto}
+  #profilePage{padding:40px 24px;max-width:800px;margin:0 auto}
   .profile-header{display:flex;align-items:center;gap:24px;margin-bottom:32px;background:#fafafa;padding:24px;border-radius:20px;border:2px solid var(--card-border)}
   .profile-info h2{font-size:28px;color:var(--red);margin-bottom:8px}
   .profile-info p{color:var(--muted);font-size:16px;margin-bottom:16px;font-style:italic}
   .btn-settings{background:#eee;color:var(--text);font-size:14px;padding:8px 16px}
   .btn-settings:hover{background:#ddd}
-
-  /* История */
-  .history-list{display:flex;flex-direction:column;gap:12px;margin-top:16px;}
-  .history-item{display:flex;align-items:center;gap:16px;background:#fff;border:2px solid var(--card-border);padding:12px;border-radius:12px;transition:border-color .15s;cursor:pointer;}
+  .history-list{display:flex;flex-direction:column;gap:12px;margin-top:16px}
+  .history-item{display:flex;align-items:center;gap:16px;background:#fff;border:2px solid var(--card-border);padding:12px;border-radius:12px;cursor:pointer}
   .history-item:hover{border-color:var(--yellow)}
-  .history-item img{width:50px;height:50px;border-radius:8px;object-fit:cover;}
-  .history-item .info{flex:1;}
+  .history-item img{width:50px;height:50px;border-radius:8px;object-fit:cover}
+  .history-item .info{flex:1}
   .history-item .info h4{font-size:16px;margin-bottom:4px}
   .history-item .info p{font-size:13px;color:var(--muted)}
-  .history-item .badge{background:var(--yellow);color:var(--red);padding:4px 10px;border-radius:8px;font-weight:700;font-size:13px;}
+  .history-item .badge{background:var(--yellow);color:var(--red);padding:4px 10px;border-radius:8px;font-weight:700;font-size:13px}
 
   /* Редактор */
-  #editorPage{display:none;padding:40px 24px;max-width:800px;margin:0 auto}
+  #createPage{padding:32px 24px;max-width:1100px;margin:0 auto}
+  .editor-wrap{display:flex;gap:28px;align-items:flex-start}
+  .editor-left{flex:1;min-width:0}
+  .editor-right{width:280px;flex-shrink:0;position:sticky;top:90px}
+  .editor-right h3{color:var(--red);margin-bottom:12px;font-size:16px}
   .editor-step{background:#fafafa;border:2px solid var(--card-border);border-radius:16px;padding:24px;margin-bottom:24px}
   .editor-step h3{color:var(--red);margin-bottom:16px}
-  .result-item{display:flex;gap:16px;margin-bottom:16px;align-items:center;background:#fff;padding:12px;border-radius:12px;border:1px solid #eee}
-  .result-item img{width:60px;height:60px;border-radius:8px;object-fit:cover}
-  .question-item{background:#fff;padding:16px;border-radius:12px;border:1px solid #eee;margin-bottom:16px}
-  .q-opts{font-size:14px;color:var(--muted);margin-top:8px;padding-left:12px;border-left:2px solid var(--yellow)}
+  .field{margin-bottom:12px}
+  .field label{display:block;font-size:13px;font-weight:700;color:var(--muted);margin-bottom:4px}
+  .field input,.field textarea,.field select{width:100%;padding:11px 12px;border:2px solid #e2e2e2;border-radius:10px;font-size:15px;font-family:inherit}
+  .field input:focus,.field textarea:focus{outline:none;border-color:var(--red)}
+  .q-item,.r-item{background:#fff;padding:16px;border-radius:12px;border:1px solid #eee;margin-bottom:14px}
+  .q-item .q-head,.r-item .r-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px}
+  .q-item .q-head strong{font-size:15px}
+  .tag{display:inline-block;background:var(--yellow);color:var(--red);font-size:12px;font-weight:700;padding:3px 10px;border-radius:8px}
+  .q-opts{font-size:13px;color:var(--muted);margin-top:6px;padding-left:12px;border-left:2px solid var(--yellow)}
+  .icon-btn{background:#f3f3f3;border:none;border-radius:8px;padding:5px 10px;cursor:pointer;font-size:13px;font-weight:700;color:var(--muted)}
+  .icon-btn:hover{background:#e5e5e5;color:var(--red)}
+  .ans-row{display:flex;gap:8px;margin-bottom:8px;align-items:center}
+  .ans-row input[type=text]{flex:1;padding:10px;border:2px solid #e2e2e2;border-radius:10px;font-size:14px}
+  .ans-row input[type=number]{width:80px;padding:10px;border:2px solid #e2e2e2;border-radius:10px;font-size:14px}
+  .type-tabs{display:flex;gap:8px;margin-bottom:14px}
+  .tab{flex:1;text-align:center;padding:9px;border-radius:10px;font-weight:700;cursor:pointer;background:#f3f3f3;color:var(--muted);font-size:14px}
+  .tab.active{background:var(--yellow);color:var(--red)}
+  .slider-row{display:flex;align-items:center;gap:12px;margin-top:10px}
+  .slider-row input[type=range]{flex:1;accent-color:var(--red)}
+  .slider-val{font-weight:800;color:var(--red);min-width:90px;font-size:14px}
+  .r-thumb{width:56px;height:56px;border-radius:10px;object-fit:cover;background:var(--yellow);flex-shrink:0}
+  .add-btn{background:#fff;border:2px dashed #ccc;color:var(--muted);font-weight:700;padding:12px;border-radius:12px;cursor:pointer;width:100%;font-size:15px}
+  .add-btn:hover{border-color:var(--red);color:var(--red)}
 
   /* Прохождение теста */
-  #takeTestPage{display:none;padding:40px 24px;max-width:600px;margin:0 auto}
+  #takeTestPage{padding:40px 24px;max-width:600px;margin:0 auto}
   .test-header{text-align:center;margin-bottom:32px}
-  .test-header img{width:150px;height:150px;border-radius:16px;object-fit:cover;margin-bottom:16px;box-shadow:0 4px 12px rgba(0,0,0,0.1)}
-  .test-header h2{color:var(--red);font-size:28px}
+  .test-header img{width:150px;height:150px;border-radius:16px;object-fit:cover;margin-bottom:16px;box-shadow:0 4px 12px rgba(0,0,0,.1)}
+  .test-header h2{color:var(--red);font-size:28px;margin-bottom:8px}
+  .test-header .tdesc{color:var(--muted);font-size:16px;margin-bottom:8px}
+  .test-header .tauthor{font-size:14px;color:var(--muted)}
+  .test-header .tauthor b{cursor:pointer}
+  .test-header .tauthor b:hover{color:var(--red);text-decoration:underline}
   .question-block{background:#fafafa;border:2px solid var(--card-border);border-radius:16px;padding:24px;margin-bottom:24px}
-  .question-block h3{font-size:20px;margin-bottom:16px}
-  .option-btn{display:block;width:100%;text-align:left;background:#fff;border:2px solid #e2e2e2;padding:16px;border-radius:12px;font-size:16px;font-weight:600;cursor:pointer;margin-bottom:12px;transition:all .15s}
+  .question-block .q-img{width:100%;max-height:220px;object-fit:cover;border-radius:12px;margin-bottom:14px}
+  .question-block h3{font-size:20px;margin-bottom:6px}
+  .question-block .qd{color:var(--muted);font-size:14px;margin-bottom:16px}
+  .option-btn{display:block;width:100%;text-align:left;background:#fff;border:2px solid #e2e2e2;padding:14px;border-radius:12px;font-size:16px;font-weight:600;cursor:pointer;margin-bottom:10px;transition:all .15s}
   .option-btn:hover{border-color:var(--yellow);background:#fffdf0}
   .option-btn.selected{border-color:var(--red);background:#fff3f4;color:var(--red)}
-  
-  /* Экран результата */
-  .result-screen{text-align:center;background:#fafafa;padding:40px 24px;border-radius:20px;border:4px solid var(--yellow)}
-  .result-screen img{width:200px;height:200px;border-radius:50%;object-fit:cover;margin-bottom:24px;border:6px solid var(--yellow)}
+  .answer-input{width:100%;padding:14px;border:2px solid #e2e2e2;border-radius:12px;font-size:16px;font-family:inherit}
+  .answer-input:focus{outline:none;border-color:var(--red)}
+
+  .result-screen{text-align:center;background:#fafafa;padding:40px 24px;border-radius:20px;border:4px solid var(--yellow);margin-bottom:24px}
+  .result-screen img.res-img{width:200px;height:200px;border-radius:50%;object-fit:cover;margin-bottom:24px;border:6px solid var(--yellow)}
   .result-screen h2{font-size:32px;color:var(--red);margin-bottom:12px}
   .result-screen p{font-size:18px;color:var(--muted);margin-bottom:24px}
-  .result-actions{display:flex;flex-direction:column;gap:12px;max-width:300px;margin:0 auto;}
+  .result-actions{display:flex;flex-direction:column;gap:12px;max-width:320px;margin:0 auto}
+
+  .likes-row{display:flex;justify-content:center;gap:14px;margin-bottom:24px}
+  .like-btn{font-size:18px;font-weight:800;padding:12px 22px;border-radius:14px;border:2px solid #e2e2e2;background:#fff;cursor:pointer}
+  .like-btn.active-like{border-color:#1a9e3f;color:#1a9e3f;background:#f0fff4}
+  .like-btn.active-dislike{border-color:var(--red);color:var(--red);background:#fff3f4}
+
+  .comments-box{max-width:600px;margin:0 auto 24px}
+  .comments-box h3{color:var(--red);margin-bottom:12px}
+  .comment{background:#fff;border:2px solid var(--card-border);border-radius:12px;padding:12px;margin-bottom:10px}
+  .comment .c-head{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+  .comment .c-head img{width:28px;height:28px;border-radius:50%;object-fit:cover}
+  .comment .c-head b{font-size:14px;color:var(--red)}
+  .comment .c-head span{font-size:12px;color:var(--muted)}
+  .comment p{font-size:15px}
+  .comment-form textarea{width:100%;padding:12px;border:2px solid #e2e2e2;border-radius:12px;font-family:inherit;font-size:15px;min-height:70px;margin-bottom:10px}
+
+  /* Статистика */
+  #statsPage{padding:40px 24px;max-width:640px;margin:0 auto}
+  .stats-row{background:#fff;border:2px solid var(--card-border);border-radius:14px;padding:16px;margin-bottom:14px}
+  .stats-row .sr-q{font-weight:700;font-size:16px;margin-bottom:6px}
+  .stats-row .sr-ans{font-size:14px;color:var(--muted);margin-bottom:4px}
+  .stats-row .sr-pts{font-size:14px;font-weight:800;color:var(--red)}
+  .stats-row .sr-comment{margin-top:10px;padding:10px 12px;background:#fffbe0;border-left:4px solid var(--yellow);border-radius:8px;font-size:14px;font-style:italic}
 
   footer{text-align:center;color:var(--muted);padding:24px;font-size:14px;border-top:4px solid var(--yellow);margin-top:32px}
 
   .modal-back{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;z-index:100}
   .modal-back.open{display:flex}
-  .modal{background:var(--white);border-radius:18px;padding:24px;width:92%;max-width:400px;border-top:6px solid var(--red);max-height:90vh;overflow-y:auto}
+  .modal{background:var(--white);border-radius:18px;padding:24px;width:92%;max-width:440px;border-top:6px solid var(--red);max-height:90vh;overflow-y:auto}
   .modal h2{color:var(--red);margin-bottom:4px}
   .modal .sub{color:var(--muted);font-size:14px;margin-bottom:14px}
-  .tabs{display:flex;gap:8px;margin-bottom:16px}
-  .tab{flex:1;text-align:center;padding:9px;border-radius:10px;font-weight:700;cursor:pointer;background:#f3f3f3;color:var(--muted)}
-  .tab.active{background:var(--yellow);color:var(--red)}
-  .field{margin-bottom:12px}
-  .field label{display:block;font-size:13px;font-weight:700;color:var(--muted);margin-bottom:4px}
-  .field input, .field textarea, .field select{width:100%;padding:11px 12px;border:2px solid #e2e2e2;border-radius:10px;font-size:15px;font-family:inherit}
-  .field input:focus, .field textarea:focus{outline:none;border-color:var(--red)}
   .modal .btn{width:100%;font-size:16px;padding:12px;margin-top:8px}
   .msg{font-size:14px;margin-top:10px;min-height:18px}
   .msg.err{color:var(--red)}
   .msg.ok{color:#1a9e3f}
   .close-x{float:right;font-size:22px;cursor:pointer;color:var(--muted);line-height:1}
+  @media(max-width:820px){.editor-wrap{flex-direction:column}.editor-right{width:100%;position:static}}
 </style>
 <base target="_blank">
 </head>
 <body>
 
 <header>
-  <div class="logo" id="logoBtn">Пикуко<span>3</span></div>
+  <div class="logo" onclick="goHome()">Пикуко<span>3</span></div>
   <nav id="navBox"></nav>
 </header>
 
 <!-- Главная -->
-<div id="mainPage">
+<div id="mainPage" class="page">
   <section class="hero">
     <h1>Тесты и игры, созданные людьми</h1>
     <p>Проходи, оценивай — или создай свой!</p>
@@ -128,144 +174,180 @@
   </section>
 </div>
 
-<!-- Профиль (свой или чужой) -->
-<div id="profilePage">
+<!-- Профиль -->
+<div id="profilePage" class="page">
   <div class="profile-header">
     <img id="profBigAva" class="big-img-ava" src="" alt="Аватар">
     <div class="profile-info">
       <h2 id="profLogin">Логин</h2>
       <p id="profStatus">Статус не установлен</p>
-      <button class="btn btn-settings" id="openSettingsBtn" style="display:none;">⚙️ Настройки профиля</button>
+      <button class="btn btn-settings" id="openSettingsBtn" style="display:none">⚙️ Настройки профиля</button>
     </div>
   </div>
-  
-  <h2 style="color:var(--red);margin-bottom:16px;">Тесты пользователя</h2>
+  <h2 style="color:var(--red);margin-bottom:16px">Тесты пользователя</h2>
   <div class="grid" id="myTestGrid"></div>
-
-  <!-- История прохождений (видна только если смотришь свой профиль) -->
-  <div id="historySection" style="display:none; margin-top:40px;">
-    <h2 style="color:var(--red);margin-bottom:16px;">Пройденные тесты</h2>
+  <div id="historySection" style="display:none;margin-top:40px">
+    <h2 style="color:var(--red);margin-bottom:16px">Пройденные тесты</h2>
     <div class="history-list" id="historyList"></div>
   </div>
 </div>
 
 <!-- Редактор -->
-<div id="editorPage">
-  <h2 style="color:var(--red);margin-bottom:8px;">Редактор теста</h2>
-  <p id="editorTestTitle" style="color:var(--muted);margin-bottom:24px;font-size:18px;">Название теста</p>
-  
-  <div class="editor-step">
-    <h3>1. Результаты теста</h3>
-    <div id="resultsList"></div>
-    <button class="btn btn-settings" id="addResultBtn">+ Добавить результат</button>
+<div id="createPage" class="page">
+  <h2 style="color:var(--red);margin-bottom:24px">Создание теста</h2>
+  <div class="editor-wrap">
+    <div class="editor-left">
+      <div class="editor-step">
+        <h3>1. Основное</h3>
+        <div class="field"><label>Название теста</label><input id="edTitle" maxlength="60" placeholder="например, Какой ты кот?"></div>
+        <div class="field"><label>Описание (видно на карточке)</label><textarea id="edDesc" rows="2" maxlength="120" placeholder="Коротко о чём тест"></textarea></div>
+        <div class="field"><label>Картинка для превью</label><input type="file" id="edAvaFile" accept="image/*" style="padding:8px;border:2px solid #e2e2e2;border-radius:10px;width:100%"></div>
+      </div>
+      <div class="editor-step">
+        <h3>2. Вопросы</h3>
+        <div id="edQuestions"></div>
+        <button class="add-btn" id="edAddQ">+ Добавить вопрос</button>
+      </div>
+      <div class="editor-step">
+        <h3>3. Результаты</h3>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:12px">Ползунком укажите, сколько очков нужно набрать для этого результата.</p>
+        <div id="edResults"></div>
+        <button class="add-btn" id="edAddR">+ Добавить результат</button>
+      </div>
+      <button class="btn btn-create" id="publishBtn" style="font-size:18px;padding:16px;width:100%">Опубликовать тест</button>
+      <div class="msg" id="pubMsg"></div>
+    </div>
+    <div class="editor-right">
+      <h3>👁 Макет превью</h3>
+      <div class="card" style="cursor:default">
+        <div class="test-icon" id="pvIcon">🦸</div>
+        <h3 id="pvTitle">Название теста</h3>
+        <div class="desc" id="pvDesc">Описание теста</div>
+        <div class="author" id="pvAuthor">от вас</div>
+      </div>
+    </div>
   </div>
-
-  <div class="editor-step">
-    <h3>2. Вопросы</h3>
-    <div id="questionsList"></div>
-    <button class="btn btn-settings" id="addQuestionBtn" style="margin-bottom:16px;">+ Добавить вопрос</button>
-  </div>
-
-  <button class="btn btn-create" id="saveTestBtn" style="font-size:18px;padding:16px;width:100%;">Сохранить и опубликовать тест</button>
-  <div class="msg" id="editorMsg"></div>
-  <button class="btn btn-settings" id="cancelEditorBtn" style="margin-top:12px;background:transparent;color:var(--muted);border:none;width:100%;">Отмена</button>
 </div>
 
 <!-- Прохождение теста -->
-<div id="takeTestPage">
-  <div id="takeTestContent">
+<div id="takeTestPage" class="page">
+  <div id="quizContent">
     <div class="test-header">
-      <img id="takeTestImg" src="" alt="Обложка">
-      <h2 id="takeTestTitle">Название теста</h2>
+      <img id="tkImg" src="" alt="Обложка">
+      <h2 id="tkTitle"></h2>
+      <div class="tdesc" id="tkDesc"></div>
+      <div class="tauthor" id="tkAuthor"></div>
     </div>
-    <div id="takeTestQuestions"></div>
-    <button class="btn btn-create" id="submitTestBtn" style="display:none;width:100%;font-size:18px;padding:16px;">Узнать результат!</button>
+    <div id="tkQuestions"></div>
+    <button class="btn btn-create" id="submitQuizBtn" style="display:none;width:100%;font-size:18px;padding:16px">Узнать результат!</button>
   </div>
-  
-  <!-- Экран результата -->
-  <div id="testResultScreen" class="result-screen" style="display:none;">
-    <img id="resultImg" src="" alt="Результат">
-    <h2 id="resultTitle">Результат</h2>
-    <p id="resultDesc">Описание</p>
-    <div class="result-actions">
-      <button class="btn btn-profile" id="shareResultBtn">📋 Скопировать ссылку</button>
-      <button class="btn btn-settings" onclick="showMainPage()">На главную</button>
+
+  <div id="quizResultView" style="display:none">
+    <div class="result-screen">
+      <img class="res-img" id="qrImg" src="" alt="Результат">
+      <h2 id="qrTitle"></h2>
+      <p id="qrDesc"></p>
+      <div class="result-actions">
+        <button class="btn btn-profile" id="toStatsBtn">📊 Моя статистика</button>
+        <button class="btn btn-settings" id="retryBtn">🔄 Пройти ещё раз</button>
+        <button class="btn btn-settings" onclick="goHome()">На главную</button>
+      </div>
+    </div>
+    <div class="likes-row">
+      <button class="like-btn" id="likeBtn">👍 <span id="likeCount">0</span></button>
+      <button class="like-btn" id="dislikeBtn">👎 <span id="dislikeCount">0</span></button>
+    </div>
+    <div class="comments-box">
+      <h3>Комментарии</h3>
+      <div id="commentList"></div>
+      <div class="comment-form">
+        <textarea id="commentText" placeholder="Оставьте комментарий..." maxlength="300"></textarea>
+        <button class="btn btn-create" id="sendCommentBtn">Отправить</button>
+      </div>
     </div>
   </div>
+</div>
+
+<!-- Страница статистики -->
+<div id="statsPage" class="page">
+  <div class="result-screen">
+    <img class="res-img" id="stImg" src="" alt="Результат">
+    <h2 id="stTitle"></h2>
+    <p id="stDesc"></p>
+    <p style="font-size:14px" id="stTest"></p>
+    <div class="result-actions" style="margin-top:16px">
+      <button class="btn btn-profile" id="shareStatsBtn">📋 Скопировать ссылку</button>
+      <button class="btn btn-settings" onclick="goHome()">На главную</button>
+    </div>
+  </div>
+  <h3 style="color:var(--red);margin:24px 0 16px">Как вы ответили:</h3>
+  <div id="statsQuestions"></div>
 </div>
 
 <footer>Пикуко 3 — пока что сайт для друзей 💛</footer>
 
-<!-- Модалки (вход, настройки, создание) - остаются без изменений -->
+<!-- Модалка входа/регистрации -->
 <div class="modal-back" id="authBack">
   <div class="modal">
     <span class="close-x" id="authClose">&times;</span>
     <h2 id="authTitle">Вход</h2>
     <div class="sub" id="authSub">Войдите, чтобы создавать тесты</div>
-    <div class="tabs">
+    <div class="type-tabs">
       <div class="tab active" id="tabLogin">Вход</div>
       <div class="tab" id="tabReg">Регистрация</div>
     </div>
     <div class="field"><label>Логин</label><input id="loginInput" maxlength="20" placeholder="например, danila_228"></div>
     <div class="field"><label>Пароль</label><input id="passInput" type="password" maxlength="60" placeholder="минимум 6 символов"></div>
     <div id="avaBlock" style="display:none">
-      <div class="field"><label>Аватарка (файл)</label><input type="file" id="regAvaFile" accept="image/*" style="padding:8px; border:2px solid #e2e2e2; border-radius:10px; width:100%;"></div>
+      <div class="field"><label>Аватарка (файл)</label><input type="file" id="regAvaFile" accept="image/*" style="padding:8px;border:2px solid #e2e2e2;border-radius:10px;width:100%"></div>
     </div>
     <button class="btn btn-create" id="authAction">Войти</button>
     <div class="msg" id="authMsg"></div>
   </div>
 </div>
 
+<!-- Модалка настроек профиля -->
 <div class="modal-back" id="settingsBack">
   <div class="modal">
     <span class="close-x" id="settingsClose">&times;</span>
     <h2>Настройки</h2>
-    <div class="field"><label>Новая аватарка (файл)</label><input type="file" id="settingsAvaFile" accept="image/*" style="padding:8px; border:2px solid #e2e2e2; border-radius:10px; width:100%;"></div>
+    <div class="field"><label>Новая аватарка (файл)</label><input type="file" id="settingsAvaFile" accept="image/*" style="padding:8px;border:2px solid #e2e2e2;border-radius:10px;width:100%"></div>
     <div class="field"><label>Статус</label><input id="settingsStatus" maxlength="50" placeholder="например, Люблю пиццу 🍕"></div>
     <button class="btn btn-create" id="saveSettingsBtn">Сохранить</button>
     <div class="msg" id="settingsMsg"></div>
   </div>
 </div>
 
-<div class="modal-back" id="createBack">
+<!-- Модалка вопроса -->
+<div class="modal-back" id="qBack">
   <div class="modal">
-    <span class="close-x" id="createClose">&times;</span>
-    <h2>Новый тест</h2>
-    <div class="sub">Шаг 1: Название и обложка</div>
-    <div class="field"><label>Название теста</label><input id="testTitle" maxlength="50" placeholder="например, Какой ты кот?"></div>
-    <div class="field"><label>Обложка теста (файл)</label><input type="file" id="testAvaFile" accept="image/*" style="padding:8px; border:2px solid #e2e2e2; border-radius:10px; width:100%;"></div>
-    <button class="btn btn-create" id="testAction">Далее: Редактор</button>
-    <div class="msg" id="testMsg"></div>
-  </div>
-</div>
-
-<div class="modal-back" id="resultBack">
-  <div class="modal">
-    <span class="close-x" id="resultClose">&times;</span>
-    <h2>Новый результат</h2>
-    <div class="field"><label>Название (например, "Кот")</label><input id="resTitle" maxlength="40"></div>
-    <div class="field"><label>Описание</label><textarea id="resDesc" rows="2" maxlength="100"></textarea></div>
-    <div class="field"><label>Картинка результата (файл)</label><input type="file" id="resFile" accept="image/*" style="padding:8px; border:2px solid #e2e2e2; border-radius:10px; width:100%;"></div>
-    <button class="btn btn-create" id="saveResultBtn">Добавить</button>
-    <div class="msg" id="resMsg"></div>
-  </div>
-</div>
-
-<div class="modal-back" id="questionBack">
-  <div class="modal">
-    <span class="close-x" id="questionClose">&times;</span>
-    <h2>Новый вопрос</h2>
-    <div class="field"><label>Текст вопроса</label><input id="qText" maxlength="100" placeholder="например, Что ты любишь есть?"></div>
-    <div style="display:flex;gap:10px;margin-bottom:12px;">
-      <div style="flex:1;"><label style="font-size:12px;color:var(--muted)">Вариант 1</label><input id="opt1" maxlength="40"></div>
-      <div style="flex:1;"><label style="font-size:12px;color:var(--muted)">Ведёт к</label><select id="res1"></select></div>
+    <span class="close-x" id="qClose">&times;</span>
+    <h2 id="qModalTitle">Новый вопрос</h2>
+    <div class="field"><label>Текст вопроса</label><input id="qText" maxlength="120" placeholder="например, Что ты любишь есть?"></div>
+    <div class="field"><label>Описание вопроса</label><input id="qDesc" maxlength="150" placeholder="необязательно"></div>
+    <div class="field"><label>Комментарий после прохождения</label><input id="qComment" maxlength="150" placeholder="увидит только прошедший тест"></div>
+    <div class="field"><label>Картинка к вопросу (необязательно)</label><input type="file" id="qImg" accept="image/*" style="padding:8px;border:2px solid #e2e2e2;border-radius:10px;width:100%"></div>
+    <div class="type-tabs">
+      <div class="tab active" id="qTabChoice">Выбрать ответ</div>
+      <div class="tab" id="qTabInput">Вписать ответ</div>
     </div>
-    <div style="display:flex;gap:10px;margin-bottom:12px;">
-      <div style="flex:1;"><label style="font-size:12px;color:var(--muted)">Вариант 2</label><input id="opt2" maxlength="40"></div>
-      <div style="flex:1;"><label style="font-size:12px;color:var(--muted)">Ведёт к</label><select id="res2"></select></div>
-    </div>
-    <button class="btn btn-create" id="saveQuestionBtn">Добавить вопрос</button>
+    <div id="qAnswersBox"></div>
+    <button class="add-btn" id="qAddAnswer" style="margin-top:8px">+ Добавить вариант</button>
+    <button class="btn btn-create" id="qSave">Сохранить вопрос</button>
     <div class="msg" id="qMsg"></div>
+  </div>
+</div>
+
+<!-- Модалка результата -->
+<div class="modal-back" id="rBack">
+  <div class="modal">
+    <span class="close-x" id="rClose">&times;</span>
+    <h2 id="rModalTitle">Новый результат</h2>
+    <div class="field"><label>Название</label><input id="rTitle" maxlength="40" placeholder="например, Настоящий кот"></div>
+    <div class="field"><label>Описание</label><textarea id="rDesc" rows="2" maxlength="150"></textarea></div>
+    <div class="field"><label>Картинка результата</label><input type="file" id="rImg" accept="image/*" style="padding:8px;border:2px solid #e2e2e2;border-radius:10px;width:100%"></div>
+    <button class="btn btn-create" id="rSave">Сохранить результат</button>
+    <div class="msg" id="rMsg"></div>
   </div>
 </div>
 
@@ -279,366 +361,591 @@
 
   let currentUser = null;
   let currentProfile = null;
-  
-  let editingTestId = null;
-  let editorResults = []; 
-  let editorQuestions = []; 
-  let tempIdCounter = 1;
 
-  let currentTestQuestions = [];
-  let currentTestResults = {};
-  let userAnswers = {}; 
+  function goHome(){ location.hash = ""; }
+  function escapeHtml(s){return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+  function getAvatarUrl(url, name){ return (url && url.startsWith('http')) ? url : DEFAULT_AVA + encodeURIComponent(name || 'User'); }
+  function fmtDate(d){ return d ? new Date(d).toLocaleDateString('ru-RU') : ''; }
 
-  const mainPage = document.getElementById('mainPage');
-  const profilePage = document.getElementById('profilePage');
-  const editorPage = document.getElementById('editorPage');
-  const takeTestPage = document.getElementById('takeTestPage');
-
-  function getAvatarUrl(url, loginName) {
-    if (url && url.startsWith('http')) return url;
-    return DEFAULT_AVA + encodeURIComponent(loginName || 'User');
+  async function uploadImage(file){
+    if(!file) return '';
+    const ext = file.name.split('.').pop();
+    const fname = Date.now() + '-' + Math.random().toString(36).slice(2) + '.' + ext;
+    const { error } = await sb.storage.from('avatars').upload(fname, file);
+    if(error) throw error;
+    return sb.storage.from('avatars').getPublicUrl(fname).data.publicUrl;
   }
 
-  async function uploadImage(file) {
-    if (!file) return null;
-    const fileExt = file.name.split('.').pop();
-    const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
-    const { error } = await sb.storage.from('avatars').upload(fileName, file);
-    if (error) throw error;
-    const { data: { publicUrl } } = sb.storage.from('avatars').getPublicUrl(fileName);
-    return publicUrl;
+  function showPage(id){
+    document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
+    document.getElementById(id).style.display = 'block';
+    window.scrollTo(0,0);
   }
 
-  // --- Главная ---
-  async function loadAllTests() {
-    const grid = document.getElementById('testGrid');
-    grid.innerHTML = '<p style="color:var(--muted)">Загрузка...</p>';
-    const { data, error } = await sb.from('tests').select(`id, title, avatar, author_id, profiles(id, login)`).order('created_at', { ascending: false });
-
-    grid.innerHTML = '';
-    if (error || !data) { grid.innerHTML = '<p style="color:var(--red)">Ошибка загрузки</p>'; return; }
-    if (data.length === 0) { grid.innerHTML = '<p style="color:var(--muted)">Пока нет тестов. Создайте первый!</p>'; return; }
-
-    data.forEach(t => {
-      const card = document.createElement('div');
-      card.className = 'card';
-      const authorName = t.profiles ? t.profiles.login : 'Неизвестный';
-      let iconHtml = t.avatar && t.avatar.startsWith('http') ? `<img src="${t.avatar}" alt="icon">` : `<span>${t.avatar || '🦸'}</span>`;
-      
-      // Вставляем ссылку на профиль автора
-      card.innerHTML = `
-        <div class="test-icon">${iconHtml}</div>
-        <h3>${escapeHtml(t.title)}</h3>
-        <div class="author" onclick="event.stopPropagation(); showUserProfile('${t.author_id}')">от ${escapeHtml(authorName)}</div>
-      `;
-      
-      // Клик по самой карточке запускает тест
-      card.onclick = () => startTest(t.id, t.title, t.avatar);
-      grid.appendChild(card);
-    });
-  }
-
-  // --- Публичный профиль ---
-  async function showUserProfile(userId) {
-    hideAllPages();
-    profilePage.style.display = 'block';
-    
-    // Загружаем профиль
-    const { data: profile } = await sb.from('profiles').select('*').eq('id', userId).single();
-    if (!profile) return;
-
-    document.getElementById('profBigAva').src = getAvatarUrl(profile.avatar, profile.login);
-    document.getElementById('profLogin').textContent = profile.login;
-    document.getElementById('profStatus').textContent = profile.status || 'Статус не установлен';
-    
-    // Скрываем настройки и историю по умолчанию
-    document.getElementById('openSettingsBtn').style.display = 'none';
-    document.getElementById('historySection').style.display = 'none';
-
-    // Если это наш профиль — показываем настройки и историю
-    if (currentUser && currentUser.id === userId) {
-      document.getElementById('openSettingsBtn').style.display = 'inline-block';
-      document.getElementById('historySection').style.display = 'block';
-      loadHistory();
-    }
-
-    // Загружаем тесты этого пользователя
-    const grid = document.getElementById('myTestGrid');
-    grid.innerHTML = '<p style="color:var(--muted)">Загрузка...</p>';
-    const { data: tests } = await sb.from('tests').select('id, title, avatar').eq('author_id', userId).order('created_at', { ascending: false });
-
-    grid.innerHTML = '';
-    if (!tests || tests.length === 0) { grid.innerHTML = '<p style="color:var(--muted)">У этого пользователя пока нет тестов.</p>'; return; }
-
-    tests.forEach(t => {
-      const card = document.createElement('div');
-      card.className = 'card';
-      let iconHtml = t.avatar && t.avatar.startsWith('http') ? `<img src="${t.avatar}" alt="icon">` : `<span>${t.avatar || '🦸'}</span>`;
-      card.innerHTML = `<div class="test-icon">${iconHtml}</div><h3>${escapeHtml(t.title)}</h3>`;
-      card.onclick = () => startTest(t.id, t.title, t.avatar);
-      grid.appendChild(card);
-    });
-  }
-
-  // --- История прохождений ---
-  async function loadHistory() {
-    const list = document.getElementById('historyList');
-    list.innerHTML = '<p style="color:var(--muted)">Загрузка истории...</p>';
-    
-    // Загружаем историю с привязкой к тесту и результату
-    const { data, error } = await sb.from('user_history')
-      .select(`
-        id, 
-        test_id,
-        result_id,
-        tests ( title, avatar ),
-        test_results ( title, image_url )
-      `)
-      .eq('user_id', currentUser.id)
-      .order('created_at', { ascending: false });
-
-    list.innerHTML = '';
-    if (error || !data || data.length === 0) { list.innerHTML = '<p style="color:var(--muted)">Вы пока не проходили тесты.</p>'; return; }
-
-    data.forEach(h => {
-      if (!h.tests || !h.test_results) return;
-      
-      const div = document.createElement('div');
-      div.className = 'history-item';
-      let img = h.tests.avatar && h.tests.avatar.startsWith('http') ? h.tests.avatar : DEFAULT_AVA + encodeURIComponent(h.tests.title);
-      
-      div.innerHTML = `
-        <img src="${img}" alt="Тест">
-        <div class="info">
-          <h4>${escapeHtml(h.tests.title)}</h4>
-          <p>Ваш результат: <strong>${escapeHtml(h.test_results.title)}</strong></p>
-        </div>
-        <div class="badge">Смотреть</div>
-      `;
-      
-      // При клике открываем сохраненный результат
-      div.onclick = () => showSavedResult(h.id, h.test_results.title, h.test_results.image_url, 'Результат теста "' + h.tests.title + '"');
-      list.appendChild(div);
-    });
-  }
-
-  // --- Прохождение теста ---
-  async function startTest(testId, title, avatar) {
-    hideAllPages();
-    takeTestPage.style.display = 'block';
-    document.getElementById('takeTestContent').style.display = 'block';
-    document.getElementById('testResultScreen').style.display = 'none';
-    
-    document.getElementById('takeTestTitle').textContent = title;
-    document.getElementById('takeTestImg').src = avatar && avatar.startsWith('http') ? avatar : DEFAULT_AVA + encodeURIComponent(title);
-    
-    const qContainer = document.getElementById('takeTestQuestions');
-    qContainer.innerHTML = '<p style="text-align:center;color:var(--muted)">Загрузка...</p>';
-    document.getElementById('submitTestBtn').style.display = 'none';
-    userAnswers = {};
-
-    const { data: questions } = await sb.from('test_questions').select('*').eq('test_id', testId).order('id');
-    const { data: results } = await sb.from('test_results').select('*').eq('test_id', testId);
-
-    if (!questions || questions.length === 0) {
-      qContainer.innerHTML = '<p style="text-align:center;color:var(--red)">Тест ещё не готов.</p>';
-      return;
-    }
-
-    currentTestQuestions = questions;
-    currentTestResults = {};
-    results.forEach(r => { currentTestResults[r.id] = r; });
-
-    qContainer.innerHTML = '';
-    questions.forEach((q, index) => {
-      const block = document.createElement('div');
-      block.className = 'question-block';
-      block.innerHTML = `<h3>${index + 1}. ${escapeHtml(q.question_text)}</h3>`;
-      const optionsDiv = document.createElement('div');
-      q.options.forEach(opt => {
-        const btn = document.createElement('button');
-        btn.className = 'option-btn';
-        btn.textContent = opt.text;
-        btn.onclick = () => {
-          optionsDiv.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
-          btn.classList.add('selected');
-          userAnswers[q.id] = opt.resultId;
-          if (Object.keys(userAnswers).length === questions.length) {
-            document.getElementById('submitTestBtn').style.display = 'block';
-          }
-        };
-        optionsDiv.appendChild(btn);
-      });
-      block.appendChild(optionsDiv);
-      qContainer.appendChild(block);
-    });
-    
-    window.scrollTo(0, 0);
-  }
-
-  document.getElementById('submitTestBtn').onclick = async () => {
-    const counts = {};
-    Object.values(userAnswers).forEach(resId => { counts[resId] = (counts[resId] || 0) + 1; });
-    
-    let maxCount = 0; let winnerId = null;
-    for (const [resId, count] of Object.entries(counts)) {
-      if (count > maxCount) { maxCount = count; winnerId = resId; }
-    }
-
-    const resultObj = currentTestResults[winnerId];
-    
-    // Сохраняем в БД (если пользователь авторизован)
-    let historyId = null;
-    if (currentUser) {
-      // Нам нужно знать test_id. Берем его из текущего URL или передаем. 
-      // Так как мы не сохранили test_id в глобальную переменную при старте, давайте исправим это:
-      const testId = currentTestQuestions[0].test_id; 
-      const { data, error } = await sb.from('user_history').insert({
-        user_id: currentUser.id,
-        test_id: testId,
-        result_id: winnerId
-      }).select().single();
-      if (!error && data) historyId = data.id;
-    }
-
-    showSavedResult(historyId, resultObj.title, resultObj.image_url, resultObj.description);
-  };
-
-  function showSavedResult(historyId, title, image, desc) {
-    hideAllPages();
-    takeTestPage.style.display = 'block';
-    document.getElementById('takeTestContent').style.display = 'none';
-    
-    const resScreen = document.getElementById('testResultScreen');
-    resScreen.style.display = 'block';
-    
-    document.getElementById('resultImg').src = image && image.startsWith('http') ? image : DEFAULT_AVA + encodeURIComponent(title);
-    document.getElementById('resultTitle').textContent = title;
-    document.getElementById('resultDesc').textContent = desc || '';
-    
-    // Обновляем URL для возможности поделиться (если есть ID)
-    if (historyId) {
-      const newUrl = window.location.origin + window.location.pathname + '?result=' + historyId;
-      window.history.pushState({path: newUrl}, '', newUrl);
-      
-      document.getElementById('shareResultBtn').onclick = () => {
-        navigator.clipboard.writeText(newUrl).then(() => {
-          alert('Ссылка скопирована! Можете отправить её друзьям.');
-        });
-      };
-    } else {
-      // Если не сохранилось, просто даем скопировать текущий URL
-      document.getElementById('shareResultBtn').onclick = () => {
-        alert('Чтобы сохранить результат, войдите в аккаунт.');
-      };
-    }
-    
-    window.scrollTo(0, 0);
-  }
-
-  // --- Инициализация и навигация ---
-  function renderNav() {
+  // ================= НАВИГАЦИЯ =================
+  function renderNav(){
     const nav = document.getElementById('navBox');
     nav.innerHTML = '';
     const createBtn = document.createElement('a');
-    createBtn.href = '#'; createBtn.className = 'btn btn-create'; createBtn.textContent = 'Создать';
-    createBtn.onclick = (e) => { e.preventDefault(); if (currentUser) openCreate(); else openAuth('Сначала войдите в аккаунт!'); };
+    createBtn.href = '#/create'; createBtn.className = 'btn btn-create'; createBtn.textContent = 'Создать';
+    createBtn.onclick = e => {
+      e.preventDefault();
+      if(currentUser) location.hash = '#/create';
+      else openAuth('Сначала войдите, чтобы создавать тесты!');
+    };
     nav.appendChild(createBtn);
-
-    if (currentUser && currentProfile) {
+    if(currentUser && currentProfile){
       const chip = document.createElement('div');
       chip.className = 'user-chip';
-      chip.innerHTML = `<img src="${getAvatarUrl(currentProfile.avatar, currentProfile.login)}" class="img-ava" alt="ava"><span>${escapeHtml(currentProfile.login)}</span>`;
-      // Ведем на СВОЙ профиль
-      chip.onclick = () => showUserProfile(currentUser.id);
+      chip.innerHTML = '<img src="' + getAvatarUrl(currentProfile.avatar, currentProfile.login) + '" class="img-ava"><span>' + escapeHtml(currentProfile.login) + '</span>';
+      chip.onclick = () => location.hash = '#/user/' + currentUser.id;
       nav.appendChild(chip);
     } else {
       const btn = document.createElement('a');
       btn.href = '#'; btn.className = 'btn btn-profile'; btn.textContent = 'Профиль';
-      btn.onclick = (e) => { e.preventDefault(); openAuth('Войдите в аккаунт'); };
+      btn.onclick = e => { e.preventDefault(); openAuth('Войдите в аккаунт'); };
       nav.appendChild(btn);
     }
   }
 
-  function escapeHtml(s){return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
-
-  async function loadProfile(user) {
+  async function loadProfile(user){
     const { data } = await sb.from('profiles').select('*').eq('id', user.id).single();
     currentProfile = data;
     renderNav();
   }
 
   sb.auth.onAuthStateChange(async (event, session) => {
-    if (session) { currentUser = session.user; await loadProfile(session.user); }
-    else { currentUser = null; currentProfile = null; renderNav(); showMainPage(); }
+    if(session){ currentUser = session.user; await loadProfile(session.user); }
+    else { currentUser = null; currentProfile = null; renderNav(); }
+    route();
   });
 
-  function hideAllPages() {
-    mainPage.style.display = 'none';
-    profilePage.style.display = 'none';
-    editorPage.style.display = 'none';
-    takeTestPage.style.display = 'none';
-    // Сбрасываем URL
-    const cleanUrl = window.location.origin + window.location.pathname;
-    window.history.pushState({path: cleanUrl}, '', cleanUrl);
+  function route(){
+    const h = location.hash;
+    if(h.startsWith('#/test/')){ openTestPage(h.slice(7)); return; }
+    if(h.startsWith('#/result/')){ openStatsPage(h.slice(9)); return; }
+    if(h.startsWith('#/user/')){ openProfilePage(h.slice(7)); return; }
+    if(h === '#/create'){
+      if(!currentUser){ openAuth('Сначала войдите, чтобы создавать тесты!'); goHome(); return; }
+      openEditor(); return;
+    }
+    openMainPage();
   }
-  
-  function showMainPage() { 
-    hideAllPages(); 
-    mainPage.style.display = 'block'; 
-    loadAllTests(); 
-  }
-  
-  document.getElementById('logoBtn').onclick = showMainPage;
+  window.addEventListener('hashchange', route);
 
-  // --- Запуск при загрузке ---
-  (async () => {
-    const { data } = await sb.auth.getSession();
-    if (data.session) { 
-      currentUser = data.session.user; 
-      await loadProfile(data.session.user); 
+  // ================= ГЛАВНАЯ =================
+  async function openMainPage(){
+    showPage('mainPage');
+    const grid = document.getElementById('testGrid');
+    grid.innerHTML = '<p style="color:var(--muted)">Загрузка...</p>';
+    const { data, error } = await sb.from('tests')
+      .select('id, title, description, avatar, author_id, profiles(id, login)')
+      .order('created_at', { ascending: false });
+    grid.innerHTML = '';
+    if(error || !data || data.length === 0){
+      grid.innerHTML = '<p style="color:var(--muted)">Пока нет тестов. Создайте первый!</p>'; return;
+    }
+    data.forEach(t => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      const icon = (t.avatar && t.avatar.startsWith('http')) ? '<img src="' + t.avatar + '">' : '<span>' + (t.avatar || '🦸') + '</span>';
+      const author = t.profiles ? t.profiles.login : 'Неизвестный';
+      card.innerHTML = '<div class="test-icon">' + icon + '</div>' +
+        '<h3>' + escapeHtml(t.title) + '</h3>' +
+        (t.description ? '<div class="desc">' + escapeHtml(t.description) + '</div>' : '') +
+        '<div class="author" id="a' + t.id + '">от ' + escapeHtml(author) + '</div>';
+      card.onclick = () => location.hash = '#/test/' + t.id;
+      grid.appendChild(card);
+      const a = document.getElementById('a' + t.id);
+      if(a) a.onclick = e => { e.stopPropagation(); location.hash = '#/user/' + t.author_id; };
+    });
+  }
+
+  // ================= ПРОФИЛЬ =================
+  async function openProfilePage(userId){
+    showPage('profilePage');
+    const { data: profile } = await sb.from('profiles').select('*').eq('id', userId).single();
+    if(!profile){ goHome(); return; }
+    document.getElementById('profBigAva').src = getAvatarUrl(profile.avatar, profile.login);
+    document.getElementById('profLogin').textContent = profile.login;
+    document.getElementById('profStatus').textContent = profile.status || 'Статус не установлен';
+    const isMe = currentUser && currentUser.id === userId;
+    document.getElementById('openSettingsBtn').style.display = isMe ? 'inline-block' : 'none';
+    document.getElementById('historySection').style.display = isMe ? 'block' : 'none';
+    if(isMe) loadHistory();
+
+    const grid = document.getElementById('myTestGrid');
+    grid.innerHTML = '<p style="color:var(--muted)">Загрузка...</p>';
+    const { data: tests } = await sb.from('tests').select('id, title, description, avatar').eq('author_id', userId).order('created_at', { ascending: false });
+    grid.innerHTML = '';
+    if(!tests || tests.length === 0){ grid.innerHTML = '<p style="color:var(--muted)">Пока нет тестов.</p>'; return; }
+    tests.forEach(t => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      const icon = (t.avatar && t.avatar.startsWith('http')) ? '<img src="' + t.avatar + '">' : '<span>' + (t.avatar || '🦸') + '</span>';
+      card.innerHTML = '<div class="test-icon">' + icon + '</div><h3>' + escapeHtml(t.title) + '</h3>' +
+        (t.description ? '<div class="desc">' + escapeHtml(t.description) + '</div>' : '');
+      card.onclick = () => location.hash = '#/test/' + t.id;
+      grid.appendChild(card);
+    });
+  }
+
+  async function loadHistory(){
+    const list = document.getElementById('historyList');
+    list.innerHTML = '<p style="color:var(--muted)">Загрузка...</p>';
+    const { data } = await sb.from('user_history')
+      .select('id, created_at, tests(title, avatar), test_results(title, image_url)')
+      .eq('user_id', currentUser.id).order('created_at', { ascending: false });
+    list.innerHTML = '';
+    if(!data || data.length === 0){ list.innerHTML = '<p style="color:var(--muted)">Вы пока не проходили тесты.</p>'; return; }
+    data.forEach(h => {
+      if(!h.tests || !h.test_results) return;
+      const div = document.createElement('div');
+      div.className = 'history-item';
+      const img = (h.tests.avatar && h.tests.avatar.startsWith('http')) ? h.tests.avatar : DEFAULT_AVA + encodeURIComponent(h.tests.title);
+      div.innerHTML = '<img src="' + img + '"><div class="info"><h4>' + escapeHtml(h.tests.title) + '</h4>' +
+        '<p>Результат: <strong>' + escapeHtml(h.test_results.title) + '</strong> · ' + fmtDate(h.created_at) + '</p></div><div class="badge">Смотреть</div>';
+      div.onclick = () => location.hash = '#/result/' + h.id;
+      list.appendChild(div);
+    });
+  }
+
+  // ================= РЕДАКТОР =================
+  let edQuestions = [];
+  let edResults = [];
+  let editingQ = -1, editingR = -1, qType = 'choice';
+  let pvImageUrl = '';
+
+  function computeMaxScore(){
+    let m = 0;
+    edQuestions.forEach(q => {
+      let best = 0;
+      (q.answers || []).forEach(a => { best = Math.max(best, Number(a.points) || 0); });
+      m += best;
+    });
+    return m;
+  }
+
+  function openEditor(){
+    showPage('createPage');
+    edQuestions = []; edResults = [];
+    editingQ = -1; editingR = -1; qType = 'choice'; pvImageUrl = '';
+    document.getElementById('edTitle').value = '';
+    document.getElementById('edDesc').value = '';
+    document.getElementById('edAvaFile').value = '';
+    document.getElementById('pubMsg').textContent = '';
+    updatePreview(); renderQuestions(); renderResults();
+  }
+
+  function updatePreview(){
+    const t = document.getElementById('edTitle').value.trim();
+    const d = document.getElementById('edDesc').value.trim();
+    document.getElementById('pvTitle').textContent = t || 'Название теста';
+    document.getElementById('pvDesc').textContent = d || 'Описание теста';
+    const icon = document.getElementById('pvIcon');
+    icon.innerHTML = pvImageUrl ? '<img src="' + pvImageUrl + '">' : '🦸';
+    document.getElementById('pvAuthor').textContent = 'от ' + (currentProfile ? currentProfile.login : 'вас');
+  }
+  document.getElementById('edTitle').addEventListener('input', updatePreview);
+  document.getElementById('edDesc').addEventListener('input', updatePreview);
+  document.getElementById('edAvaFile').addEventListener('change', e => {
+    const f = e.target.files[0];
+    if(!f){ return; }
+    const r = new FileReader();
+    r.onload = ev => { pvImageUrl = ev.target.result; updatePreview(); };
+    r.readAsDataURL(f);
+  });
+
+  function renderQuestions(){
+    const box = document.getElementById('edQuestions');
+    box.innerHTML = '';
+    if(edQuestions.length === 0) box.innerHTML = '<p style="color:var(--muted);font-size:14px;margin-bottom:12px">Пока нет вопросов.</p>';
+    edQuestions.forEach((q, i) => {
+      const div = document.createElement('div');
+      div.className = 'q-item';
+      const opts = (q.answers || []).map(a => '<div>• ' + escapeHtml(a.text) + ' <span style="color:var(--red);font-size:12px">(+' + (a.points||0) + ' очк.)</span></div>').join('');
+      div.innerHTML = '<div class="q-head"><strong>' + (i+1) + '. ' + escapeHtml(q.text) + '</strong>' +
+        '<span style="display:flex;gap:6px"><span class="tag">' + (q.type === 'choice' ? 'выбрать' : 'вписать') + '</span>' +
+        '<button class="icon-btn" data-eq="' + i + '">✏️</button><button class="icon-btn" data-dq="' + i + '">🗑</button></span></div>' +
+        (q.desc ? '<div style="font-size:13px;color:var(--muted)">' + escapeHtml(q.desc) + '</div>' : '') +
+        '<div class="q-opts">' + opts + '</div>';
+      box.appendChild(div);
+    });
+    box.querySelectorAll('[data-dq]').forEach(b => b.onclick = () => { if(confirm('Удалить вопрос?')){ edQuestions.splice(Number(b.dataset.dq), 1); renderQuestions(); renderResults(); } });
+    box.querySelectorAll('[data-eq]').forEach(b => b.onclick = () => openQModal(Number(b.dataset.eq)));
+  }
+
+  function renderResults(){
+    const box = document.getElementById('edResults');
+    const maxS = computeMaxScore();
+    box.innerHTML = '';
+    if(edResults.length === 0) box.innerHTML = '<p style="color:var(--muted);font-size:14px;margin-bottom:12px">Пока нет результатов.</p>';
+    edResults.forEach((r, i) => {
+      if(r.minPoints > maxS) r.minPoints = maxS;
+      const div = document.createElement('div');
+      div.className = 'r-item';
+      div.innerHTML = '<div class="r-head" style="margin-bottom:0"><div style="display:flex;gap:12px;align-items:center;flex:1">' +
+        (r.imageUrl ? '<img class="r-thumb" src="' + r.imageUrl + '">' : '<div class="r-thumb" style="display:flex;align-items:center;justify-content:center">?</div>') +
+        '<div><strong style="color:var(--red)">' + escapeHtml(r.title) + '</strong>' +
+        '<div style="font-size:13px;color:var(--muted)">' + escapeHtml(r.desc || '') + '</div></div></div>' +
+        '<span style="display:flex;gap:6px"><button class="icon-btn" data-er="' + i + '">✏️</button><button class="icon-btn" data-dr="' + i + '">🗑</button></span></div>' +
+        '<div class="slider-row"><input type="range" min="0" max="' + maxS + '" value="' + r.minPoints + '" data-sr="' + i + '">' +
+        '<span class="slider-val" id="sv' + i + '">от ' + r.minPoints + ' очк.</span></div>';
+      box.appendChild(div);
+    });
+    box.querySelectorAll('[data-sr]').forEach(s => s.oninput = () => {
+      const i = Number(s.dataset.sr);
+      edResults[i].minPoints = Number(s.value);
+      document.getElementById('sv' + i).textContent = 'от ' + s.value + ' очк.';
+    });
+    box.querySelectorAll('[data-dr]').forEach(b => b.onclick = () => { if(confirm('Удалить результат?')){ edResults.splice(Number(b.dataset.dr), 1); renderResults(); } });
+    box.querySelectorAll('[data-er]').forEach(b => b.onclick = () => openRModal(Number(b.dataset.er)));
+  }
+
+  // --- модалка вопроса ---
+  const qBack = document.getElementById('qBack');
+  function addAnswerRow(text, points){
+    const box = document.getElementById('qAnswersBox');
+    const row = document.createElement('div');
+    row.className = 'ans-row';
+    row.innerHTML = '<input type="text" class="ans-text" placeholder="' + (qType === 'choice' ? 'Вариант ответа' : 'Правильный ответ (сравнение)') + '" maxlength="80" value="' + escapeHtml(text || '') + '">' +
+      '<input type="number" class="ans-points" min="0" max="999" value="' + (points || 0) + '" title="Очки">' +
+      '<button class="icon-btn ans-del">✕</button>';
+    row.querySelector('.ans-del').onclick = () => row.remove();
+    box.appendChild(row);
+  }
+  function setQType(t){
+    qType = t;
+    document.getElementById('qTabChoice').classList.toggle('active', t === 'choice');
+    document.getElementById('qTabInput').classList.toggle('active', t === 'input');
+    document.getElementById('qAnswersBox').innerHTML = '';
+    addAnswerRow(); addAnswerRow();
+    document.getElementById('qAddAnswer').textContent = t === 'choice' ? '+ Добавить вариант' : '+ Добавить эталонный ответ';
+  }
+  document.getElementById('qTabChoice').onclick = () => setQType('choice');
+  document.getElementById('qTabInput').onclick = () => setQType('input');
+  document.getElementById('qAddAnswer').onclick = () => addAnswerRow();
+  document.getElementById('qClose').onclick = () => qBack.classList.remove('open');
+  qBack.onclick = e => { if(e.target === qBack) qBack.classList.remove('open'); };
+
+  function openQModal(index){
+    editingQ = index;
+    document.getElementById('qModalTitle').textContent = index >= 0 ? 'Редактировать вопрос' : 'Новый вопрос';
+    document.getElementById('qImg').value = '';
+    document.getElementById('qMsg').textContent = '';
+    if(index >= 0){
+      const q = edQuestions[index];
+      document.getElementById('qText').value = q.text;
+      document.getElementById('qDesc').value = q.desc || '';
+      document.getElementById('qComment').value = q.comment || '';
+      setQType(q.type || 'choice');
+      document.getElementById('qAnswersBox').innerHTML = '';
+      (q.answers || []).forEach(a => addAnswerRow(a.text, a.points));
     } else {
-      renderNav();
+      document.getElementById('qText').value = '';
+      document.getElementById('qDesc').value = '';
+      document.getElementById('qComment').value = '';
+      setQType('choice');
     }
+    qBack.classList.add('open');
+  }
+  document.getElementById('edAddQ').onclick = () => openQModal(-1);
 
-    // Проверяем, есть ли в URL параметр ?result=...
-    const urlParams = new URLSearchParams(window.location.search);
-    const sharedResultId = urlParams.get('result');
+  document.getElementById('qSave').onclick = async () => {
+    const text = document.getElementById('qText').value.trim();
+    const desc = document.getElementById('qDesc').value.trim();
+    const comment = document.getElementById('qComment').value.trim();
+    const file = document.getElementById('qImg').files[0];
+    const m = document.getElementById('qMsg');
+    m.className = 'msg';
+    if(text.length < 3){ m.classList.add('err'); m.textContent = 'Текст вопроса слишком короткий'; return; }
+    const answers = [];
+    document.querySelectorAll('#qAnswersBox .ans-row').forEach(row => {
+      const t = row.querySelector('.ans-text').value.trim();
+      if(t) answers.push({ text: t, points: Math.max(0, Number(row.querySelector('.ans-points').value) || 0) });
+    });
+    if(answers.length < (qType === 'choice' ? 2 : 1)){ m.classList.add('err'); m.textContent = qType === 'choice' ? 'Нужно минимум 2 варианта' : 'Нужен минимум 1 эталонный ответ'; return; }
+    m.textContent = 'Загрузка картинки...';
+    let imageUrl = editingQ >= 0 ? (edQuestions[editingQ].imageUrl || '') : '';
+    try { if(file) imageUrl = await uploadImage(file); } catch(err){ m.classList.add('err'); m.textContent = 'Ошибка загрузки: ' + err.message; return; }
+    const qObj = { text, desc, comment, type: qType, answers, imageUrl };
+    if(editingQ >= 0) edQuestions[editingQ] = qObj; else edQuestions.push(qObj);
+    qBack.classList.remove('open');
+    renderQuestions(); renderResults();
+  };
 
-    if (sharedResultId) {
-      // Загружаем результат по ID
-      const { data: h } = await sb.from('user_history')
-        .select(`
-          result_id,
-          tests ( title ),
-          test_results ( title, image_url, description )
-        `)
-        .eq('id', sharedResultId)
-        .single();
-        
-      if (h && h.test_results) {
-        showSavedResult(sharedResultId, h.test_results.title, h.test_results.image_url, h.test_results.description);
-        return;
+  // --- модалка результата ---
+  const rBack = document.getElementById('rBack');
+  document.getElementById('rClose').onclick = () => rBack.classList.remove('open');
+  rBack.onclick = e => { if(e.target === rBack) rBack.classList.remove('open'); };
+  function openRModal(index){
+    editingR = index;
+    document.getElementById('rModalTitle').textContent = index >= 0 ? 'Редактировать результат' : 'Новый результат';
+    document.getElementById('rImg').value = '';
+    document.getElementById('rMsg').textContent = '';
+    if(index >= 0){
+      document.getElementById('rTitle').value = edResults[index].title;
+      document.getElementById('rDesc').value = edResults[index].desc || '';
+    } else {
+      document.getElementById('rTitle').value = '';
+      document.getElementById('rDesc').value = '';
+    }
+    rBack.classList.add('open');
+  }
+  document.getElementById('edAddR').onclick = () => openRModal(-1);
+  document.getElementById('rSave').onclick = async () => {
+    const title = document.getElementById('rTitle').value.trim();
+    const desc = document.getElementById('rDesc').value.trim();
+    const file = document.getElementById('rImg').files[0];
+    const m = document.getElementById('rMsg');
+    m.className = 'msg';
+    if(title.length < 2){ m.classList.add('err'); m.textContent = 'Название слишком короткое'; return; }
+    m.textContent = 'Загрузка картинки...';
+    let imageUrl = editingR >= 0 ? (edResults[editingR].imageUrl || '') : '';
+    try { if(file) imageUrl = await uploadImage(file); } catch(err){ m.classList.add('err'); m.textContent = 'Ошибка загрузки: ' + err.message; return; }
+    if(editingR >= 0){ edResults[editingR].title = title; edResults[editingR].desc = desc; edResults[editingR].imageUrl = imageUrl; }
+    else edResults.push({ title, desc, imageUrl, minPoints: 0 });
+    rBack.classList.remove('open');
+    renderResults();
+  };
+
+  // --- публикация ---
+  document.getElementById('publishBtn').onclick = async () => {
+    const m = document.getElementById('pubMsg');
+    m.className = 'msg';
+    const title = document.getElementById('edTitle').value.trim();
+    const desc = document.getElementById('edDesc').value.trim();
+    if(title.length < 3){ m.classList.add('err'); m.textContent = 'Введите название теста'; return; }
+    if(edQuestions.length === 0){ m.classList.add('err'); m.textContent = 'Добавьте хотя бы 1 вопрос'; return; }
+    if(edResults.length === 0){ m.classList.add('err'); m.textContent = 'Добавьте хотя бы 1 результат'; return; }
+    m.textContent = 'Публикация...';
+    try {
+      let ava = pvImageUrl;
+      const avaFile = document.getElementById('edAvaFile').files[0];
+      if(avaFile && avaFile.size > 0 && ava.startsWith('data:')) ava = await uploadImage(avaFile);
+      if(!ava) ava = '🦸';
+      const { data: test, error: tErr } = await sb.from('tests')
+        .insert({ title, description: desc, avatar: ava, author_id: currentUser.id }).select().single();
+      if(tErr) throw tErr;
+      for(const r of edResults){
+        const { error } = await sb.from('test_results')
+          .insert({ test_id: test.id, title: r.title, description: r.desc, image_url: r.imageUrl, min_points: r.minPoints });
+        if(error) throw error;
       }
+      for(const q of edQuestions){
+        const { error } = await sb.from('test_questions')
+          .insert({ test_id: test.id, question_text: q.text, question_desc: q.desc, after_comment: q.comment,
+                    image_url: q.imageUrl, type: q.type, options: q.answers });
+        if(error) throw error;
+      }
+      m.classList.add('ok'); m.textContent = 'Тест опубликован!';
+      setTimeout(() => location.hash = '#/test/' + test.id, 700);
+    } catch(err){
+      m.classList.add('err'); m.textContent = 'Ошибка: ' + err.message;
     }
-    
-    showMainPage();
-  })();
+  };
 
-  // --- Модалки (вход, настройки, создание) ---
-  // (Этот блок кода остался прежним, я просто убрал его для краткости. 
-  // ВАЖНО: Убедись, что ты копируешь ВЕСЬ скрипт, включая обработчики модалок.
-  // Вот код модалок:
+  // ================= ПРОХОЖДЕНИЕ ТЕСТА =================
+  let tkTest = null, tkQuestions = [], tkResults = [], tkAnswers = {}, lastHistoryId = null;
+
+  async function openTestPage(id){
+    showPage('takeTestPage');
+    document.getElementById('quizContent').style.display = 'block';
+    document.getElementById('quizResultView').style.display = 'none';
+    document.getElementById('submitQuizBtn').style.display = 'none';
+    document.getElementById('tkQuestions').innerHTML = '<p style="text-align:center;color:var(--muted)">Загрузка...</p>';
+    const { data: test, error } = await sb.from('tests')
+      .select('id, title, description, avatar, author_id, profiles(login)').eq('id', id).single();
+    if(error || !test){ goHome(); return; }
+    const { data: questions } = await sb.from('test_questions').select('*').eq('test_id', id).order('id');
+    const { data: results } = await sb.from('test_results').select('*').eq('test_id', id).order('min_points', { ascending: false });
+    if(!questions || questions.length === 0 || !results || results.length === 0){
+      document.getElementById('tkQuestions').innerHTML = '<p style="text-align:center;color:var(--red)">Тест ещё не готов.</p>';
+      return;
+    }
+    tkTest = test; tkQuestions = questions; tkResults = results; tkAnswers = {}; lastHistoryId = null;
+    document.getElementById('tkTitle').textContent = test.title;
+    document.getElementById('tkDesc').textContent = test.description || '';
+    document.getElementById('tkImg').src = (test.avatar && test.avatar.startsWith('http')) ? test.avatar : DEFAULT_AVA + encodeURIComponent(test.title);
+    const aBox = document.getElementById('tkAuthor');
+    aBox.innerHTML = 'от <b>' + escapeHtml(test.profiles ? test.profiles.login : 'Неизвестный') + '</b>';
+    aBox.querySelector('b').onclick = () => location.hash = '#/user/' + test.author_id;
+    renderQuizQuestions();
+  }
+
+  function renderQuizQuestions(){
+    const box = document.getElementById('tkQuestions');
+    box.innerHTML = '';
+    tkQuestions.forEach((q, idx) => {
+      const div = document.createElement('div');
+      div.className = 'question-block';
+      let inner = '';
+      if(q.image_url) inner += '<img class="q-img" src="' + q.image_url + '">';
+      inner += '<h3>' + (idx + 1) + '. ' + escapeHtml(q.question_text) + '</h3>';
+      if(q.question_desc) inner += '<div class="qd">' + escapeHtml(q.question_desc) + '</div>';
+      box.appendChild(div);
+      const body = document.createElement('div');
+      if(q.type === 'input'){
+        const inp = document.createElement('input');
+        inp.className = 'answer-input'; inp.placeholder = 'Впишите ответ...'; inp.maxLength = 80;
+        inp.oninput = () => { if(inp.value.trim()) tkAnswers[q.id] = { type: 'input', value: inp.value.trim() }; else delete tkAnswers[q.id]; checkComplete(); };
+        body.appendChild(inp);
+      } else {
+        (q.options || []).forEach(opt => {
+          const btn = document.createElement('button');
+          btn.className = 'option-btn'; btn.textContent = opt.text;
+          btn.onclick = () => {
+            body.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            tkAnswers[q.id] = { type: 'choice', text: opt.text, points: Number(opt.points) || 0 };
+            checkComplete();
+          };
+          body.appendChild(btn);
+        });
+      }
+      div.appendChild(body);
+    });
+  }
+  function checkComplete(){
+    document.getElementById('submitQuizBtn').style.display = (Object.keys(tkAnswers).length === tkQuestions.length) ? 'block' : 'none';
+  }
+
+  document.getElementById('submitQuizBtn').onclick = async () => {
+    let total = 0;
+    const snapshot = {};
+    tkQuestions.forEach(q => {
+      const ans = tkAnswers[q.id];
+      let pts = 0, given = '';
+      if(ans.type === 'choice'){ pts = ans.points; given = ans.text; }
+      else {
+        given = ans.value;
+        const norm = ans.value.toLowerCase().replace(/[!?.,]/g, '').trim();
+        (q.options || []).forEach(o => {
+          const oNorm = String(o.text).toLowerCase().replace(/[!?.,]/g, '').trim();
+          if(oNorm === norm) pts = Number(o.points) || 0;
+        });
+      }
+      total += pts;
+      snapshot[q.id] = { qtext: q.question_text, given, points: pts, comment: q.after_comment || '' };
+    });
+    const res = tkResults.find(r => total >= r.min_points) || tkResults[tkResults.length - 1];
+    if(currentUser){
+      const { data } = await sb.from('user_history')
+        .insert({ user_id: currentUser.id, test_id: tkTest.id, result_id: res.id, answers: snapshot }).select().single();
+      lastHistoryId = data ? data.id : null;
+    }
+    showQuizResult(res, total);
+  };
+
+  function showQuizResult(res, total){
+    document.getElementById('quizContent').style.display = 'none';
+    const view = document.getElementById('quizResultView');
+    view.style.display = 'block';
+    document.getElementById('qrImg').src = (res.image_url && res.image_url.startsWith('http')) ? res.image_url : DEFAULT_AVA + encodeURIComponent(res.title);
+    document.getElementById('qrTitle').textContent = res.title;
+    document.getElementById('qrDesc').textContent = (res.description ? res.description + ' ' : '') + 'Вы набрали ' + total + ' очк.';
+    const toStats = document.getElementById('toStatsBtn');
+    if(lastHistoryId){ toStats.style.display = 'block'; toStats.onclick = () => location.hash = '#/result/' + lastHistoryId; }
+    else { toStats.style.display = 'none'; }
+    loadLikes(); loadComments();
+    window.scrollTo(0,0);
+  }
+  document.getElementById('retryBtn').onclick = () => openTestPage(tkTest.id);
+
+  // --- лайки ---
+  let myLike = 0;
+  async function loadLikes(){
+    myLike = 0;
+    const { data } = await sb.from('test_likes').select('user_id, value').eq('test_id', tkTest.id);
+    let l = 0, d = 0;
+    (data || []).forEach(r => { if(r.value === 1) l++; else d++; if(currentUser && r.user_id === currentUser.id) myLike = r.value; });
+    document.getElementById('likeCount').textContent = l;
+    document.getElementById('dislikeCount').textContent = d;
+    paintLikes();
+  }
+  function paintLikes(){
+    document.getElementById('likeBtn').className = 'like-btn' + (myLike === 1 ? ' active-like' : '');
+    document.getElementById('dislikeBtn').className = 'like-btn' + (myLike === -1 ? ' active-dislike' : '');
+  }
+  async function setLike(v){
+    if(!currentUser){ openAuth('Войдите, чтобы оценивать тесты'); return; }
+    if(myLike === v) v = 0;
+    if(v === 0){
+      await sb.from('test_likes').delete().eq('test_id', tkTest.id).eq('user_id', currentUser.id);
+    } else {
+      const { data: ex } = await sb.from('test_likes').select('id').eq('test_id', tkTest.id).eq('user_id', currentUser.id).maybeSingle();
+      if(ex) await sb.from('test_likes').update({ value: v }).eq('id', ex.id);
+      else await sb.from('test_likes').insert({ test_id: tkTest.id, user_id: currentUser.id, value: v });
+    }
+    loadLikes();
+  }
+  document.getElementById('likeBtn').onclick = () => setLike(1);
+  document.getElementById('dislikeBtn').onclick = () => setLike(-1);
+
+  // --- комментарии ---
+  async function loadComments(){
+    const box = document.getElementById('commentList');
+    const { data } = await sb.from('test_comments')
+      .select('text, created_at, profiles(login, avatar)').eq('test_id', tkTest.id).order('created_at', { ascending: false }).limit(50);
+    box.innerHTML = '';
+    if(!data || data.length === 0){ box.innerHTML = '<p style="color:var(--muted);font-size:14px">Пока нет комментариев.</p>'; return; }
+    data.forEach(c => {
+      const div = document.createElement('div');
+      div.className = 'comment';
+      const ava = getAvatarUrl(c.profiles ? c.profiles.avatar : '', c.profiles ? c.profiles.login : 'U');
+      div.innerHTML = '<div class="c-head"><img src="' + ava + '"><b>' + escapeHtml(c.profiles ? c.profiles.login : '???') + '</b><span>' + fmtDate(c.created_at) + '</span></div><p>' + escapeHtml(c.text) + '</p>';
+      box.appendChild(div);
+    });
+  }
+  document.getElementById('sendCommentBtn').onclick = async () => {
+    if(!currentUser){ openAuth('Войдите, чтобы оставлять комментарии'); return; }
+    const ta = document.getElementById('commentText');
+    const text = ta.value.trim();
+    if(!text) return;
+    const { error } = await sb.from('test_comments').insert({ test_id: tkTest.id, user_id: currentUser.id, text });
+    if(!error){ ta.value = ''; loadComments(); }
+  };
+
+  // ================= СТРАНИЦА СТАТИСТИКИ =================
+  async function openStatsPage(hid){
+    showPage('statsPage');
+    const { data: h, error } = await sb.from('user_history')
+      .select('id, answers, created_at, tests(id, title, avatar), test_results(title, image_url, description)')
+      .eq('id', hid).single();
+    if(error || !h || !h.test_results){ goHome(); return; }
+    document.getElementById('stImg').src = (h.test_results.image_url && h.test_results.image_url.startsWith('http')) ? h.test_results.image_url : DEFAULT_AVA + encodeURIComponent(h.test_results.title);
+    document.getElementById('stTitle').textContent = h.test_results.title;
+    document.getElementById('stDesc').textContent = h.test_results.description || '';
+    document.getElementById('stTest').innerHTML = 'Тест: <a style="color:var(--red);font-weight:700" href="#/test/' + h.tests.id + '">' + escapeHtml(h.tests.title) + '</a> · ' + fmtDate(h.created_at);
+    const shareUrl = location.origin + location.pathname + '#/result/' + hid;
+    document.getElementById('shareStatsBtn').onclick = () => {
+      navigator.clipboard.writeText(shareUrl).then(() => alert('Ссылка скопирована!'));
+    };
+    const box = document.getElementById('statsQuestions');
+    box.innerHTML = '';
+    const ans = h.answers || {};
+    Object.values(ans).forEach(a => {
+      const div = document.createElement('div');
+      div.className = 'stats-row';
+      div.innerHTML = '<div class="sr-q">' + escapeHtml(a.qtext) + '</div>' +
+        '<div class="sr-ans">Ваш ответ: <b>' + escapeHtml(a.given || '—') + '</b></div>' +
+        '<div class="sr-pts">+' + a.points + ' очков</div>' +
+        (a.comment ? '<div class="sr-comment">💬 ' + escapeHtml(a.comment) + '</div>' : '');
+      box.appendChild(div);
+    });
+  }
+
+  // ================= АВТОРИЗАЦИЯ =================
   const back = document.getElementById('authBack');
   const tabLogin = document.getElementById('tabLogin');
   const tabReg = document.getElementById('tabReg');
   const avaBlock = document.getElementById('avaBlock');
   const msg = document.getElementById('authMsg');
   let mode = 'login';
-  function openAuth(note) { msg.textContent = ''; msg.className = 'msg'; document.getElementById('authSub').textContent = note || 'Войдите, чтобы создавать тесты'; back.classList.add('open'); }
+  function openAuth(note){ msg.textContent = ''; msg.className = 'msg'; document.getElementById('authSub').textContent = note || 'Войдите, чтобы создавать тесты'; back.classList.add('open'); }
   document.getElementById('authClose').onclick = () => back.classList.remove('open');
-  back.onclick = e => { if (e.target === back) back.classList.remove('open'); };
-  function setMode(m) {
+  back.onclick = e => { if(e.target === back) back.classList.remove('open'); };
+  function setMode(m){
     mode = m;
     tabLogin.classList.toggle('active', m === 'login');
     tabReg.classList.toggle('active', m === 'reg');
@@ -654,24 +961,24 @@
     const pass = document.getElementById('passInput').value;
     const file = document.getElementById('regAvaFile').files[0];
     msg.className = 'msg';
-    if (!/^[a-zA-Z0-9_]{3,20}$/.test(login)) { msg.classList.add('err'); msg.textContent = 'Логин: 3-20 символов, только буквы, цифры и _'; return; }
-    if (pass.length < 6) { msg.classList.add('err'); msg.textContent = 'Пароль должен быть не короче 6 символов'; return; }
+    if(!/^[a-zA-Z0-9_]{3,20}$/.test(login)){ msg.classList.add('err'); msg.textContent = 'Логин: 3-20 символов, только буквы, цифры и _'; return; }
+    if(pass.length < 6){ msg.classList.add('err'); msg.textContent = 'Пароль должен быть не короче 6 символов'; return; }
     const email = login.toLowerCase() + FAKE_DOMAIN;
-    if (mode === 'login') {
+    if(mode === 'login'){
       const { error } = await sb.auth.signInWithPassword({ email, password: pass });
-      if (error) { msg.classList.add('err'); msg.textContent = 'Неверный логин или пароль'; return; }
+      if(error){ msg.classList.add('err'); msg.textContent = 'Неверный логин или пароль'; return; }
       back.classList.remove('open');
     } else {
       const { data: exists } = await sb.from('profiles').select('login').eq('login', login).maybeSingle();
-      if (exists) { msg.classList.add('err'); msg.textContent = 'Такой логин уже занят'; return; }
+      if(exists){ msg.classList.add('err'); msg.textContent = 'Такой логин уже занят'; return; }
       msg.textContent = 'Создаём аккаунт...';
       const { data, error } = await sb.auth.signUp({ email, password: pass });
-      if (error) { msg.classList.add('err'); msg.textContent = 'Ошибка: ' + error.message; return; }
-      if (data.user) {
+      if(error){ msg.classList.add('err'); msg.textContent = 'Ошибка: ' + error.message; return; }
+      if(data.user){
         let avaUrl = '';
-        if (file) { try { msg.textContent = 'Загрузка аватарки...'; avaUrl = await uploadImage(file); } catch (err) { msg.classList.add('err'); msg.textContent = 'Ошибка загрузки авы: ' + err.message; return; } }
+        if(file){ try { msg.textContent = 'Загрузка аватарки...'; avaUrl = await uploadImage(file); } catch(err){ msg.classList.add('err'); msg.textContent = 'Ошибка загрузки авы: ' + err.message; return; } }
         const { error: perr } = await sb.from('profiles').insert({ id: data.user.id, login, avatar: avaUrl });
-        if (perr) { msg.classList.add('err'); msg.textContent = 'Ошибка сохранения профиля'; return; }
+        if(perr){ msg.classList.add('err'); msg.textContent = 'Ошибка сохранения профиля'; return; }
         msg.classList.add('ok'); msg.textContent = 'Аккаунт создан! Входим...';
         await sb.auth.signInWithPassword({ email, password: pass });
         back.classList.remove('open');
@@ -679,6 +986,8 @@
     }
     document.getElementById('passInput').value = '';
   };
+
+  // настройки профиля
   const settingsBack = document.getElementById('settingsBack');
   document.getElementById('openSettingsBtn').onclick = () => {
     document.getElementById('settingsAvaFile').value = '';
@@ -687,163 +996,31 @@
     settingsBack.classList.add('open');
   };
   document.getElementById('settingsClose').onclick = () => settingsBack.classList.remove('open');
-  settingsBack.onclick = e => { if (e.target === settingsBack) settingsBack.classList.remove('open'); };
+  settingsBack.onclick = e => { if(e.target === settingsBack) settingsBack.classList.remove('open'); };
   document.getElementById('saveSettingsBtn').onclick = async () => {
     const file = document.getElementById('settingsAvaFile').files[0];
     const newStatus = document.getElementById('settingsStatus').value.trim();
     const sMsg = document.getElementById('settingsMsg');
     sMsg.className = 'msg'; sMsg.textContent = 'Сохранение...';
-    let newAvaUrl = currentProfile.avatar;
-    if (file) { try { sMsg.textContent = 'Загрузка аватарки...'; newAvaUrl = await uploadImage(file); } catch (err) { sMsg.classList.add('err'); sMsg.textContent = 'Ошибка загрузки: ' + err.message; return; } }
-    const { error } = await sb.from('profiles').update({ avatar: newAvaUrl, status: newStatus }).eq('id', currentUser.id);
-    if (error) { sMsg.classList.add('err'); sMsg.textContent = 'Ошибка: ' + error.message; } 
+    let newAva = currentProfile.avatar;
+    if(file){ try { sMsg.textContent = 'Загрузка аватарки...'; newAva = await uploadImage(file); } catch(err){ sMsg.classList.add('err'); sMsg.textContent = 'Ошибка загрузки: ' + err.message; return; } }
+    const { error } = await sb.from('profiles').update({ avatar: newAva, status: newStatus }).eq('id', currentUser.id);
+    if(error){ sMsg.classList.add('err'); sMsg.textContent = 'Ошибка: ' + error.message; }
     else {
       sMsg.classList.add('ok'); sMsg.textContent = 'Сохранено!';
-      currentProfile.avatar = newAvaUrl; currentProfile.status = newStatus;
-      renderNav(); showUserProfile(currentUser.id);
+      currentProfile.avatar = newAva; currentProfile.status = newStatus;
+      renderNav(); openProfilePage(currentUser.id);
       setTimeout(() => settingsBack.classList.remove('open'), 800);
     }
   };
-  const createBack = document.getElementById('createBack');
-  function openCreate() {
-    document.getElementById('testMsg').textContent = '';
-    document.getElementById('testTitle').value = '';
-    document.getElementById('testAvaFile').value = '';
-    createBack.classList.add('open');
-  }
-  document.getElementById('createClose').onclick = () => createBack.classList.remove('open');
-  createBack.onclick = e => { if (e.target === createBack) createBack.classList.remove('open'); };
-  document.getElementById('testAction').onclick = async () => {
-    const title = document.getElementById('testTitle').value.trim();
-    const file = document.getElementById('testAvaFile').files[0];
-    const tMsg = document.getElementById('testMsg');
-    tMsg.className = 'msg';
-    if (title.length < 3) { tMsg.classList.add('err'); tMsg.textContent = 'Название должно быть не короче 3 символов'; return; }
-    let finalAva = '🦸';
-    if (file) { tMsg.textContent = 'Загрузка картинки...'; try { finalAva = await uploadImage(file); } catch (err) { tMsg.classList.add('err'); tMsg.textContent = 'Ошибка: ' + err.message; return; } }
-    tMsg.textContent = 'Создаём...';
-    const { data, error } = await sb.from('tests').insert({ title: title, avatar: finalAva, author_id: currentUser.id }).select().single();
-    if (error) { tMsg.classList.add('err'); tMsg.textContent = 'Ошибка: ' + error.message; } 
-    else {
-      createBack.classList.remove('open');
-      editingTestId = data.id;
-      document.getElementById('editorTestTitle').textContent = title;
-      editorResults = [];
-      editorQuestions = [];
-      tempIdCounter = 1;
-      hideAllPages(); editorPage.style.display = 'block'; renderEditor();
-    }
-  };
-  function renderEditor() {
-    const resList = document.getElementById('resultsList');
-    resList.innerHTML = '';
-    if (editorResults.length === 0) resList.innerHTML = '<p style="color:var(--muted);font-size:14px;margin-bottom:12px;">Пока нет результатов.</p>';
-    editorResults.forEach(r => {
-      const div = document.createElement('div');
-      div.className = 'result-item';
-      div.innerHTML = `
-        ${r.imageUrl ? `<img src="${r.imageUrl}">` : `<div style="width:60px;height:60px;background:#eee;border-radius:8px;display:flex;align-items:center;justify-content:center;">?</div>`}
-        <div style="flex:1;"><strong style="color:var(--red)">${escapeHtml(r.title)}</strong><br><span style="font-size:13px;color:var(--muted)">${escapeHtml(r.desc || '')}</span></div>
-      `;
-      resList.appendChild(div);
-    });
-    const qList = document.getElementById('questionsList');
-    qList.innerHTML = '';
-    if (editorQuestions.length === 0) qList.innerHTML = '<p style="color:var(--muted);font-size:14px;margin-bottom:12px;">Пока нет вопросов.</p>';
-    editorQuestions.forEach((q, index) => {
-      const div = document.createElement('div');
-      div.className = 'question-item';
-      let optsHtml = q.options.map(o => {
-        const res = editorResults.find(r => r.tempId === o.resultTempId);
-        return `<div>• ${escapeHtml(o.text)} <span style="color:var(--red);font-size:12px;">(→ ${res ? escapeHtml(res.title) : '?'})</span></div>`;
-      }).join('');
-      div.innerHTML = `<strong>Вопрос ${index + 1}: ${escapeHtml(q.text)}</strong><div class="q-opts">${optsHtml}</div>`;
-      qList.appendChild(div);
-    });
-  }
-  const resultBack = document.getElementById('resultBack');
-  document.getElementById('addResultBtn').onclick = () => {
-    document.getElementById('resTitle').value = '';
-    document.getElementById('resDesc').value = '';
-    document.getElementById('resFile').value = '';
-    document.getElementById('resMsg').textContent = '';
-    resultBack.classList.add('open');
-  };
-  document.getElementById('resultClose').onclick = () => resultBack.classList.remove('open');
-  resultBack.onclick = e => { if (e.target === resultBack) resultBack.classList.remove('open'); };
-  document.getElementById('saveResultBtn').onclick = async () => {
-    const title = document.getElementById('resTitle').value.trim();
-    const desc = document.getElementById('resDesc').value.trim();
-    const file = document.getElementById('resFile').files[0];
-    const rMsg = document.getElementById('resMsg');
-    rMsg.className = 'msg';
-    if (title.length < 2) { rMsg.classList.add('err'); rMsg.textContent = 'Название слишком короткое'; return; }
-    let imageUrl = '';
-    if (file) { rMsg.textContent = 'Загрузка картинки...'; try { imageUrl = await uploadImage(file); } catch (err) { rMsg.classList.add('err'); rMsg.textContent = 'Ошибка: ' + err.message; return; } }
-    editorResults.push({ tempId: tempIdCounter++, title, desc, imageUrl });
-    resultBack.classList.remove('open');
-    renderEditor();
-  };
-  const questionBack = document.getElementById('questionBack');
-  document.getElementById('addQuestionBtn').onclick = () => {
-    if (editorResults.length < 2) { alert('Сначала добавьте хотя бы 2 результата!'); return; }
-    document.getElementById('qText').value = '';
-    document.getElementById('opt1').value = '';
-    document.getElementById('opt2').value = '';
-    document.getElementById('qMsg').textContent = '';
-    const res1 = document.getElementById('res1');
-    const res2 = document.getElementById('res2');
-    res1.innerHTML = ''; res2.innerHTML = '';
-    editorResults.forEach(r => {
-      res1.innerHTML += `<option value="${r.tempId}">${escapeHtml(r.title)}</option>`;
-      res2.innerHTML += `<option value="${r.tempId}">${escapeHtml(r.title)}</option>`;
-    });
-    if (editorResults.length > 1) res2.selectedIndex = 1;
-    questionBack.classList.add('open');
-  };
-  document.getElementById('questionClose').onclick = () => questionBack.classList.remove('open');
-  questionBack.onclick = e => { if (e.target === questionBack) questionBack.classList.remove('open'); };
-  document.getElementById('saveQuestionBtn').onclick = () => {
-    const text = document.getElementById('qText').value.trim();
-    const opt1 = document.getElementById('opt1').value.trim();
-    const opt2 = document.getElementById('opt2').value.trim();
-    const r1 = parseInt(document.getElementById('res1').value);
-    const r2 = parseInt(document.getElementById('res2').value);
-    const qMsg = document.getElementById('qMsg');
-    qMsg.className = 'msg';
-    if (text.length < 3) { qMsg.classList.add('err'); qMsg.textContent = 'Текст вопроса слишком короткий'; return; }
-    if (!opt1 || !opt2) { qMsg.classList.add('err'); qMsg.textContent = 'Заполните оба варианта ответа'; return; }
-    editorQuestions.push({ text: text, options: [{ text: opt1, resultTempId: r1 }, { text: opt2, resultTempId: r2 }] });
-    questionBack.classList.remove('open');
-    renderEditor();
-  };
-  document.getElementById('saveTestBtn').onclick = async () => {
-    const eMsg = document.getElementById('editorMsg');
-    eMsg.className = 'msg';
-    if (editorResults.length < 2) { eMsg.classList.add('err'); eMsg.textContent = 'Нужно добавить минимум 2 результата!'; return; }
-    if (editorQuestions.length === 0) { eMsg.classList.add('err'); eMsg.textContent = 'Нужно добавить хотя бы 1 вопрос!'; return; }
-    eMsg.textContent = 'Сохранение...';
-    try {
-      const resultIdMap = {}; 
-      for (const r of editorResults) {
-        const { data, error } = await sb.from('test_results').insert({ test_id: editingTestId, title: r.title, description: r.desc, image_url: r.imageUrl }).select().single();
-        if (error) throw error;
-        resultIdMap[r.tempId] = data.id;
-      }
-      for (const q of editorQuestions) {
-        const mappedOptions = q.options.map(o => ({ text: o.text, resultId: resultIdMap[o.resultTempId] }));
-        const { error } = await sb.from('test_questions').insert({ test_id: editingTestId, question_text: q.text, options: mappedOptions });
-        if (error) throw error;
-      }
-      eMsg.classList.add('ok'); eMsg.textContent = 'Тест опубликован!';
-      setTimeout(() => { showMainPage(); }, 1000);
-    } catch (err) {
-      eMsg.classList.add('err'); eMsg.textContent = 'Ошибка сохранения: ' + err.message;
-    }
-  };
-  document.getElementById('cancelEditorBtn').onclick = () => {
-    if (confirm('Несохранённые данные будут потеряны. Выйти?')) showMainPage();
-  };
+
+  // старт
+  (async () => {
+    const { data } = await sb.auth.getSession();
+    if(data.session){ currentUser = data.session.user; await loadProfile(data.session.user); }
+    else renderNav();
+    route();
+  })();
 </script>
 
 </body>
