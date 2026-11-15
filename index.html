@@ -6,52 +6,56 @@
 <title>Пикуко 3 — тесты и игры от пользователей</title>
 <style>
   :root{
-    --red:#d0162c; --yellow:#f4e238; --white:#ffffff; --text:#1d1d1d; --muted:#6b6b6b; --card-border:#eeeeee;
+    --red:#d0162c; --darkred:#a81223; --yellow:#f4e238; --yellow2:#ffe980;
+    --white:#ffffff; --text:#1d1d1d; --muted:#6b6b6b; --card-border:#eeeeee;
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:var(--white);color:var(--text)}
+  body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:var(--red);color:var(--white)}
   a{text-decoration:none;color:inherit;cursor:pointer}
   .page{display:none}
+  h2.page-title{color:var(--yellow)}
 
-  header{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;background:var(--white);border-bottom:4px solid var(--yellow);position:sticky;top:0;z-index:10}
-  .logo{font-size:26px;font-weight:800;color:var(--red);letter-spacing:.5px;cursor:pointer}
+  header{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;background:var(--darkred);border-bottom:4px solid var(--yellow);position:sticky;top:0;z-index:10}
+  .logo{font-size:26px;font-weight:800;color:var(--white);letter-spacing:.5px;cursor:pointer}
   .logo span{display:inline-block;background:var(--yellow);color:var(--red);border-radius:10px;padding:0 8px;margin-left:4px}
   nav{display:flex;gap:10px;align-items:center}
   .btn{display:inline-block;font-weight:700;font-size:15px;padding:10px 18px;border-radius:12px;cursor:pointer;border:none;text-align:center}
-  .btn-create{background:var(--red);color:var(--white)}
-  .btn-create:hover{background:#a81223}
-  .btn-profile{background:var(--yellow);color:var(--red)}
-  .btn-profile:hover{background:#e0cb1f}
-  .user-chip{display:flex;align-items:center;gap:8px;background:var(--yellow);border-radius:12px;padding:6px 12px;font-weight:700;color:var(--red);cursor:pointer}
+  .btn-create{background:var(--yellow);color:var(--red)}
+  .btn-create:hover{background:#e0cb1f}
+  .btn-profile{background:var(--white);color:var(--red)}
+  .btn-profile:hover{background:#f0f0f0}
+  .user-chip{display:flex;align-items:center;gap:8px;background:var(--yellow);color:var(--red);border-radius:12px;padding:6px 12px;font-weight:700;cursor:pointer}
   .user-chip:hover{background:#e0cb1f}
   .img-ava{width:32px;height:32px;border-radius:50%;object-fit:cover;background:#fff}
   .big-img-ava{width:120px;height:120px;border-radius:50%;object-fit:cover;background:#fff;border:4px solid var(--yellow)}
 
-  .hero{text-align:center;padding:48px 20px 32px;background:linear-gradient(180deg,var(--yellow) 0%,var(--white) 100%)}
-  .hero h1{font-size:34px;color:var(--red);margin-bottom:10px}
-  .hero p{color:var(--muted);font-size:17px}
+  .hero{text-align:center;padding:48px 20px 32px;background:linear-gradient(180deg,#e8354a 0%,var(--red) 100%)}
+  .hero h1{font-size:34px;color:var(--white);margin-bottom:10px}
+  .hero p{color:rgba(255,255,255,.85);font-size:17px}
 
   .tests{padding:24px;max-width:1100px;margin:0 auto}
-  .tests h2{color:var(--red);margin-bottom:16px}
+  .tests h2{color:var(--yellow);margin-bottom:16px}
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px}
-  .card{border:2px solid var(--card-border);border-radius:16px;padding:16px;background:var(--white);transition:transform .15s,border-color .15s;display:flex;flex-direction:column;align-items:center;text-align:center;cursor:pointer}
+  .card{border:2px solid var(--card-border);border-radius:16px;padding:16px;background:var(--white);color:var(--text);transition:transform .15s,border-color .15s;display:flex;flex-direction:column;align-items:center;text-align:center;cursor:pointer;position:relative}
   .card:hover{transform:translateY(-4px);border-color:var(--yellow)}
   .card .test-icon{width:100%;height:110px;border-radius:12px;background:var(--yellow);display:flex;align-items:center;justify-content:center;font-size:52px;margin-bottom:12px;overflow:hidden}
   .card .test-icon img{width:100%;height:100%;object-fit:cover}
-  .card h3{font-size:17px;margin-bottom:6px}
+  .card h3{font-size:17px;margin-bottom:6px;color:var(--red)}
   .card .desc{font-size:13px;color:var(--muted);margin-bottom:8px}
   .card .author{color:var(--muted);font-size:14px}
   .card .author:hover{color:var(--red);text-decoration:underline}
+  .card-stats-btn{position:absolute;top:8px;right:8px;background:var(--white);border:2px solid var(--yellow);border-radius:10px;padding:3px 9px;cursor:pointer;font-size:15px;z-index:2}
+  .card-stats-btn:hover{background:var(--yellow)}
 
   /* Профиль */
   #profilePage{padding:40px 24px;max-width:800px;margin:0 auto}
-  .profile-header{display:flex;align-items:center;gap:24px;margin-bottom:32px;background:#fafafa;padding:24px;border-radius:20px;border:2px solid var(--card-border)}
+  .profile-header{display:flex;align-items:center;gap:24px;margin-bottom:32px;background:var(--white);color:var(--text);padding:24px;border-radius:20px;border:2px solid var(--card-border)}
   .profile-info h2{font-size:28px;color:var(--red);margin-bottom:8px}
   .profile-info p{color:var(--muted);font-size:16px;margin-bottom:16px;font-style:italic}
   .btn-settings{background:#eee;color:var(--text);font-size:14px;padding:8px 16px}
   .btn-settings:hover{background:#ddd}
   .history-list{display:flex;flex-direction:column;gap:12px;margin-top:16px}
-  .history-item{display:flex;align-items:center;gap:16px;background:#fff;border:2px solid var(--card-border);padding:12px;border-radius:12px;cursor:pointer}
+  .history-item{display:flex;align-items:center;gap:16px;background:var(--white);color:var(--text);border:2px solid var(--card-border);padding:12px;border-radius:12px;cursor:pointer}
   .history-item:hover{border-color:var(--yellow)}
   .history-item img{width:50px;height:50px;border-radius:8px;object-fit:cover}
   .history-item .info{flex:1}
@@ -64,86 +68,112 @@
   .editor-wrap{display:flex;gap:28px;align-items:flex-start}
   .editor-left{flex:1;min-width:0}
   .editor-right{width:280px;flex-shrink:0;position:sticky;top:90px}
-  .editor-right h3{color:var(--red);margin-bottom:12px;font-size:16px}
-  .editor-step{background:#fafafa;border:2px solid var(--card-border);border-radius:16px;padding:24px;margin-bottom:24px}
+  .editor-right h3{color:var(--yellow);margin-bottom:12px;font-size:16px}
+  .editor-step{background:var(--white);color:var(--text);border-radius:16px;padding:24px;margin-bottom:24px}
   .editor-step h3{color:var(--red);margin-bottom:16px}
   .field{margin-bottom:12px}
   .field label{display:block;font-size:13px;font-weight:700;color:var(--muted);margin-bottom:4px}
-  .field input,.field textarea,.field select{width:100%;padding:11px 12px;border:2px solid #e2e2e2;border-radius:10px;font-size:15px;font-family:inherit}
+  .field input,.field textarea,.field select{width:100%;padding:11px 12px;border:2px solid #e2e2e2;border-radius:10px;font-size:15px;font-family:inherit;background:#fff;color:var(--text)}
   .field input:focus,.field textarea:focus{outline:none;border-color:var(--red)}
-  .q-item,.r-item{background:#fff;padding:16px;border-radius:12px;border:1px solid #eee;margin-bottom:14px}
-  .q-item .q-head,.r-item .r-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px}
-  .q-item .q-head strong{font-size:15px}
+  .qe,.re{background:#fafafa;padding:16px;border-radius:12px;border:1px solid #eee;margin-bottom:14px}
+  .qe-head,.re-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}
+  .qe-head strong,.re-head strong{font-size:15px;color:var(--red)}
   .tag{display:inline-block;background:var(--yellow);color:var(--red);font-size:12px;font-weight:700;padding:3px 10px;border-radius:8px}
-  .q-opts{font-size:13px;color:var(--muted);margin-top:6px;padding-left:12px;border-left:2px solid var(--yellow)}
   .icon-btn{background:#f3f3f3;border:none;border-radius:8px;padding:5px 10px;cursor:pointer;font-size:13px;font-weight:700;color:var(--muted)}
   .icon-btn:hover{background:#e5e5e5;color:var(--red)}
   .ans-row{display:flex;gap:8px;margin-bottom:8px;align-items:center}
-  .ans-row input[type=text]{flex:1;padding:10px;border:2px solid #e2e2e2;border-radius:10px;font-size:14px}
-  .ans-row input[type=number]{width:80px;padding:10px;border:2px solid #e2e2e2;border-radius:10px;font-size:14px}
+  .ans-row input[type=text]{flex:1;padding:10px;border:2px solid #e2e2e2;border-radius:10px;font-size:14px;background:#fff;color:var(--text)}
+  .ans-row input[type=number]{width:80px;padding:10px;border:2px solid #e2e2e2;border-radius:10px;font-size:14px;background:#fff;color:var(--text)}
   .type-tabs{display:flex;gap:8px;margin-bottom:14px}
   .tab{flex:1;text-align:center;padding:9px;border-radius:10px;font-weight:700;cursor:pointer;background:#f3f3f3;color:var(--muted);font-size:14px}
   .tab.active{background:var(--yellow);color:var(--red)}
-  .slider-row{display:flex;align-items:center;gap:12px;margin-top:10px}
-  .slider-row input[type=range]{flex:1;accent-color:var(--red)}
-  .slider-val{font-weight:800;color:var(--red);min-width:90px;font-size:14px}
-  .r-thumb{width:56px;height:56px;border-radius:10px;object-fit:cover;background:var(--yellow);flex-shrink:0}
+  .thumb{width:56px;height:56px;border-radius:10px;object-fit:cover;background:var(--yellow);flex-shrink:0}
+  .img-row{display:flex;gap:10px;align-items:center}
+  .img-row input[type=file]{flex:1;padding:8px;border:2px solid #e2e2e2;border-radius:10px;background:#fff;color:var(--muted)}
   .add-btn{background:#fff;border:2px dashed #ccc;color:var(--muted);font-weight:700;padding:12px;border-radius:12px;cursor:pointer;width:100%;font-size:15px}
   .add-btn:hover{border-color:var(--red);color:var(--red)}
+  /* ползунок делений */
+  .bounds-track{position:relative;height:16px;background:#f0f0f0;border-radius:10px;margin:16px 0 12px}
+  .bounds-fill{position:absolute;top:0;height:100%;background:var(--yellow)}
+  .bounds-fill.alt{background:var(--yellow2)}
+  .bounds-handle{position:absolute;top:-8px;width:22px;height:32px;background:var(--red);border:3px solid #fff;border-radius:8px;cursor:ew-resize;touch-action:none;box-shadow:0 2px 6px rgba(0,0,0,.25);color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center;user-select:none}
+  .bounds-labels{display:flex;flex-direction:column;gap:4px}
+  .bounds-label{font-size:13px;color:var(--muted);background:#fafafa;border-radius:8px;padding:6px 10px}
 
   /* Прохождение теста */
-  #takeTestPage{padding:40px 24px;max-width:600px;margin:0 auto}
+  #takeTestPage{padding:40px 24px;max-width:1000px;margin:0 auto}
   .test-header{text-align:center;margin-bottom:32px}
-  .test-header img{width:150px;height:150px;border-radius:16px;object-fit:cover;margin-bottom:16px;box-shadow:0 4px 12px rgba(0,0,0,.1)}
-  .test-header h2{color:var(--red);font-size:28px;margin-bottom:8px}
-  .test-header .tdesc{color:var(--muted);font-size:16px;margin-bottom:8px}
-  .test-header .tauthor{font-size:14px;color:var(--muted)}
-  .test-header .tauthor b{cursor:pointer}
-  .test-header .tauthor b:hover{color:var(--red);text-decoration:underline}
-  .question-block{background:#fafafa;border:2px solid var(--card-border);border-radius:16px;padding:24px;margin-bottom:24px}
+  .test-header img{width:150px;height:150px;border-radius:16px;object-fit:cover;margin-bottom:16px;box-shadow:0 4px 12px rgba(0,0,0,.25);border:4px solid var(--yellow)}
+  .test-header h2{font-size:28px;margin-bottom:8px}
+  .test-header .tdesc{color:rgba(255,255,255,.85);font-size:16px;margin-bottom:10px}
+  .test-header .tauthor{font-size:14px;color:rgba(255,255,255,.75)}
+  .test-header .tauthor b{cursor:pointer;color:var(--yellow)}
+  .quiz-col{max-width:600px;margin:0 auto}
+  .question-block{background:var(--white);color:var(--text);border-radius:16px;padding:24px;margin-bottom:24px}
   .question-block .q-img{width:100%;max-height:220px;object-fit:cover;border-radius:12px;margin-bottom:14px}
-  .question-block h3{font-size:20px;margin-bottom:6px}
+  .question-block h3{font-size:20px;margin-bottom:6px;color:var(--red)}
   .question-block .qd{color:var(--muted);font-size:14px;margin-bottom:16px}
-  .option-btn{display:block;width:100%;text-align:left;background:#fff;border:2px solid #e2e2e2;padding:14px;border-radius:12px;font-size:16px;font-weight:600;cursor:pointer;margin-bottom:10px;transition:all .15s}
+  .option-btn{display:block;width:100%;text-align:left;background:#fff;border:2px solid #e2e2e2;padding:14px;border-radius:12px;font-size:16px;font-weight:600;cursor:pointer;margin-bottom:10px;transition:all .15s;color:var(--text)}
   .option-btn:hover{border-color:var(--yellow);background:#fffdf0}
   .option-btn.selected{border-color:var(--red);background:#fff3f4;color:var(--red)}
-  .answer-input{width:100%;padding:14px;border:2px solid #e2e2e2;border-radius:12px;font-size:16px;font-family:inherit}
+  .answer-input{width:100%;padding:14px;border:2px solid #e2e2e2;border-radius:12px;font-size:16px;font-family:inherit;background:#fff;color:var(--text)}
   .answer-input:focus{outline:none;border-color:var(--red)}
 
-  .result-screen{text-align:center;background:#fafafa;padding:40px 24px;border-radius:20px;border:4px solid var(--yellow);margin-bottom:24px}
-  .result-screen img.res-img{width:200px;height:200px;border-radius:50%;object-fit:cover;margin-bottom:24px;border:6px solid var(--yellow)}
-  .result-screen h2{font-size:32px;color:var(--red);margin-bottom:12px}
-  .result-screen p{font-size:18px;color:var(--muted);margin-bottom:24px}
-  .result-actions{display:flex;flex-direction:column;gap:12px;max-width:320px;margin:0 auto}
+  .result-screen{text-align:center;background:var(--white);color:var(--text);padding:32px 20px;border-radius:20px;border:4px solid var(--yellow)}
+  .result-screen img.res-img{width:170px;height:170px;border-radius:50%;object-fit:cover;margin-bottom:20px;border:6px solid var(--yellow)}
+  .result-screen h2{font-size:30px;color:var(--red);margin-bottom:12px}
+  .result-screen p{font-size:17px;color:var(--muted);margin-bottom:16px}
+  .result-actions{display:flex;flex-direction:column;gap:10px;max-width:320px;margin:0 auto}
 
-  .likes-row{display:flex;justify-content:center;gap:14px;margin-bottom:24px}
-  .like-btn{font-size:18px;font-weight:800;padding:12px 22px;border-radius:14px;border:2px solid #e2e2e2;background:#fff;cursor:pointer}
+  .result-layout{display:flex;gap:24px;align-items:flex-start;margin-top:24px}
+  .result-left{flex:1;min-width:0}
+  .result-right{width:340px;flex-shrink:0;position:sticky;top:90px}
+  .likes-row{display:flex;justify-content:center;gap:14px;margin-top:16px}
+  .like-btn{font-size:18px;font-weight:800;padding:12px 22px;border-radius:14px;border:2px solid #e2e2e2;background:#fff;cursor:pointer;color:var(--text)}
   .like-btn.active-like{border-color:#1a9e3f;color:#1a9e3f;background:#f0fff4}
   .like-btn.active-dislike{border-color:var(--red);color:var(--red);background:#fff3f4}
 
-  .comments-box{max-width:600px;margin:0 auto 24px}
-  .comments-box h3{color:var(--red);margin-bottom:12px}
-  .comment{background:#fff;border:2px solid var(--card-border);border-radius:12px;padding:12px;margin-bottom:10px}
+  .comments-box h3{color:var(--yellow);margin-bottom:12px}
+  .comment{background:var(--white);color:var(--text);border-radius:12px;padding:12px;margin-bottom:10px}
   .comment .c-head{display:flex;align-items:center;gap:8px;margin-bottom:6px}
   .comment .c-head img{width:28px;height:28px;border-radius:50%;object-fit:cover}
   .comment .c-head b{font-size:14px;color:var(--red)}
   .comment .c-head span{font-size:12px;color:var(--muted)}
+  .comment .c-head .c-del{margin-left:auto}
   .comment p{font-size:15px}
-  .comment-form textarea{width:100%;padding:12px;border:2px solid #e2e2e2;border-radius:12px;font-family:inherit;font-size:15px;min-height:70px;margin-bottom:10px}
+  .c-actions{display:flex;gap:14px;margin-top:8px}
+  .c-act{background:none;border:none;cursor:pointer;font-size:13px;font-weight:700;color:var(--muted);padding:0}
+  .c-act:hover{color:var(--red)}
+  .c-act.liked{color:#1a9e3f}
+  .c-children{margin-left:22px;margin-top:10px;border-left:3px solid var(--yellow);padding-left:12px}
+  .reply-box{margin-top:8px;display:none}
+  .reply-box textarea{width:100%;padding:10px;border:2px solid #e2e2e2;border-radius:10px;font-family:inherit;font-size:14px;min-height:56px;background:#fff;color:var(--text)}
+  .comment-form textarea{width:100%;padding:12px;border:2px solid #e2e2e2;border-radius:12px;font-family:inherit;font-size:15px;min-height:70px;margin-bottom:10px;background:#fff;color:var(--text)}
 
-  /* Статистика */
+  /* Статистика теста */
+  #testStatsPage{padding:40px 24px;max-width:640px;margin:0 auto}
+  .ts-meta{color:rgba(255,255,255,.85);margin:10px 0 24px;font-size:15px}
+  .ts-row{background:var(--white);color:var(--text);border-radius:14px;padding:14px;margin-bottom:14px}
+  .ts-row .ts-head{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+  .ts-row .ts-head img{width:44px;height:44px;border-radius:10px;object-fit:cover;background:var(--yellow)}
+  .ts-row .ts-head b{color:var(--red)}
+  .ts-row .ts-head span{margin-left:auto;font-size:13px;color:var(--muted);font-weight:700}
+  .ts-bar{height:14px;background:#f0f0f0;border-radius:8px;overflow:hidden}
+  .ts-bar div{height:100%;background:var(--yellow);border-radius:8px}
+
+  /* Статистика прохождения */
   #statsPage{padding:40px 24px;max-width:640px;margin:0 auto}
-  .stats-row{background:#fff;border:2px solid var(--card-border);border-radius:14px;padding:16px;margin-bottom:14px}
+  .stats-row{background:var(--white);color:var(--text);border-radius:14px;padding:16px;margin-bottom:14px}
   .stats-row .sr-q{font-weight:700;font-size:16px;margin-bottom:6px}
   .stats-row .sr-ans{font-size:14px;color:var(--muted);margin-bottom:4px}
   .stats-row .sr-pts{font-size:14px;font-weight:800;color:var(--red)}
   .stats-row .sr-comment{margin-top:10px;padding:10px 12px;background:#fffbe0;border-left:4px solid var(--yellow);border-radius:8px;font-size:14px;font-style:italic}
 
-  footer{text-align:center;color:var(--muted);padding:24px;font-size:14px;border-top:4px solid var(--yellow);margin-top:32px}
+  footer{text-align:center;color:rgba(255,255,255,.75);padding:24px;font-size:14px;border-top:4px solid var(--yellow);margin-top:32px}
 
-  .modal-back{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;z-index:100}
+  .modal-back{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:100}
   .modal-back.open{display:flex}
-  .modal{background:var(--white);border-radius:18px;padding:24px;width:92%;max-width:440px;border-top:6px solid var(--red);max-height:90vh;overflow-y:auto}
+  .modal{background:var(--white);color:var(--text);border-radius:18px;padding:24px;width:92%;max-width:440px;border-top:6px solid var(--yellow);max-height:90vh;overflow-y:auto}
   .modal h2{color:var(--red);margin-bottom:4px}
   .modal .sub{color:var(--muted);font-size:14px;margin-bottom:14px}
   .modal .btn{width:100%;font-size:16px;padding:12px;margin-top:8px}
@@ -151,7 +181,7 @@
   .msg.err{color:var(--red)}
   .msg.ok{color:#1a9e3f}
   .close-x{float:right;font-size:22px;cursor:pointer;color:var(--muted);line-height:1}
-  @media(max-width:820px){.editor-wrap{flex-direction:column}.editor-right{width:100%;position:static}}
+  @media(max-width:900px){.editor-wrap{flex-direction:column}.editor-right{width:100%;position:static}.result-layout{flex-direction:column}.result-right{width:100%;position:static}}
 </style>
 <base target="_blank">
 </head>
@@ -184,24 +214,26 @@
       <button class="btn btn-settings" id="openSettingsBtn" style="display:none">⚙️ Настройки профиля</button>
     </div>
   </div>
-  <h2 style="color:var(--red);margin-bottom:16px">Тесты пользователя</h2>
+  <h2 style="color:var(--yellow);margin-bottom:16px">Тесты пользователя</h2>
   <div class="grid" id="myTestGrid"></div>
   <div id="historySection" style="display:none;margin-top:40px">
-    <h2 style="color:var(--red);margin-bottom:16px">Пройденные тесты</h2>
+    <h2 style="color:var(--yellow);margin-bottom:16px">Пройденные тесты</h2>
     <div class="history-list" id="historyList"></div>
   </div>
 </div>
 
 <!-- Редактор -->
 <div id="createPage" class="page">
-  <h2 style="color:var(--red);margin-bottom:24px">Создание теста</h2>
+  <h2 class="page-title" style="margin-bottom:24px">Создание теста</h2>
   <div class="editor-wrap">
     <div class="editor-left">
       <div class="editor-step">
         <h3>1. Основное</h3>
         <div class="field"><label>Название теста</label><input id="edTitle" maxlength="60" placeholder="например, Какой ты кот?"></div>
         <div class="field"><label>Описание (видно на карточке)</label><textarea id="edDesc" rows="2" maxlength="120" placeholder="Коротко о чём тест"></textarea></div>
-        <div class="field"><label>Картинка для превью</label><input type="file" id="edAvaFile" accept="image/*" style="padding:8px;border:2px solid #e2e2e2;border-radius:10px;width:100%"></div>
+        <div class="field"><label>Картинка для превью</label>
+          <div class="img-row"><input type="file" id="edAvaFile" accept="image/*"><img class="thumb" id="edAvaPreview" style="display:none"></div>
+        </div>
       </div>
       <div class="editor-step">
         <h3>2. Вопросы</h3>
@@ -210,12 +242,12 @@
       </div>
       <div class="editor-step">
         <h3>3. Результаты</h3>
-        <p style="font-size:13px;color:var(--muted);margin-bottom:12px">Ползунком укажите, сколько очков нужно набрать для этого результата.</p>
         <div id="edResults"></div>
-        <button class="add-btn" id="edAddR">+ Добавить результат</button>
+        <button class="add-btn" id="edAddR" style="margin-bottom:16px">+ Добавить результат</button>
+        <div id="edBounds"></div>
       </div>
       <button class="btn btn-create" id="publishBtn" style="font-size:18px;padding:16px;width:100%">Опубликовать тест</button>
-      <div class="msg" id="pubMsg"></div>
+      <div class="msg" id="pubMsg" style="color:#fff"></div>
     </div>
     <div class="editor-right">
       <h3>👁 Макет превью</h3>
@@ -237,38 +269,55 @@
       <h2 id="tkTitle"></h2>
       <div class="tdesc" id="tkDesc"></div>
       <div class="tauthor" id="tkAuthor"></div>
+      <div style="margin-top:14px"><button class="btn btn-profile" id="tkStatsBtn">📊 Статистика теста</button></div>
     </div>
-    <div id="tkQuestions"></div>
-    <button class="btn btn-create" id="submitQuizBtn" style="display:none;width:100%;font-size:18px;padding:16px">Узнать результат!</button>
+    <div class="quiz-col">
+      <div id="tkQuestions"></div>
+      <button class="btn btn-create" id="submitQuizBtn" style="display:none;width:100%;font-size:18px;padding:16px;margin-bottom:24px">Узнать результат!</button>
+    </div>
   </div>
 
   <div id="quizResultView" style="display:none">
-    <div class="result-screen">
-      <img class="res-img" id="qrImg" src="" alt="Результат">
-      <h2 id="qrTitle"></h2>
-      <p id="qrDesc"></p>
-      <div class="result-actions">
-        <button class="btn btn-profile" id="toStatsBtn">📊 Моя статистика</button>
-        <button class="btn btn-settings" id="retryBtn">🔄 Пройти ещё раз</button>
-        <button class="btn btn-settings" onclick="goHome()">На главную</button>
+    <div class="result-layout">
+      <div class="result-left">
+        <div class="comments-box">
+          <h3>💬 Комментарии</h3>
+          <div id="commentList"></div>
+          <div class="comment-form">
+            <textarea id="commentText" placeholder="Оставьте комментарий..." maxlength="300"></textarea>
+            <button class="btn btn-create" id="sendCommentBtn">Отправить</button>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="likes-row">
-      <button class="like-btn" id="likeBtn">👍 <span id="likeCount">0</span></button>
-      <button class="like-btn" id="dislikeBtn">👎 <span id="dislikeCount">0</span></button>
-    </div>
-    <div class="comments-box">
-      <h3>Комментарии</h3>
-      <div id="commentList"></div>
-      <div class="comment-form">
-        <textarea id="commentText" placeholder="Оставьте комментарий..." maxlength="300"></textarea>
-        <button class="btn btn-create" id="sendCommentBtn">Отправить</button>
+      <div class="result-right">
+        <div class="result-screen">
+          <img class="res-img" id="qrImg" src="" alt="Результат">
+          <h2 id="qrTitle"></h2>
+          <p id="qrDesc"></p>
+          <div class="result-actions">
+            <button class="btn btn-profile" id="toStatsBtn">📊 Моя статистика</button>
+            <button class="btn btn-settings" id="retryBtn">🔄 Пройти ещё раз</button>
+            <button class="btn btn-settings" onclick="goHome()">На главную</button>
+          </div>
+        </div>
+        <div class="likes-row">
+          <button class="like-btn" id="likeBtn">👍 <span id="likeCount">0</span></button>
+          <button class="like-btn" id="dislikeBtn">👎 <span id="dislikeCount">0</span></button>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Страница статистики -->
+<!-- Статистика теста -->
+<div id="testStatsPage" class="page">
+  <h2 class="page-title" id="tsTitle">Статистика теста</h2>
+  <div class="ts-meta" id="tsMeta"></div>
+  <div id="tsBars"></div>
+  <div style="margin-top:20px"><button class="btn btn-profile" id="tsBackBtn">← К тесту</button></div>
+</div>
+
+<!-- Статистика прохождения -->
 <div id="statsPage" class="page">
   <div class="result-screen">
     <img class="res-img" id="stImg" src="" alt="Результат">
@@ -280,7 +329,7 @@
       <button class="btn btn-settings" onclick="goHome()">На главную</button>
     </div>
   </div>
-  <h3 style="color:var(--red);margin:24px 0 16px">Как вы ответили:</h3>
+  <h3 style="color:var(--yellow);margin:24px 0 16px">Как вы ответили:</h3>
   <div id="statsQuestions"></div>
 </div>
 
@@ -299,7 +348,7 @@
     <div class="field"><label>Логин</label><input id="loginInput" maxlength="20" placeholder="например, danila_228"></div>
     <div class="field"><label>Пароль</label><input id="passInput" type="password" maxlength="60" placeholder="минимум 6 символов"></div>
     <div id="avaBlock" style="display:none">
-      <div class="field"><label>Аватарка (файл)</label><input type="file" id="regAvaFile" accept="image/*" style="padding:8px;border:2px solid #e2e2e2;border-radius:10px;width:100%"></div>
+      <div class="field"><label>Аватарка (файл)</label><input type="file" id="regAvaFile" accept="image/*"></div>
     </div>
     <button class="btn btn-create" id="authAction">Войти</button>
     <div class="msg" id="authMsg"></div>
@@ -311,43 +360,10 @@
   <div class="modal">
     <span class="close-x" id="settingsClose">&times;</span>
     <h2>Настройки</h2>
-    <div class="field"><label>Новая аватарка (файл)</label><input type="file" id="settingsAvaFile" accept="image/*" style="padding:8px;border:2px solid #e2e2e2;border-radius:10px;width:100%"></div>
+    <div class="field"><label>Новая аватарка (файл)</label><input type="file" id="settingsAvaFile" accept="image/*"></div>
     <div class="field"><label>Статус</label><input id="settingsStatus" maxlength="50" placeholder="например, Люблю пиццу 🍕"></div>
     <button class="btn btn-create" id="saveSettingsBtn">Сохранить</button>
     <div class="msg" id="settingsMsg"></div>
-  </div>
-</div>
-
-<!-- Модалка вопроса -->
-<div class="modal-back" id="qBack">
-  <div class="modal">
-    <span class="close-x" id="qClose">&times;</span>
-    <h2 id="qModalTitle">Новый вопрос</h2>
-    <div class="field"><label>Текст вопроса</label><input id="qText" maxlength="120" placeholder="например, Что ты любишь есть?"></div>
-    <div class="field"><label>Описание вопроса</label><input id="qDesc" maxlength="150" placeholder="необязательно"></div>
-    <div class="field"><label>Комментарий после прохождения</label><input id="qComment" maxlength="150" placeholder="увидит только прошедший тест"></div>
-    <div class="field"><label>Картинка к вопросу (необязательно)</label><input type="file" id="qImg" accept="image/*" style="padding:8px;border:2px solid #e2e2e2;border-radius:10px;width:100%"></div>
-    <div class="type-tabs">
-      <div class="tab active" id="qTabChoice">Выбрать ответ</div>
-      <div class="tab" id="qTabInput">Вписать ответ</div>
-    </div>
-    <div id="qAnswersBox"></div>
-    <button class="add-btn" id="qAddAnswer" style="margin-top:8px">+ Добавить вариант</button>
-    <button class="btn btn-create" id="qSave">Сохранить вопрос</button>
-    <div class="msg" id="qMsg"></div>
-  </div>
-</div>
-
-<!-- Модалка результата -->
-<div class="modal-back" id="rBack">
-  <div class="modal">
-    <span class="close-x" id="rClose">&times;</span>
-    <h2 id="rModalTitle">Новый результат</h2>
-    <div class="field"><label>Название</label><input id="rTitle" maxlength="40" placeholder="например, Настоящий кот"></div>
-    <div class="field"><label>Описание</label><textarea id="rDesc" rows="2" maxlength="150"></textarea></div>
-    <div class="field"><label>Картинка результата</label><input type="file" id="rImg" accept="image/*" style="padding:8px;border:2px solid #e2e2e2;border-radius:10px;width:100%"></div>
-    <button class="btn btn-create" id="rSave">Сохранить результат</button>
-    <div class="msg" id="rMsg"></div>
   </div>
 </div>
 
@@ -425,6 +441,7 @@
     if(h.startsWith('#/test/')){ openTestPage(h.slice(7)); return; }
     if(h.startsWith('#/result/')){ openStatsPage(h.slice(9)); return; }
     if(h.startsWith('#/user/')){ openProfilePage(h.slice(7)); return; }
+    if(h.startsWith('#/stats/')){ openTestStats(h.slice(8)); return; }
     if(h === '#/create'){
       if(!currentUser){ openAuth('Сначала войдите, чтобы создавать тесты!'); goHome(); return; }
       openEditor(); return;
@@ -437,25 +454,27 @@
   async function openMainPage(){
     showPage('mainPage');
     const grid = document.getElementById('testGrid');
-    grid.innerHTML = '<p style="color:var(--muted)">Загрузка...</p>';
+    grid.innerHTML = '<p style="color:rgba(255,255,255,.8)">Загрузка...</p>';
     const { data, error } = await sb.from('tests')
       .select('id, title, description, avatar, author_id, profiles(id, login)')
       .order('created_at', { ascending: false });
     grid.innerHTML = '';
     if(error || !data || data.length === 0){
-      grid.innerHTML = '<p style="color:var(--muted)">Пока нет тестов. Создайте первый!</p>'; return;
+      grid.innerHTML = '<p style="color:rgba(255,255,255,.8)">Пока нет тестов. Создайте первый!</p>'; return;
     }
     data.forEach(t => {
       const card = document.createElement('div');
       card.className = 'card';
       const icon = (t.avatar && t.avatar.startsWith('http')) ? '<img src="' + t.avatar + '">' : '<span>' + (t.avatar || '🦸') + '</span>';
       const author = t.profiles ? t.profiles.login : 'Неизвестный';
-      card.innerHTML = '<div class="test-icon">' + icon + '</div>' +
+      card.innerHTML = '<div class="card-stats-btn" id="s' + t.id + '" title="Статистика">📊</div>' +
+        '<div class="test-icon">' + icon + '</div>' +
         '<h3>' + escapeHtml(t.title) + '</h3>' +
         (t.description ? '<div class="desc">' + escapeHtml(t.description) + '</div>' : '') +
         '<div class="author" id="a' + t.id + '">от ' + escapeHtml(author) + '</div>';
       card.onclick = () => location.hash = '#/test/' + t.id;
       grid.appendChild(card);
+      document.getElementById('s' + t.id).onclick = e => { e.stopPropagation(); location.hash = '#/stats/' + t.id; };
       const a = document.getElementById('a' + t.id);
       if(a) a.onclick = e => { e.stopPropagation(); location.hash = '#/user/' + t.author_id; };
     });
@@ -475,29 +494,30 @@
     if(isMe) loadHistory();
 
     const grid = document.getElementById('myTestGrid');
-    grid.innerHTML = '<p style="color:var(--muted)">Загрузка...</p>';
+    grid.innerHTML = '<p style="color:rgba(255,255,255,.8)">Загрузка...</p>';
     const { data: tests } = await sb.from('tests').select('id, title, description, avatar').eq('author_id', userId).order('created_at', { ascending: false });
     grid.innerHTML = '';
-    if(!tests || tests.length === 0){ grid.innerHTML = '<p style="color:var(--muted)">Пока нет тестов.</p>'; return; }
+    if(!tests || tests.length === 0){ grid.innerHTML = '<p style="color:rgba(255,255,255,.8)">Пока нет тестов.</p>'; return; }
     tests.forEach(t => {
       const card = document.createElement('div');
       card.className = 'card';
       const icon = (t.avatar && t.avatar.startsWith('http')) ? '<img src="' + t.avatar + '">' : '<span>' + (t.avatar || '🦸') + '</span>';
-      card.innerHTML = '<div class="test-icon">' + icon + '</div><h3>' + escapeHtml(t.title) + '</h3>' +
+      card.innerHTML = '<div class="card-stats-btn" id="ps' + t.id + '">📊</div><div class="test-icon">' + icon + '</div><h3>' + escapeHtml(t.title) + '</h3>' +
         (t.description ? '<div class="desc">' + escapeHtml(t.description) + '</div>' : '');
       card.onclick = () => location.hash = '#/test/' + t.id;
       grid.appendChild(card);
+      document.getElementById('ps' + t.id).onclick = e => { e.stopPropagation(); location.hash = '#/stats/' + t.id; };
     });
   }
 
   async function loadHistory(){
     const list = document.getElementById('historyList');
-    list.innerHTML = '<p style="color:var(--muted)">Загрузка...</p>';
+    list.innerHTML = '<p style="color:rgba(255,255,255,.8)">Загрузка...</p>';
     const { data } = await sb.from('user_history')
       .select('id, created_at, tests(title, avatar), test_results(title, image_url)')
       .eq('user_id', currentUser.id).order('created_at', { ascending: false });
     list.innerHTML = '';
-    if(!data || data.length === 0){ list.innerHTML = '<p style="color:var(--muted)">Вы пока не проходили тесты.</p>'; return; }
+    if(!data || data.length === 0){ list.innerHTML = '<p style="color:rgba(255,255,255,.8)">Вы пока не проходили тесты.</p>'; return; }
     data.forEach(h => {
       if(!h.tests || !h.test_results) return;
       const div = document.createElement('div');
@@ -510,31 +530,233 @@
     });
   }
 
-  // ================= РЕДАКТОР =================
-  let edQuestions = [];
-  let edResults = [];
-  let editingQ = -1, editingR = -1, qType = 'choice';
-  let pvImageUrl = '';
+  // ================= РЕДАКТОР (инлайн) =================
+  let edQuestions = []; // {text, desc, comment, type, answers:[{text,points}], imageUrl}
+  let edResults = [];   // {title, desc, imageUrl}
+  let edBounds = [];    // границы в процентах, длина = results-1
+  let boundsRefs = { fills: [], handles: [], labels: [] };
 
-  function computeMaxScore(){
-    let m = 0;
-    edQuestions.forEach(q => {
-      let best = 0;
-      (q.answers || []).forEach(a => { best = Math.max(best, Number(a.points) || 0); });
-      m += best;
+  function syncEditorFromDOM(){
+    edQuestions = [];
+    document.querySelectorAll('#edQuestions .qe').forEach(b => {
+      edQuestions.push({
+        text: b.querySelector('.qe-text').value,
+        desc: b.querySelector('.qe-desc').value,
+        comment: b.querySelector('.qe-comment').value,
+        type: b.dataset.type,
+        imageUrl: b.dataset.img || '',
+        answers: Array.from(b.querySelectorAll('.ans-row')).map(row => ({
+          text: row.querySelector('.ans-text').value,
+          points: Math.max(0, Number(row.querySelector('.ans-points').value) || 0)
+        }))
+      });
     });
-    return m;
+    edResults = [];
+    document.querySelectorAll('#edResults .re').forEach(b => {
+      edResults.push({
+        title: b.querySelector('.re-title').value,
+        desc: b.querySelector('.re-desc').value,
+        imageUrl: b.dataset.img || ''
+      });
+    });
   }
+
+  function answerRowHTML(type, a){
+    return '<div class="ans-row">' +
+      '<input type="text" class="ans-text" placeholder="' + (type === 'choice' ? 'Вариант ответа' : 'Эталонный ответ (сравнение)') + '" maxlength="80" value="' + escapeHtml(a ? a.text : '') + '">' +
+      '<input type="number" class="ans-points" min="0" max="999" value="' + (a ? a.points : 0) + '" title="Очки за выбор">' +
+      '<button class="icon-btn ans-del">✕</button></div>';
+  }
+
+  function renderQuestions(){
+    const box = document.getElementById('edQuestions');
+    box.innerHTML = '';
+    if(edQuestions.length === 0) box.innerHTML = '<p style="color:var(--muted);font-size:14px;margin-bottom:12px">Пока нет вопросов.</p>';
+    edQuestions.forEach((q, i) => {
+      const div = document.createElement('div');
+      div.className = 'qe';
+      div.dataset.type = q.type;
+      div.dataset.img = q.imageUrl || '';
+      let ansHtml = '';
+      (q.answers && q.answers.length ? q.answers : [{text:'',points:0},{text:'',points:0}]).forEach(a => ansHtml += answerRowHTML(q.type, a));
+      div.innerHTML =
+        '<div class="qe-head"><strong>Вопрос ' + (i+1) + '</strong>' +
+        '<span style="display:flex;gap:6px;align-items:center"><span class="tag qe-tag">' + (q.type === 'choice' ? 'выбрать' : 'вписать') + '</span>' +
+        '<button class="icon-btn qe-del">🗑</button></span></div>' +
+        '<div class="field"><label>Текст вопроса</label><input class="qe-text" maxlength="120" value="' + escapeHtml(q.text) + '" placeholder="например, Что ты любишь есть?"></div>' +
+        '<div class="field"><label>Описание вопроса</label><input class="qe-desc" maxlength="150" value="' + escapeHtml(q.desc || '') + '" placeholder="необязательно"></div>' +
+        '<div class="field"><label>Комментарий после прохождения</label><input class="qe-comment" maxlength="150" value="' + escapeHtml(q.comment || '') + '" placeholder="увидит только прошедший тест"></div>' +
+        '<div class="field"><label>Картинка к вопросу</label><div class="img-row">' +
+          '<input type="file" class="qe-img" accept="image/*">' +
+          (q.imageUrl ? '<img class="thumb qe-preview" src="' + q.imageUrl + '">' : '<img class="thumb qe-preview" style="display:none">') +
+        '</div></div>' +
+        '<div class="type-tabs">' +
+          '<div class="tab qe-tc' + (q.type === 'choice' ? ' active' : '') + '">Выбрать ответ</div>' +
+          '<div class="tab qe-ti' + (q.type === 'input' ? ' active' : '') + '">Вписать ответ</div>' +
+        '</div>' +
+        '<div class="qe-answers">' + ansHtml + '</div>' +
+        '<button class="add-btn qe-add" style="margin-top:6px">+ Добавить вариант</button>';
+      box.appendChild(div);
+
+      div.querySelector('.qe-del').onclick = () => { if(confirm('Удалить вопрос?')){ syncEditorFromDOM(); edQuestions.splice(i, 1); renderQuestions(); } };
+      div.querySelector('.qe-add').onclick = () => { div.querySelector('.qe-answers').insertAdjacentHTML('beforeend', answerRowHTML(div.dataset.type, null)); bindAnswerRows(div); };
+      div.querySelector('.qe-tc').onclick = () => switchQType(div, i, 'choice');
+      div.querySelector('.qe-ti').onclick = () => switchQType(div, i, 'input');
+      div.querySelector('.qe-img').addEventListener('change', e => {
+        const f = e.target.files[0];
+        if(!f) return;
+        const r = new FileReader();
+        r.onload = ev => { const p = div.querySelector('.qe-preview'); p.src = ev.target.result; p.style.display = 'block'; };
+        r.readAsDataURL(f);
+      });
+      bindAnswerRows(div);
+    });
+  }
+  function bindAnswerRows(block){
+    block.querySelectorAll('.ans-del').forEach(b => b.onclick = () => b.closest('.ans-row').remove());
+  }
+  function switchQType(block, i, type){
+    syncEditorFromDOM();
+    edQuestions[i].type = type;
+    if(type === 'input' && edQuestions[i].answers.length < 1) edQuestions[i].answers.push({text:'', points:0});
+    renderQuestions();
+  }
+
+  function renderResults(){
+    const box = document.getElementById('edResults');
+    box.innerHTML = '';
+    if(edResults.length === 0) box.innerHTML = '<p style="color:var(--muted);font-size:14px;margin-bottom:12px">Пока нет результатов.</p>';
+    edResults.forEach((r, i) => {
+      const div = document.createElement('div');
+      div.className = 're';
+      div.dataset.img = r.imageUrl || '';
+      div.innerHTML =
+        '<div class="re-head"><strong>Результат ' + (i+1) + '</strong><button class="icon-btn re-del">🗑</button></div>' +
+        '<div class="field"><label>Название результата</label><input class="re-title" maxlength="40" value="' + escapeHtml(r.title) + '" placeholder="например, Настоящий кот"></div>' +
+        '<div class="field"><label>Описание</label><textarea class="re-desc" rows="2" maxlength="150">' + escapeHtml(r.desc || '') + '</textarea></div>' +
+        '<div class="field"><label>Картинка результата</label><div class="img-row">' +
+          '<input type="file" class="re-img" accept="image/*">' +
+          (r.imageUrl ? '<img class="thumb re-preview" src="' + r.imageUrl + '">' : '<img class="thumb re-preview" style="display:none">') +
+        '</div></div>';
+      box.appendChild(div);
+      div.querySelector('.re-del').onclick = () => { if(confirm('Удалить результат?')){ syncEditorFromDOM(); edResults.splice(i, 1); renderResults(); renderBounds(); } };
+      div.querySelector('.re-title').addEventListener('input', () => { syncEditorFromDOM(); paintBounds(); });
+      div.querySelector('.re-img').addEventListener('change', e => {
+        const f = e.target.files[0];
+        if(!f) return;
+        const r2 = new FileReader();
+        r2.onload = ev => { const p = div.querySelector('.re-preview'); p.src = ev.target.result; p.style.display = 'block'; };
+        r2.readAsDataURL(f);
+      });
+    });
+  }
+
+  function normalizeBounds(){
+    const n = edResults.length;
+    if(n < 2){ edBounds = []; return; }
+    if(edBounds.length !== n - 1){
+      edBounds = [];
+      for(let i = 1; i < n; i++) edBounds.push(Math.round(100 * i / n));
+    }
+  }
+
+  function renderBounds(){
+    const box = document.getElementById('edBounds');
+    box.innerHTML = '';
+    boundsRefs = { fills: [], handles: [], labels: [] };
+    const n = edResults.length;
+    if(n < 2){
+      box.innerHTML = '<p style="font-size:13px;color:var(--muted)">Добавьте минимум 2 результата — появится ползунок с делениями.</p>';
+      edBounds = [];
+      return;
+    }
+    normalizeBounds();
+    const track = document.createElement('div');
+    track.className = 'bounds-track';
+    for(let i = 0; i < n; i++){
+      const f = document.createElement('div');
+      f.className = 'bounds-fill' + (i % 2 ? ' alt' : '');
+      track.appendChild(f);
+      boundsRefs.fills.push(f);
+    }
+    for(let i = 0; i < n - 1; i++){
+      const h = document.createElement('div');
+      h.className = 'bounds-handle';
+      h.textContent = '⋮';
+      h.dataset.bi = i;
+      h.addEventListener('pointerdown', startBoundDrag);
+      track.appendChild(h);
+      boundsRefs.handles.push(h);
+    }
+    const labels = document.createElement('div');
+    labels.className = 'bounds-labels';
+    for(let i = 0; i < n; i++){
+      const s = document.createElement('div');
+      s.className = 'bounds-label';
+      labels.appendChild(s);
+      boundsRefs.labels.push(s);
+    }
+    box.appendChild(track);
+    box.appendChild(labels);
+    paintBounds();
+  }
+
+  function paintBounds(){
+    if(!boundsRefs.labels.length || boundsRefs.labels.length !== edResults.length) return;
+    const n = edResults.length;
+    let prev = 0;
+    for(let i = 0; i < n; i++){
+      const to = i < n - 1 ? edBounds[i] : 100;
+      boundsRefs.fills[i].style.left = prev + '%';
+      boundsRefs.fills[i].style.width = (to - prev) + '%';
+      boundsRefs.labels[i].textContent = 'до ' + to + '% — ' + (edResults[i].title || ('Результат ' + (i + 1)));
+      prev = to;
+    }
+    edBounds.forEach((b, i) => { boundsRefs.handles[i].style.left = 'calc(' + b + '% - 11px)'; });
+  }
+
+  function startBoundDrag(e){
+    e.preventDefault();
+    const i = Number(e.currentTarget.dataset.bi);
+    const track = e.currentTarget.parentElement;
+    const move = ev => {
+      const r = track.getBoundingClientRect();
+      let p = (ev.clientX - r.left) / r.width * 100;
+      const lo = i > 0 ? edBounds[i - 1] + 3 : 3;
+      const hi = i < edBounds.length - 1 ? edBounds[i + 1] - 3 : 97;
+      p = Math.max(lo, Math.min(hi, p));
+      edBounds[i] = Math.round(p);
+      paintBounds();
+    };
+    const up = () => {
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+  }
+
+  document.getElementById('edAddQ').onclick = () => {
+    syncEditorFromDOM();
+    edQuestions.push({ text: '', desc: '', comment: '', type: 'choice', imageUrl: '', answers: [{text:'',points:0},{text:'',points:0}] });
+    renderQuestions();
+  };
+  document.getElementById('edAddR').onclick = () => {
+    syncEditorFromDOM();
+    edResults.push({ title: '', desc: '', imageUrl: '' });
+    renderResults();
+    renderBounds();
+  };
 
   function openEditor(){
     showPage('createPage');
-    edQuestions = []; edResults = [];
-    editingQ = -1; editingR = -1; qType = 'choice'; pvImageUrl = '';
+    edQuestions = []; edResults = []; edBounds = [];
     document.getElementById('edTitle').value = '';
     document.getElementById('edDesc').value = '';
     document.getElementById('edAvaFile').value = '';
+    document.getElementById('edAvaPreview').style.display = 'none';
     document.getElementById('pubMsg').textContent = '';
-    updatePreview(); renderQuestions(); renderResults();
+    renderQuestions(); renderResults(); renderBounds(); updatePreview();
   }
 
   function updatePreview(){
@@ -546,196 +768,68 @@
     icon.innerHTML = pvImageUrl ? '<img src="' + pvImageUrl + '">' : '🦸';
     document.getElementById('pvAuthor').textContent = 'от ' + (currentProfile ? currentProfile.login : 'вас');
   }
+  let pvImageUrl = '';
   document.getElementById('edTitle').addEventListener('input', updatePreview);
   document.getElementById('edDesc').addEventListener('input', updatePreview);
   document.getElementById('edAvaFile').addEventListener('change', e => {
     const f = e.target.files[0];
-    if(!f){ return; }
+    if(!f) return;
     const r = new FileReader();
-    r.onload = ev => { pvImageUrl = ev.target.result; updatePreview(); };
+    r.onload = ev => {
+      pvImageUrl = ev.target.result;
+      const p = document.getElementById('edAvaPreview');
+      p.src = pvImageUrl; p.style.display = 'block';
+      updatePreview();
+    };
     r.readAsDataURL(f);
   });
 
-  function renderQuestions(){
-    const box = document.getElementById('edQuestions');
-    box.innerHTML = '';
-    if(edQuestions.length === 0) box.innerHTML = '<p style="color:var(--muted);font-size:14px;margin-bottom:12px">Пока нет вопросов.</p>';
-    edQuestions.forEach((q, i) => {
-      const div = document.createElement('div');
-      div.className = 'q-item';
-      const opts = (q.answers || []).map(a => '<div>• ' + escapeHtml(a.text) + ' <span style="color:var(--red);font-size:12px">(+' + (a.points||0) + ' очк.)</span></div>').join('');
-      div.innerHTML = '<div class="q-head"><strong>' + (i+1) + '. ' + escapeHtml(q.text) + '</strong>' +
-        '<span style="display:flex;gap:6px"><span class="tag">' + (q.type === 'choice' ? 'выбрать' : 'вписать') + '</span>' +
-        '<button class="icon-btn" data-eq="' + i + '">✏️</button><button class="icon-btn" data-dq="' + i + '">🗑</button></span></div>' +
-        (q.desc ? '<div style="font-size:13px;color:var(--muted)">' + escapeHtml(q.desc) + '</div>' : '') +
-        '<div class="q-opts">' + opts + '</div>';
-      box.appendChild(div);
-    });
-    box.querySelectorAll('[data-dq]').forEach(b => b.onclick = () => { if(confirm('Удалить вопрос?')){ edQuestions.splice(Number(b.dataset.dq), 1); renderQuestions(); renderResults(); } });
-    box.querySelectorAll('[data-eq]').forEach(b => b.onclick = () => openQModal(Number(b.dataset.eq)));
-  }
-
-  function renderResults(){
-    const box = document.getElementById('edResults');
-    const maxS = computeMaxScore();
-    box.innerHTML = '';
-    if(edResults.length === 0) box.innerHTML = '<p style="color:var(--muted);font-size:14px;margin-bottom:12px">Пока нет результатов.</p>';
-    edResults.forEach((r, i) => {
-      if(r.minPoints > maxS) r.minPoints = maxS;
-      const div = document.createElement('div');
-      div.className = 'r-item';
-      div.innerHTML = '<div class="r-head" style="margin-bottom:0"><div style="display:flex;gap:12px;align-items:center;flex:1">' +
-        (r.imageUrl ? '<img class="r-thumb" src="' + r.imageUrl + '">' : '<div class="r-thumb" style="display:flex;align-items:center;justify-content:center">?</div>') +
-        '<div><strong style="color:var(--red)">' + escapeHtml(r.title) + '</strong>' +
-        '<div style="font-size:13px;color:var(--muted)">' + escapeHtml(r.desc || '') + '</div></div></div>' +
-        '<span style="display:flex;gap:6px"><button class="icon-btn" data-er="' + i + '">✏️</button><button class="icon-btn" data-dr="' + i + '">🗑</button></span></div>' +
-        '<div class="slider-row"><input type="range" min="0" max="' + maxS + '" value="' + r.minPoints + '" data-sr="' + i + '">' +
-        '<span class="slider-val" id="sv' + i + '">от ' + r.minPoints + ' очк.</span></div>';
-      box.appendChild(div);
-    });
-    box.querySelectorAll('[data-sr]').forEach(s => s.oninput = () => {
-      const i = Number(s.dataset.sr);
-      edResults[i].minPoints = Number(s.value);
-      document.getElementById('sv' + i).textContent = 'от ' + s.value + ' очк.';
-    });
-    box.querySelectorAll('[data-dr]').forEach(b => b.onclick = () => { if(confirm('Удалить результат?')){ edResults.splice(Number(b.dataset.dr), 1); renderResults(); } });
-    box.querySelectorAll('[data-er]').forEach(b => b.onclick = () => openRModal(Number(b.dataset.er)));
-  }
-
-  // --- модалка вопроса ---
-  const qBack = document.getElementById('qBack');
-  function addAnswerRow(text, points){
-    const box = document.getElementById('qAnswersBox');
-    const row = document.createElement('div');
-    row.className = 'ans-row';
-    row.innerHTML = '<input type="text" class="ans-text" placeholder="' + (qType === 'choice' ? 'Вариант ответа' : 'Правильный ответ (сравнение)') + '" maxlength="80" value="' + escapeHtml(text || '') + '">' +
-      '<input type="number" class="ans-points" min="0" max="999" value="' + (points || 0) + '" title="Очки">' +
-      '<button class="icon-btn ans-del">✕</button>';
-    row.querySelector('.ans-del').onclick = () => row.remove();
-    box.appendChild(row);
-  }
-  function setQType(t){
-    qType = t;
-    document.getElementById('qTabChoice').classList.toggle('active', t === 'choice');
-    document.getElementById('qTabInput').classList.toggle('active', t === 'input');
-    document.getElementById('qAnswersBox').innerHTML = '';
-    addAnswerRow(); addAnswerRow();
-    document.getElementById('qAddAnswer').textContent = t === 'choice' ? '+ Добавить вариант' : '+ Добавить эталонный ответ';
-  }
-  document.getElementById('qTabChoice').onclick = () => setQType('choice');
-  document.getElementById('qTabInput').onclick = () => setQType('input');
-  document.getElementById('qAddAnswer').onclick = () => addAnswerRow();
-  document.getElementById('qClose').onclick = () => qBack.classList.remove('open');
-  qBack.onclick = e => { if(e.target === qBack) qBack.classList.remove('open'); };
-
-  function openQModal(index){
-    editingQ = index;
-    document.getElementById('qModalTitle').textContent = index >= 0 ? 'Редактировать вопрос' : 'Новый вопрос';
-    document.getElementById('qImg').value = '';
-    document.getElementById('qMsg').textContent = '';
-    if(index >= 0){
-      const q = edQuestions[index];
-      document.getElementById('qText').value = q.text;
-      document.getElementById('qDesc').value = q.desc || '';
-      document.getElementById('qComment').value = q.comment || '';
-      setQType(q.type || 'choice');
-      document.getElementById('qAnswersBox').innerHTML = '';
-      (q.answers || []).forEach(a => addAnswerRow(a.text, a.points));
-    } else {
-      document.getElementById('qText').value = '';
-      document.getElementById('qDesc').value = '';
-      document.getElementById('qComment').value = '';
-      setQType('choice');
-    }
-    qBack.classList.add('open');
-  }
-  document.getElementById('edAddQ').onclick = () => openQModal(-1);
-
-  document.getElementById('qSave').onclick = async () => {
-    const text = document.getElementById('qText').value.trim();
-    const desc = document.getElementById('qDesc').value.trim();
-    const comment = document.getElementById('qComment').value.trim();
-    const file = document.getElementById('qImg').files[0];
-    const m = document.getElementById('qMsg');
-    m.className = 'msg';
-    if(text.length < 3){ m.classList.add('err'); m.textContent = 'Текст вопроса слишком короткий'; return; }
-    const answers = [];
-    document.querySelectorAll('#qAnswersBox .ans-row').forEach(row => {
-      const t = row.querySelector('.ans-text').value.trim();
-      if(t) answers.push({ text: t, points: Math.max(0, Number(row.querySelector('.ans-points').value) || 0) });
-    });
-    if(answers.length < (qType === 'choice' ? 2 : 1)){ m.classList.add('err'); m.textContent = qType === 'choice' ? 'Нужно минимум 2 варианта' : 'Нужен минимум 1 эталонный ответ'; return; }
-    m.textContent = 'Загрузка картинки...';
-    let imageUrl = editingQ >= 0 ? (edQuestions[editingQ].imageUrl || '') : '';
-    try { if(file) imageUrl = await uploadImage(file); } catch(err){ m.classList.add('err'); m.textContent = 'Ошибка загрузки: ' + err.message; return; }
-    const qObj = { text, desc, comment, type: qType, answers, imageUrl };
-    if(editingQ >= 0) edQuestions[editingQ] = qObj; else edQuestions.push(qObj);
-    qBack.classList.remove('open');
-    renderQuestions(); renderResults();
-  };
-
-  // --- модалка результата ---
-  const rBack = document.getElementById('rBack');
-  document.getElementById('rClose').onclick = () => rBack.classList.remove('open');
-  rBack.onclick = e => { if(e.target === rBack) rBack.classList.remove('open'); };
-  function openRModal(index){
-    editingR = index;
-    document.getElementById('rModalTitle').textContent = index >= 0 ? 'Редактировать результат' : 'Новый результат';
-    document.getElementById('rImg').value = '';
-    document.getElementById('rMsg').textContent = '';
-    if(index >= 0){
-      document.getElementById('rTitle').value = edResults[index].title;
-      document.getElementById('rDesc').value = edResults[index].desc || '';
-    } else {
-      document.getElementById('rTitle').value = '';
-      document.getElementById('rDesc').value = '';
-    }
-    rBack.classList.add('open');
-  }
-  document.getElementById('edAddR').onclick = () => openRModal(-1);
-  document.getElementById('rSave').onclick = async () => {
-    const title = document.getElementById('rTitle').value.trim();
-    const desc = document.getElementById('rDesc').value.trim();
-    const file = document.getElementById('rImg').files[0];
-    const m = document.getElementById('rMsg');
-    m.className = 'msg';
-    if(title.length < 2){ m.classList.add('err'); m.textContent = 'Название слишком короткое'; return; }
-    m.textContent = 'Загрузка картинки...';
-    let imageUrl = editingR >= 0 ? (edResults[editingR].imageUrl || '') : '';
-    try { if(file) imageUrl = await uploadImage(file); } catch(err){ m.classList.add('err'); m.textContent = 'Ошибка загрузки: ' + err.message; return; }
-    if(editingR >= 0){ edResults[editingR].title = title; edResults[editingR].desc = desc; edResults[editingR].imageUrl = imageUrl; }
-    else edResults.push({ title, desc, imageUrl, minPoints: 0 });
-    rBack.classList.remove('open');
-    renderResults();
-  };
-
-  // --- публикация ---
   document.getElementById('publishBtn').onclick = async () => {
     const m = document.getElementById('pubMsg');
     m.className = 'msg';
+    syncEditorFromDOM();
+    normalizeBounds();
     const title = document.getElementById('edTitle').value.trim();
     const desc = document.getElementById('edDesc').value.trim();
     if(title.length < 3){ m.classList.add('err'); m.textContent = 'Введите название теста'; return; }
     if(edQuestions.length === 0){ m.classList.add('err'); m.textContent = 'Добавьте хотя бы 1 вопрос'; return; }
-    if(edResults.length === 0){ m.classList.add('err'); m.textContent = 'Добавьте хотя бы 1 результат'; return; }
+    if(edResults.length < 2){ m.classList.add('err'); m.textContent = 'Нужно минимум 2 результата'; return; }
+    for(let i = 0; i < edQuestions.length; i++){
+      if(edQuestions[i].text.trim().length < 3){ m.classList.add('err'); m.textContent = 'Заполните текст вопроса ' + (i + 1); return; }
+      const valid = edQuestions[i].answers.filter(a => a.text.trim());
+      if(valid.length < (edQuestions[i].type === 'choice' ? 2 : 1)){ m.classList.add('err'); m.textContent = 'Заполните ответы в вопросе ' + (i + 1); return; }
+      edQuestions[i].answers = valid;
+    }
+    for(let i = 0; i < edResults.length; i++){
+      if(edResults[i].title.trim().length < 2){ m.classList.add('err'); m.textContent = 'Заполните название результата ' + (i + 1); return; }
+    }
     m.textContent = 'Публикация...';
     try {
       let ava = pvImageUrl;
       const avaFile = document.getElementById('edAvaFile').files[0];
-      if(avaFile && avaFile.size > 0 && ava.startsWith('data:')) ava = await uploadImage(avaFile);
+      if(avaFile && ava.startsWith('data:')) ava = await uploadImage(avaFile);
       if(!ava) ava = '🦸';
       const { data: test, error: tErr } = await sb.from('tests')
         .insert({ title, description: desc, avatar: ava, author_id: currentUser.id }).select().single();
       if(tErr) throw tErr;
-      for(const r of edResults){
+
+      for(let i = 0; i < edResults.length; i++){
+        const file = document.querySelectorAll('#edResults .re')[i].querySelector('.re-img').files[0];
+        let img = edResults[i].imageUrl;
+        if(file) img = await uploadImage(file);
+        const minP = i < edResults.length - 1 ? edBounds[i] : 100;
         const { error } = await sb.from('test_results')
-          .insert({ test_id: test.id, title: r.title, description: r.desc, image_url: r.imageUrl, min_points: r.minPoints });
+          .insert({ test_id: test.id, title: edResults[i].title.trim(), description: edResults[i].desc.trim(), image_url: img, min_points: minP });
         if(error) throw error;
       }
-      for(const q of edQuestions){
+      for(let i = 0; i < edQuestions.length; i++){
+        const q = edQuestions[i];
+        const file = document.querySelectorAll('#edQuestions .qe')[i].querySelector('.qe-img').files[0];
+        let img = q.imageUrl;
+        if(file) img = await uploadImage(file);
         const { error } = await sb.from('test_questions')
-          .insert({ test_id: test.id, question_text: q.text, question_desc: q.desc, after_comment: q.comment,
-                    image_url: q.imageUrl, type: q.type, options: q.answers });
+          .insert({ test_id: test.id, question_text: q.text.trim(), question_desc: q.desc.trim(), after_comment: q.comment.trim(),
+                    image_url: img, type: q.type, options: q.answers });
         if(error) throw error;
       }
       m.classList.add('ok'); m.textContent = 'Тест опубликован!';
@@ -753,14 +847,14 @@
     document.getElementById('quizContent').style.display = 'block';
     document.getElementById('quizResultView').style.display = 'none';
     document.getElementById('submitQuizBtn').style.display = 'none';
-    document.getElementById('tkQuestions').innerHTML = '<p style="text-align:center;color:var(--muted)">Загрузка...</p>';
+    document.getElementById('tkQuestions').innerHTML = '<p style="text-align:center;color:rgba(255,255,255,.85)">Загрузка...</p>';
     const { data: test, error } = await sb.from('tests')
       .select('id, title, description, avatar, author_id, profiles(login)').eq('id', id).single();
     if(error || !test){ goHome(); return; }
     const { data: questions } = await sb.from('test_questions').select('*').eq('test_id', id).order('id');
-    const { data: results } = await sb.from('test_results').select('*').eq('test_id', id).order('min_points', { ascending: false });
+    const { data: results } = await sb.from('test_results').select('*').eq('test_id', id).order('min_points', { ascending: true });
     if(!questions || questions.length === 0 || !results || results.length === 0){
-      document.getElementById('tkQuestions').innerHTML = '<p style="text-align:center;color:var(--red)">Тест ещё не готов.</p>';
+      document.getElementById('tkQuestions').innerHTML = '<p style="text-align:center;color:#fff">Тест ещё не готов.</p>';
       return;
     }
     tkTest = test; tkQuestions = questions; tkResults = results; tkAnswers = {}; lastHistoryId = null;
@@ -770,6 +864,7 @@
     const aBox = document.getElementById('tkAuthor');
     aBox.innerHTML = 'от <b>' + escapeHtml(test.profiles ? test.profiles.login : 'Неизвестный') + '</b>';
     aBox.querySelector('b').onclick = () => location.hash = '#/user/' + test.author_id;
+    document.getElementById('tkStatsBtn').onclick = () => location.hash = '#/stats/' + test.id;
     renderQuizQuestions();
   }
 
@@ -783,6 +878,7 @@
       if(q.image_url) inner += '<img class="q-img" src="' + q.image_url + '">';
       inner += '<h3>' + (idx + 1) + '. ' + escapeHtml(q.question_text) + '</h3>';
       if(q.question_desc) inner += '<div class="qd">' + escapeHtml(q.question_desc) + '</div>';
+      div.innerHTML = inner;
       box.appendChild(div);
       const body = document.createElement('div');
       if(q.type === 'input'){
@@ -810,6 +906,16 @@
     document.getElementById('submitQuizBtn').style.display = (Object.keys(tkAnswers).length === tkQuestions.length) ? 'block' : 'none';
   }
 
+  function maxScoreOf(questions){
+    let m = 0;
+    questions.forEach(q => {
+      let best = 0;
+      (q.options || []).forEach(o => { best = Math.max(best, Number(o.points) || 0); });
+      m += best;
+    });
+    return m;
+  }
+
   document.getElementById('submitQuizBtn').onclick = async () => {
     let total = 0;
     const snapshot = {};
@@ -828,31 +934,36 @@
       total += pts;
       snapshot[q.id] = { qtext: q.question_text, given, points: pts, comment: q.after_comment || '' };
     });
-    const res = tkResults.find(r => total >= r.min_points) || tkResults[tkResults.length - 1];
+    const ms = maxScoreOf(tkQuestions);
+    const pct = ms > 0 ? Math.round(total / ms * 100) : 100;
+    const res = tkResults.find(r => pct <= r.min_points) || tkResults[tkResults.length - 1];
     if(currentUser){
       const { data } = await sb.from('user_history')
         .insert({ user_id: currentUser.id, test_id: tkTest.id, result_id: res.id, answers: snapshot }).select().single();
       lastHistoryId = data ? data.id : null;
     }
-    showQuizResult(res, total);
+    showQuizResult(res, total, pct);
   };
 
-  function showQuizResult(res, total){
+  function showQuizResult(res, total, pct){
     document.getElementById('quizContent').style.display = 'none';
-    const view = document.getElementById('quizResultView');
-    view.style.display = 'block';
+    document.getElementById('quizResultView').style.display = 'block';
     document.getElementById('qrImg').src = (res.image_url && res.image_url.startsWith('http')) ? res.image_url : DEFAULT_AVA + encodeURIComponent(res.title);
     document.getElementById('qrTitle').textContent = res.title;
-    document.getElementById('qrDesc').textContent = (res.description ? res.description + ' ' : '') + 'Вы набрали ' + total + ' очк.';
+    document.getElementById('qrDesc').textContent = (res.description ? res.description + ' ' : '') + 'Вы набрали ' + total + ' очк. (' + pct + '%)';
     const toStats = document.getElementById('toStatsBtn');
-    if(lastHistoryId){ toStats.style.display = 'block'; toStats.onclick = () => location.hash = '#/result/' + lastHistoryId; }
-    else { toStats.style.display = 'none'; }
+    if(lastHistoryId){
+      toStats.style.display = 'block';
+      toStats.onclick = () => location.hash = '#/result/' + lastHistoryId;
+    } else {
+      toStats.style.display = 'none';
+    }
     loadLikes(); loadComments();
     window.scrollTo(0,0);
   }
   document.getElementById('retryBtn').onclick = () => openTestPage(tkTest.id);
 
-  // --- лайки ---
+  // --- лайки теста ---
   let myLike = 0;
   async function loadLikes(){
     myLike = 0;
@@ -882,20 +993,73 @@
   document.getElementById('likeBtn').onclick = () => setLike(1);
   document.getElementById('dislikeBtn').onclick = () => setLike(-1);
 
-  // --- комментарии ---
+  // --- комментарии (с лайками и ответами) ---
+  let commentLikes = {}; // id -> {count, mine}
   async function loadComments(){
     const box = document.getElementById('commentList');
     const { data } = await sb.from('test_comments')
-      .select('text, created_at, profiles(login, avatar)').eq('test_id', tkTest.id).order('created_at', { ascending: false }).limit(50);
+      .select('id, text, parent_id, created_at, user_id, profiles(login, avatar)')
+      .eq('test_id', tkTest.id).order('created_at', { ascending: false }).limit(100);
     box.innerHTML = '';
-    if(!data || data.length === 0){ box.innerHTML = '<p style="color:var(--muted);font-size:14px">Пока нет комментариев.</p>'; return; }
-    data.forEach(c => {
-      const div = document.createElement('div');
-      div.className = 'comment';
-      const ava = getAvatarUrl(c.profiles ? c.profiles.avatar : '', c.profiles ? c.profiles.login : 'U');
-      div.innerHTML = '<div class="c-head"><img src="' + ava + '"><b>' + escapeHtml(c.profiles ? c.profiles.login : '???') + '</b><span>' + fmtDate(c.created_at) + '</span></div><p>' + escapeHtml(c.text) + '</p>';
-      box.appendChild(div);
+    if(!data || data.length === 0){ box.innerHTML = '<p style="color:rgba(255,255,255,.8);font-size:14px">Пока нет комментариев.</p>'; return; }
+    commentLikes = {};
+    const ids = data.map(c => c.id);
+    const { data: cl } = await sb.from('comment_likes').select('comment_id, user_id').in('comment_id', ids);
+    (cl || []).forEach(r => {
+      if(!commentLikes[r.comment_id]) commentLikes[r.comment_id] = { count: 0, mine: false };
+      commentLikes[r.comment_id].count++;
+      if(currentUser && r.user_id === currentUser.id) commentLikes[r.comment_id].mine = true;
     });
+    const parents = data.filter(c => !c.parent_id);
+    const children = data.filter(c => c.parent_id);
+    parents.forEach(c => box.appendChild(commentEl(c, children)));
+  }
+  function commentEl(c, allChildren){
+    const div = document.createElement('div');
+    div.className = 'comment';
+    const lk = commentLikes[c.id] || { count: 0, mine: false };
+    const ava = getAvatarUrl(c.profiles ? c.profiles.avatar : '', c.profiles ? c.profiles.login : 'U');
+    const canDel = currentUser && c.user_id === currentUser.id;
+    div.innerHTML =
+      '<div class="c-head"><img src="' + ava + '"><b>' + escapeHtml(c.profiles ? c.profiles.login : '???') + '</b><span>' + fmtDate(c.created_at) + '</span>' +
+      (canDel ? '<button class="icon-btn c-del">🗑</button>' : '') + '</div>' +
+      '<p>' + escapeHtml(c.text) + '</p>' +
+      '<div class="c-actions">' +
+        '<button class="c-act c-like' + (lk.mine ? ' liked' : '') + '">👍 <span>' + lk.count + '</span></button>' +
+        '<button class="c-act c-reply">Ответить</button>' +
+      '</div>' +
+      '<div class="reply-box"><textarea maxlength="300" placeholder="Ваш ответ..."></textarea>' +
+      '<button class="btn btn-create" style="width:auto;padding:8px 18px;font-size:14px;margin-top:6px">Отправить</button></div>' +
+      '<div class="c-children"></div>';
+    if(canDel) div.querySelector('.c-del').onclick = async () => {
+      if(!confirm('Удалить комментарий?')) return;
+      await sb.from('test_comments').delete().eq('id', c.id);
+      loadComments();
+    };
+    div.querySelector('.c-like').onclick = async () => {
+      if(!currentUser){ openAuth('Войдите, чтобы лайкать комментарии'); return; }
+      if(lk.mine){ await sb.from('comment_likes').delete().eq('comment_id', c.id).eq('user_id', currentUser.id); }
+      else {
+        const { data: ex } = await sb.from('comment_likes').select('id').eq('comment_id', c.id).eq('user_id', currentUser.id).maybeSingle();
+        if(!ex) await sb.from('comment_likes').insert({ comment_id: c.id, user_id: currentUser.id });
+      }
+      loadComments();
+    };
+    const replyBox = div.querySelector('.reply-box');
+    div.querySelector('.c-reply').onclick = () => {
+      if(!currentUser){ openAuth('Войдите, чтобы отвечать'); return; }
+      replyBox.style.display = replyBox.style.display === 'block' ? 'none' : 'block';
+    };
+    replyBox.querySelector('button').onclick = async () => {
+      const text = replyBox.querySelector('textarea').value.trim();
+      if(!text) return;
+      const { error } = await sb.from('test_comments').insert({ test_id: tkTest.id, user_id: currentUser.id, text, parent_id: c.id });
+      if(!error) loadComments();
+    };
+    const kids = allChildren.filter(k => k.parent_id === c.id);
+    const kidsBox = div.querySelector('.c-children');
+    kids.forEach(k => kidsBox.appendChild(commentEl(k, allChildren)));
+    return div;
   }
   document.getElementById('sendCommentBtn').onclick = async () => {
     if(!currentUser){ openAuth('Войдите, чтобы оставлять комментарии'); return; }
@@ -906,7 +1070,42 @@
     if(!error){ ta.value = ''; loadComments(); }
   };
 
-  // ================= СТРАНИЦА СТАТИСТИКИ =================
+  // ================= СТАТИСТИКА ТЕСТА =================
+  async function openTestStats(id){
+    showPage('testStatsPage');
+    const { data: test } = await sb.from('tests').select('id, title').eq('id', id).single();
+    if(!test){ goHome(); return; }
+    document.getElementById('tsTitle').textContent = '📊 ' + test.title;
+    document.getElementById('tsBackBtn').onclick = () => location.hash = '#/test/' + id;
+
+    const { data: results } = await sb.from('test_results').select('*').eq('test_id', id).order('min_points', { ascending: true });
+    const { data: hist } = await sb.from('user_history').select('result_id').eq('test_id', id);
+    const { data: likes } = await sb.from('test_likes').select('value').eq('test_id', id);
+
+    const total = (hist || []).length;
+    let l = 0, d = 0;
+    (likes || []).forEach(r => { if(r.value === 1) l++; else d++; });
+    document.getElementById('tsMeta').textContent = 'Прошли тест: ' + total + ' раз · 👍 ' + l + ' · 👎 ' + d;
+
+    const counts = {};
+    (hist || []).forEach(h => { counts[h.result_id] = (counts[h.result_id] || 0) + 1; });
+    const box = document.getElementById('tsBars');
+    box.innerHTML = '';
+    (results || []).forEach(r => {
+      const c = counts[r.id] || 0;
+      const pct = total ? Math.round(c / total * 100) : 0;
+      const div = document.createElement('div');
+      div.className = 'ts-row';
+      div.innerHTML = '<div class="ts-head">' +
+        (r.image_url ? '<img src="' + r.image_url + '">' : '<img src="' + DEFAULT_AVA + encodeURIComponent(r.title) + '">') +
+        '<b>' + escapeHtml(r.title) + '</b><span>' + c + ' раз (' + pct + '%)</span></div>' +
+        '<div class="ts-bar"><div style="width:' + pct + '%"></div></div>';
+      box.appendChild(div);
+    });
+    if(total === 0) box.innerHTML += '<p style="color:rgba(255,255,255,.8)">Этот тест ещё никто не проходил.</p>';
+  }
+
+  // ================= СТРАНИЦА СТАТИСТИКИ ПРОХОЖДЕНИЯ =================
   async function openStatsPage(hid){
     showPage('statsPage');
     const { data: h, error } = await sb.from('user_history')
@@ -987,7 +1186,6 @@
     document.getElementById('passInput').value = '';
   };
 
-  // настройки профиля
   const settingsBack = document.getElementById('settingsBack');
   document.getElementById('openSettingsBtn').onclick = () => {
     document.getElementById('settingsAvaFile').value = '';
@@ -1014,7 +1212,6 @@
     }
   };
 
-  // старт
   (async () => {
     const { data } = await sb.auth.getSession();
     if(data.session){ currentUser = data.session.user; await loadProfile(data.session.user); }
