@@ -10,13 +10,13 @@
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:var(--white);color:var(--text)}
-  a{text-decoration:none;color:inherit}
+  a{text-decoration:none;color:inherit;cursor:pointer;}
 
   header{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;background:var(--white);border-bottom:4px solid var(--yellow);position:sticky;top:0;z-index:10}
   .logo{font-size:26px;font-weight:800;color:var(--red);letter-spacing:.5px;cursor:pointer}
   .logo span{display:inline-block;background:var(--yellow);color:var(--red);border-radius:10px;padding:0 8px;margin-left:4px}
   nav{display:flex;gap:10px;align-items:center}
-  .btn{display:inline-block;font-weight:700;font-size:15px;padding:10px 18px;border-radius:12px;cursor:pointer;border:none}
+  .btn{display:inline-block;font-weight:700;font-size:15px;padding:10px 18px;border-radius:12px;cursor:pointer;border:none;text-align:center;}
   .btn-create{background:var(--red);color:var(--white)}
   .btn-create:hover{background:#a81223}
   .btn-profile{background:var(--yellow);color:var(--red)}
@@ -39,8 +39,10 @@
   .card .test-icon{width:100%;height:110px;border-radius:12px;background:var(--yellow);display:flex;align-items:center;justify-content:center;font-size:52px;margin-bottom:12px;overflow:hidden}
   .card .test-icon img{width:100%;height:100%;object-fit:cover}
   .card h3{font-size:17px;margin-bottom:6px}
-  .card .author{color:var(--muted);font-size:14px}
+  .card .author{color:var(--muted);font-size:14px;transition:color .15s;}
+  .card .author:hover{color:var(--red);text-decoration:underline;}
 
+  /* Профиль */
   #profilePage{display:none;padding:40px 24px;max-width:800px;margin:0 auto}
   .profile-header{display:flex;align-items:center;gap:24px;margin-bottom:32px;background:#fafafa;padding:24px;border-radius:20px;border:2px solid var(--card-border)}
   .profile-info h2{font-size:28px;color:var(--red);margin-bottom:8px}
@@ -48,7 +50,17 @@
   .btn-settings{background:#eee;color:var(--text);font-size:14px;padding:8px 16px}
   .btn-settings:hover{background:#ddd}
 
-  /* --- Стили редактора --- */
+  /* История */
+  .history-list{display:flex;flex-direction:column;gap:12px;margin-top:16px;}
+  .history-item{display:flex;align-items:center;gap:16px;background:#fff;border:2px solid var(--card-border);padding:12px;border-radius:12px;transition:border-color .15s;cursor:pointer;}
+  .history-item:hover{border-color:var(--yellow)}
+  .history-item img{width:50px;height:50px;border-radius:8px;object-fit:cover;}
+  .history-item .info{flex:1;}
+  .history-item .info h4{font-size:16px;margin-bottom:4px}
+  .history-item .info p{font-size:13px;color:var(--muted)}
+  .history-item .badge{background:var(--yellow);color:var(--red);padding:4px 10px;border-radius:8px;font-weight:700;font-size:13px;}
+
+  /* Редактор */
   #editorPage{display:none;padding:40px 24px;max-width:800px;margin:0 auto}
   .editor-step{background:#fafafa;border:2px solid var(--card-border);border-radius:16px;padding:24px;margin-bottom:24px}
   .editor-step h3{color:var(--red);margin-bottom:16px}
@@ -57,7 +69,7 @@
   .question-item{background:#fff;padding:16px;border-radius:12px;border:1px solid #eee;margin-bottom:16px}
   .q-opts{font-size:14px;color:var(--muted);margin-top:8px;padding-left:12px;border-left:2px solid var(--yellow)}
 
-  /* --- Стили прохождения теста --- */
+  /* Прохождение теста */
   #takeTestPage{display:none;padding:40px 24px;max-width:600px;margin:0 auto}
   .test-header{text-align:center;margin-bottom:32px}
   .test-header img{width:150px;height:150px;border-radius:16px;object-fit:cover;margin-bottom:16px;box-shadow:0 4px 12px rgba(0,0,0,0.1)}
@@ -67,10 +79,13 @@
   .option-btn{display:block;width:100%;text-align:left;background:#fff;border:2px solid #e2e2e2;padding:16px;border-radius:12px;font-size:16px;font-weight:600;cursor:pointer;margin-bottom:12px;transition:all .15s}
   .option-btn:hover{border-color:var(--yellow);background:#fffdf0}
   .option-btn.selected{border-color:var(--red);background:#fff3f4;color:var(--red)}
+  
+  /* Экран результата */
   .result-screen{text-align:center;background:#fafafa;padding:40px 24px;border-radius:20px;border:4px solid var(--yellow)}
   .result-screen img{width:200px;height:200px;border-radius:50%;object-fit:cover;margin-bottom:24px;border:6px solid var(--yellow)}
   .result-screen h2{font-size:32px;color:var(--red);margin-bottom:12px}
   .result-screen p{font-size:18px;color:var(--muted);margin-bottom:24px}
+  .result-actions{display:flex;flex-direction:column;gap:12px;max-width:300px;margin:0 auto;}
 
   footer{text-align:center;color:var(--muted);padding:24px;font-size:14px;border-top:4px solid var(--yellow);margin-top:32px}
 
@@ -101,7 +116,7 @@
   <nav id="navBox"></nav>
 </header>
 
-<!-- Главная страница -->
+<!-- Главная -->
 <div id="mainPage">
   <section class="hero">
     <h1>Тесты и игры, созданные людьми</h1>
@@ -113,21 +128,28 @@
   </section>
 </div>
 
-<!-- Страница профиля -->
+<!-- Профиль (свой или чужой) -->
 <div id="profilePage">
   <div class="profile-header">
     <img id="profBigAva" class="big-img-ava" src="" alt="Аватар">
     <div class="profile-info">
       <h2 id="profLogin">Логин</h2>
       <p id="profStatus">Статус не установлен</p>
-      <button class="btn btn-settings" id="openSettingsBtn">⚙️ Настройки профиля</button>
+      <button class="btn btn-settings" id="openSettingsBtn" style="display:none;">⚙️ Настройки профиля</button>
     </div>
   </div>
-  <h2 style="color:var(--red);margin-bottom:16px;">Мои тесты</h2>
+  
+  <h2 style="color:var(--red);margin-bottom:16px;">Тесты пользователя</h2>
   <div class="grid" id="myTestGrid"></div>
+
+  <!-- История прохождений (видна только если смотришь свой профиль) -->
+  <div id="historySection" style="display:none; margin-top:40px;">
+    <h2 style="color:var(--red);margin-bottom:16px;">Пройденные тесты</h2>
+    <div class="history-list" id="historyList"></div>
+  </div>
 </div>
 
-<!-- Редактор теста -->
+<!-- Редактор -->
 <div id="editorPage">
   <h2 style="color:var(--red);margin-bottom:8px;">Редактор теста</h2>
   <p id="editorTestTitle" style="color:var(--muted);margin-bottom:24px;font-size:18px;">Название теста</p>
@@ -149,27 +171,32 @@
   <button class="btn btn-settings" id="cancelEditorBtn" style="margin-top:12px;background:transparent;color:var(--muted);border:none;width:100%;">Отмена</button>
 </div>
 
-<!-- Страница прохождения теста -->
+<!-- Прохождение теста -->
 <div id="takeTestPage">
-  <div class="test-header">
-    <img id="takeTestImg" src="" alt="Обложка">
-    <h2 id="takeTestTitle">Название теста</h2>
+  <div id="takeTestContent">
+    <div class="test-header">
+      <img id="takeTestImg" src="" alt="Обложка">
+      <h2 id="takeTestTitle">Название теста</h2>
+    </div>
+    <div id="takeTestQuestions"></div>
+    <button class="btn btn-create" id="submitTestBtn" style="display:none;width:100%;font-size:18px;padding:16px;">Узнать результат!</button>
   </div>
-  <div id="takeTestQuestions"></div>
-  <button class="btn btn-create" id="submitTestBtn" style="display:none;width:100%;font-size:18px;padding:16px;">Узнать результат!</button>
   
   <!-- Экран результата -->
   <div id="testResultScreen" class="result-screen" style="display:none;">
     <img id="resultImg" src="" alt="Результат">
     <h2 id="resultTitle">Результат</h2>
     <p id="resultDesc">Описание</p>
-    <button class="btn btn-profile" onclick="showMainPage()">На главную</button>
+    <div class="result-actions">
+      <button class="btn btn-profile" id="shareResultBtn">📋 Скопировать ссылку</button>
+      <button class="btn btn-settings" onclick="showMainPage()">На главную</button>
+    </div>
   </div>
 </div>
 
 <footer>Пикуко 3 — пока что сайт для друзей 💛</footer>
 
-<!-- Окно входа / регистрации -->
+<!-- Модалки (вход, настройки, создание) - остаются без изменений -->
 <div class="modal-back" id="authBack">
   <div class="modal">
     <span class="close-x" id="authClose">&times;</span>
@@ -189,7 +216,6 @@
   </div>
 </div>
 
-<!-- Окно настроек профиля -->
 <div class="modal-back" id="settingsBack">
   <div class="modal">
     <span class="close-x" id="settingsClose">&times;</span>
@@ -201,7 +227,6 @@
   </div>
 </div>
 
-<!-- Окно создания теста (Шаг 1) -->
 <div class="modal-back" id="createBack">
   <div class="modal">
     <span class="close-x" id="createClose">&times;</span>
@@ -214,7 +239,6 @@
   </div>
 </div>
 
-<!-- Модалка для добавления результата -->
 <div class="modal-back" id="resultBack">
   <div class="modal">
     <span class="close-x" id="resultClose">&times;</span>
@@ -227,13 +251,11 @@
   </div>
 </div>
 
-<!-- Модалка для добавления вопроса -->
 <div class="modal-back" id="questionBack">
   <div class="modal">
     <span class="close-x" id="questionClose">&times;</span>
     <h2>Новый вопрос</h2>
     <div class="field"><label>Текст вопроса</label><input id="qText" maxlength="100" placeholder="например, Что ты любишь есть?"></div>
-    
     <div style="display:flex;gap:10px;margin-bottom:12px;">
       <div style="flex:1;"><label style="font-size:12px;color:var(--muted)">Вариант 1</label><input id="opt1" maxlength="40"></div>
       <div style="flex:1;"><label style="font-size:12px;color:var(--muted)">Ведёт к</label><select id="res1"></select></div>
@@ -242,7 +264,6 @@
       <div style="flex:1;"><label style="font-size:12px;color:var(--muted)">Вариант 2</label><input id="opt2" maxlength="40"></div>
       <div style="flex:1;"><label style="font-size:12px;color:var(--muted)">Ведёт к</label><select id="res2"></select></div>
     </div>
-
     <button class="btn btn-create" id="saveQuestionBtn">Добавить вопрос</button>
     <div class="msg" id="qMsg"></div>
   </div>
@@ -264,10 +285,9 @@
   let editorQuestions = []; 
   let tempIdCounter = 1;
 
-  // Состояние прохождения теста
   let currentTestQuestions = [];
   let currentTestResults = {};
-  let userAnswers = {}; // question_id -> result_id
+  let userAnswers = {}; 
 
   const mainPage = document.getElementById('mainPage');
   const profilePage = document.getElementById('profilePage');
@@ -293,7 +313,7 @@
   async function loadAllTests() {
     const grid = document.getElementById('testGrid');
     grid.innerHTML = '<p style="color:var(--muted)">Загрузка...</p>';
-    const { data, error } = await sb.from('tests').select(`id, title, avatar, profiles(login)`).order('created_at', { ascending: false });
+    const { data, error } = await sb.from('tests').select(`id, title, avatar, author_id, profiles(id, login)`).order('created_at', { ascending: false });
 
     grid.innerHTML = '';
     if (error || !data) { grid.innerHTML = '<p style="color:var(--red)">Ошибка загрузки</p>'; return; }
@@ -304,36 +324,219 @@
       card.className = 'card';
       const authorName = t.profiles ? t.profiles.login : 'Неизвестный';
       let iconHtml = t.avatar && t.avatar.startsWith('http') ? `<img src="${t.avatar}" alt="icon">` : `<span>${t.avatar || '🦸'}</span>`;
-      card.innerHTML = `<div class="test-icon">${iconHtml}</div><h3>${escapeHtml(t.title)}</h3><div class="author">от ${escapeHtml(authorName)}</div>`;
       
-      // Делаем кликабельным для прохождения
+      // Вставляем ссылку на профиль автора
+      card.innerHTML = `
+        <div class="test-icon">${iconHtml}</div>
+        <h3>${escapeHtml(t.title)}</h3>
+        <div class="author" onclick="event.stopPropagation(); showUserProfile('${t.author_id}')">от ${escapeHtml(authorName)}</div>
+      `;
+      
+      // Клик по самой карточке запускает тест
       card.onclick = () => startTest(t.id, t.title, t.avatar);
       grid.appendChild(card);
     });
   }
 
-  // --- Профиль ---
-  async function loadMyTests() {
-    if (!currentUser) return;
+  // --- Публичный профиль ---
+  async function showUserProfile(userId) {
+    hideAllPages();
+    profilePage.style.display = 'block';
+    
+    // Загружаем профиль
+    const { data: profile } = await sb.from('profiles').select('*').eq('id', userId).single();
+    if (!profile) return;
+
+    document.getElementById('profBigAva').src = getAvatarUrl(profile.avatar, profile.login);
+    document.getElementById('profLogin').textContent = profile.login;
+    document.getElementById('profStatus').textContent = profile.status || 'Статус не установлен';
+    
+    // Скрываем настройки и историю по умолчанию
+    document.getElementById('openSettingsBtn').style.display = 'none';
+    document.getElementById('historySection').style.display = 'none';
+
+    // Если это наш профиль — показываем настройки и историю
+    if (currentUser && currentUser.id === userId) {
+      document.getElementById('openSettingsBtn').style.display = 'inline-block';
+      document.getElementById('historySection').style.display = 'block';
+      loadHistory();
+    }
+
+    // Загружаем тесты этого пользователя
     const grid = document.getElementById('myTestGrid');
     grid.innerHTML = '<p style="color:var(--muted)">Загрузка...</p>';
-    const { data, error } = await sb.from('tests').select('id, title, avatar').eq('author_id', currentUser.id).order('created_at', { ascending: false });
+    const { data: tests } = await sb.from('tests').select('id, title, avatar').eq('author_id', userId).order('created_at', { ascending: false });
 
     grid.innerHTML = '';
-    if (error) { grid.innerHTML = '<p style="color:var(--red)">Ошибка</p>'; return; }
-    if (data.length === 0) { grid.innerHTML = '<p style="color:var(--muted)">Вы ещё не создали ни одного теста.</p>'; return; }
+    if (!tests || tests.length === 0) { grid.innerHTML = '<p style="color:var(--muted)">У этого пользователя пока нет тестов.</p>'; return; }
 
-    data.forEach(t => {
+    tests.forEach(t => {
       const card = document.createElement('div');
       card.className = 'card';
       let iconHtml = t.avatar && t.avatar.startsWith('http') ? `<img src="${t.avatar}" alt="icon">` : `<span>${t.avatar || '🦸'}</span>`;
       card.innerHTML = `<div class="test-icon">${iconHtml}</div><h3>${escapeHtml(t.title)}</h3>`;
-      // В профиле тоже можно кликать
       card.onclick = () => startTest(t.id, t.title, t.avatar);
       grid.appendChild(card);
     });
   }
 
+  // --- История прохождений ---
+  async function loadHistory() {
+    const list = document.getElementById('historyList');
+    list.innerHTML = '<p style="color:var(--muted)">Загрузка истории...</p>';
+    
+    // Загружаем историю с привязкой к тесту и результату
+    const { data, error } = await sb.from('user_history')
+      .select(`
+        id, 
+        test_id,
+        result_id,
+        tests ( title, avatar ),
+        test_results ( title, image_url )
+      `)
+      .eq('user_id', currentUser.id)
+      .order('created_at', { ascending: false });
+
+    list.innerHTML = '';
+    if (error || !data || data.length === 0) { list.innerHTML = '<p style="color:var(--muted)">Вы пока не проходили тесты.</p>'; return; }
+
+    data.forEach(h => {
+      if (!h.tests || !h.test_results) return;
+      
+      const div = document.createElement('div');
+      div.className = 'history-item';
+      let img = h.tests.avatar && h.tests.avatar.startsWith('http') ? h.tests.avatar : DEFAULT_AVA + encodeURIComponent(h.tests.title);
+      
+      div.innerHTML = `
+        <img src="${img}" alt="Тест">
+        <div class="info">
+          <h4>${escapeHtml(h.tests.title)}</h4>
+          <p>Ваш результат: <strong>${escapeHtml(h.test_results.title)}</strong></p>
+        </div>
+        <div class="badge">Смотреть</div>
+      `;
+      
+      // При клике открываем сохраненный результат
+      div.onclick = () => showSavedResult(h.id, h.test_results.title, h.test_results.image_url, 'Результат теста "' + h.tests.title + '"');
+      list.appendChild(div);
+    });
+  }
+
+  // --- Прохождение теста ---
+  async function startTest(testId, title, avatar) {
+    hideAllPages();
+    takeTestPage.style.display = 'block';
+    document.getElementById('takeTestContent').style.display = 'block';
+    document.getElementById('testResultScreen').style.display = 'none';
+    
+    document.getElementById('takeTestTitle').textContent = title;
+    document.getElementById('takeTestImg').src = avatar && avatar.startsWith('http') ? avatar : DEFAULT_AVA + encodeURIComponent(title);
+    
+    const qContainer = document.getElementById('takeTestQuestions');
+    qContainer.innerHTML = '<p style="text-align:center;color:var(--muted)">Загрузка...</p>';
+    document.getElementById('submitTestBtn').style.display = 'none';
+    userAnswers = {};
+
+    const { data: questions } = await sb.from('test_questions').select('*').eq('test_id', testId).order('id');
+    const { data: results } = await sb.from('test_results').select('*').eq('test_id', testId);
+
+    if (!questions || questions.length === 0) {
+      qContainer.innerHTML = '<p style="text-align:center;color:var(--red)">Тест ещё не готов.</p>';
+      return;
+    }
+
+    currentTestQuestions = questions;
+    currentTestResults = {};
+    results.forEach(r => { currentTestResults[r.id] = r; });
+
+    qContainer.innerHTML = '';
+    questions.forEach((q, index) => {
+      const block = document.createElement('div');
+      block.className = 'question-block';
+      block.innerHTML = `<h3>${index + 1}. ${escapeHtml(q.question_text)}</h3>`;
+      const optionsDiv = document.createElement('div');
+      q.options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.textContent = opt.text;
+        btn.onclick = () => {
+          optionsDiv.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+          btn.classList.add('selected');
+          userAnswers[q.id] = opt.resultId;
+          if (Object.keys(userAnswers).length === questions.length) {
+            document.getElementById('submitTestBtn').style.display = 'block';
+          }
+        };
+        optionsDiv.appendChild(btn);
+      });
+      block.appendChild(optionsDiv);
+      qContainer.appendChild(block);
+    });
+    
+    window.scrollTo(0, 0);
+  }
+
+  document.getElementById('submitTestBtn').onclick = async () => {
+    const counts = {};
+    Object.values(userAnswers).forEach(resId => { counts[resId] = (counts[resId] || 0) + 1; });
+    
+    let maxCount = 0; let winnerId = null;
+    for (const [resId, count] of Object.entries(counts)) {
+      if (count > maxCount) { maxCount = count; winnerId = resId; }
+    }
+
+    const resultObj = currentTestResults[winnerId];
+    
+    // Сохраняем в БД (если пользователь авторизован)
+    let historyId = null;
+    if (currentUser) {
+      // Нам нужно знать test_id. Берем его из текущего URL или передаем. 
+      // Так как мы не сохранили test_id в глобальную переменную при старте, давайте исправим это:
+      const testId = currentTestQuestions[0].test_id; 
+      const { data, error } = await sb.from('user_history').insert({
+        user_id: currentUser.id,
+        test_id: testId,
+        result_id: winnerId
+      }).select().single();
+      if (!error && data) historyId = data.id;
+    }
+
+    showSavedResult(historyId, resultObj.title, resultObj.image_url, resultObj.description);
+  };
+
+  function showSavedResult(historyId, title, image, desc) {
+    hideAllPages();
+    takeTestPage.style.display = 'block';
+    document.getElementById('takeTestContent').style.display = 'none';
+    
+    const resScreen = document.getElementById('testResultScreen');
+    resScreen.style.display = 'block';
+    
+    document.getElementById('resultImg').src = image && image.startsWith('http') ? image : DEFAULT_AVA + encodeURIComponent(title);
+    document.getElementById('resultTitle').textContent = title;
+    document.getElementById('resultDesc').textContent = desc || '';
+    
+    // Обновляем URL для возможности поделиться (если есть ID)
+    if (historyId) {
+      const newUrl = window.location.origin + window.location.pathname + '?result=' + historyId;
+      window.history.pushState({path: newUrl}, '', newUrl);
+      
+      document.getElementById('shareResultBtn').onclick = () => {
+        navigator.clipboard.writeText(newUrl).then(() => {
+          alert('Ссылка скопирована! Можете отправить её друзьям.');
+        });
+      };
+    } else {
+      // Если не сохранилось, просто даем скопировать текущий URL
+      document.getElementById('shareResultBtn').onclick = () => {
+        alert('Чтобы сохранить результат, войдите в аккаунт.');
+      };
+    }
+    
+    window.scrollTo(0, 0);
+  }
+
+  // --- Инициализация и навигация ---
   function renderNav() {
     const nav = document.getElementById('navBox');
     nav.innerHTML = '';
@@ -346,7 +549,8 @@
       const chip = document.createElement('div');
       chip.className = 'user-chip';
       chip.innerHTML = `<img src="${getAvatarUrl(currentProfile.avatar, currentProfile.login)}" class="img-ava" alt="ava"><span>${escapeHtml(currentProfile.login)}</span>`;
-      chip.onclick = showProfilePage;
+      // Ведем на СВОЙ профиль
+      chip.onclick = () => showUserProfile(currentUser.id);
       nav.appendChild(chip);
     } else {
       const btn = document.createElement('a');
@@ -369,129 +573,68 @@
     else { currentUser = null; currentProfile = null; renderNav(); showMainPage(); }
   });
 
-  // --- Переключение экранов ---
   function hideAllPages() {
     mainPage.style.display = 'none';
     profilePage.style.display = 'none';
     editorPage.style.display = 'none';
     takeTestPage.style.display = 'none';
+    // Сбрасываем URL
+    const cleanUrl = window.location.origin + window.location.pathname;
+    window.history.pushState({path: cleanUrl}, '', cleanUrl);
   }
-  function showMainPage() { hideAllPages(); mainPage.style.display = 'block'; loadAllTests(); }
-  function showProfilePage() {
-    hideAllPages(); profilePage.style.display = 'block';
-    document.getElementById('profBigAva').src = getAvatarUrl(currentProfile.avatar, currentProfile.login);
-    document.getElementById('profLogin').textContent = currentProfile.login;
-    document.getElementById('profStatus').textContent = currentProfile.status || 'Статус не установлен';
-    loadMyTests();
+  
+  function showMainPage() { 
+    hideAllPages(); 
+    mainPage.style.display = 'block'; 
+    loadAllTests(); 
   }
-  function showEditorPage() {
-    hideAllPages(); editorPage.style.display = 'block';
-    renderEditor();
-  }
+  
   document.getElementById('logoBtn').onclick = showMainPage;
 
-  // --- Прохождение теста ---
-  async function startTest(testId, title, avatar) {
-    hideAllPages();
-    takeTestPage.style.display = 'block';
-    document.getElementById('takeTestTitle').textContent = title;
-    
-    let imgHtml = avatar && avatar.startsWith('http') ? avatar : DEFAULT_AVA + encodeURIComponent(title);
-    document.getElementById('takeTestImg').src = imgHtml;
-    
-    document.getElementById('testResultScreen').style.display = 'none';
-    document.getElementById('submitTestBtn').style.display = 'none';
-    const qContainer = document.getElementById('takeTestQuestions');
-    qContainer.innerHTML = '<p style="text-align:center;color:var(--muted)">Загрузка вопросов...</p>';
-    
-    userAnswers = {};
-
-    // Загружаем вопросы и результаты
-    const { data: questions, error: qErr } = await sb.from('test_questions').select('*').eq('test_id', testId).order('id');
-    const { data: results, error: rErr } = await sb.from('test_results').select('*').eq('test_id', testId);
-
-    if (qErr || rErr || !questions || questions.length === 0) {
-      qContainer.innerHTML = '<p style="text-align:center;color:var(--red)">Ошибка загрузки вопросов или тест пуст.</p>';
-      return;
+  // --- Запуск при загрузке ---
+  (async () => {
+    const { data } = await sb.auth.getSession();
+    if (data.session) { 
+      currentUser = data.session.user; 
+      await loadProfile(data.session.user); 
+    } else {
+      renderNav();
     }
 
-    currentTestQuestions = questions;
-    currentTestResults = {};
-    results.forEach(r => { currentTestResults[r.id] = r; });
+    // Проверяем, есть ли в URL параметр ?result=...
+    const urlParams = new URLSearchParams(window.location.search);
+    const sharedResultId = urlParams.get('result');
 
-    qContainer.innerHTML = '';
-    questions.forEach((q, index) => {
-      const block = document.createElement('div');
-      block.className = 'question-block';
-      block.innerHTML = `<h3>${index + 1}. ${escapeHtml(q.question_text)}</h3>`;
-      
-      const optionsDiv = document.createElement('div');
-      q.options.forEach(opt => {
-        const btn = document.createElement('button');
-        btn.className = 'option-btn';
-        btn.textContent = opt.text;
-        btn.onclick = () => {
-          // Убираем выделение с других кнопок в этом вопросе
-          optionsDiv.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
-          btn.classList.add('selected');
-          
-          userAnswers[q.id] = opt.resultId;
-          
-          // Если ответили на все вопросы, показываем кнопку
-          if (Object.keys(userAnswers).length === questions.length) {
-            document.getElementById('submitTestBtn').style.display = 'block';
-          }
-        };
-        optionsDiv.appendChild(btn);
-      });
-      
-      block.appendChild(optionsDiv);
-      qContainer.appendChild(block);
-    });
-  }
-
-  document.getElementById('submitTestBtn').onclick = () => {
-    // Считаем результаты
-    const counts = {};
-    Object.values(userAnswers).forEach(resId => {
-      counts[resId] = (counts[resId] || 0) + 1;
-    });
-
-    // Находим победителя
-    let maxCount = 0;
-    let winnerId = null;
-    for (const [resId, count] of Object.entries(counts)) {
-      if (count > maxCount) {
-        maxCount = count;
-        winnerId = resId;
+    if (sharedResultId) {
+      // Загружаем результат по ID
+      const { data: h } = await sb.from('user_history')
+        .select(`
+          result_id,
+          tests ( title ),
+          test_results ( title, image_url, description )
+        `)
+        .eq('id', sharedResultId)
+        .single();
+        
+      if (h && h.test_results) {
+        showSavedResult(sharedResultId, h.test_results.title, h.test_results.image_url, h.test_results.description);
+        return;
       }
     }
+    
+    showMainPage();
+  })();
 
-    const resultObj = currentTestResults[winnerId];
-    
-    // Показываем экран результата
-    document.getElementById('takeTestQuestions').innerHTML = '';
-    document.getElementById('submitTestBtn').style.display = 'none';
-    
-    const resScreen = document.getElementById('testResultScreen');
-    resScreen.style.display = 'block';
-    
-    let resImg = resultObj.image_url && resultObj.image_url.startsWith('http') ? resultObj.image_url : DEFAULT_AVA + encodeURIComponent(resultObj.title);
-    document.getElementById('resultImg').src = resImg;
-    document.getElementById('resultTitle').textContent = resultObj.title;
-    document.getElementById('resultDesc').textContent = resultObj.description || '';
-    
-    window.scrollTo(0, 0);
-  };
-
-  // --- Регистрация/Вход ---
+  // --- Модалки (вход, настройки, создание) ---
+  // (Этот блок кода остался прежним, я просто убрал его для краткости. 
+  // ВАЖНО: Убедись, что ты копируешь ВЕСЬ скрипт, включая обработчики модалок.
+  // Вот код модалок:
   const back = document.getElementById('authBack');
   const tabLogin = document.getElementById('tabLogin');
   const tabReg = document.getElementById('tabReg');
   const avaBlock = document.getElementById('avaBlock');
   const msg = document.getElementById('authMsg');
   let mode = 'login';
-
   function openAuth(note) { msg.textContent = ''; msg.className = 'msg'; document.getElementById('authSub').textContent = note || 'Войдите, чтобы создавать тесты'; back.classList.add('open'); }
   document.getElementById('authClose').onclick = () => back.classList.remove('open');
   back.onclick = e => { if (e.target === back) back.classList.remove('open'); };
@@ -506,7 +649,6 @@
   }
   tabLogin.onclick = () => setMode('login');
   tabReg.onclick = () => setMode('reg');
-
   document.getElementById('authAction').onclick = async () => {
     const login = document.getElementById('loginInput').value.trim();
     const pass = document.getElementById('passInput').value;
@@ -537,8 +679,6 @@
     }
     document.getElementById('passInput').value = '';
   };
-
-  // --- Настройки профиля ---
   const settingsBack = document.getElementById('settingsBack');
   document.getElementById('openSettingsBtn').onclick = () => {
     document.getElementById('settingsAvaFile').value = '';
@@ -548,7 +688,6 @@
   };
   document.getElementById('settingsClose').onclick = () => settingsBack.classList.remove('open');
   settingsBack.onclick = e => { if (e.target === settingsBack) settingsBack.classList.remove('open'); };
-
   document.getElementById('saveSettingsBtn').onclick = async () => {
     const file = document.getElementById('settingsAvaFile').files[0];
     const newStatus = document.getElementById('settingsStatus').value.trim();
@@ -561,12 +700,10 @@
     else {
       sMsg.classList.add('ok'); sMsg.textContent = 'Сохранено!';
       currentProfile.avatar = newAvaUrl; currentProfile.status = newStatus;
-      renderNav(); showProfilePage();
+      renderNav(); showUserProfile(currentUser.id);
       setTimeout(() => settingsBack.classList.remove('open'), 800);
     }
   };
-
-  // --- Создание теста (Шаг 1) ---
   const createBack = document.getElementById('createBack');
   function openCreate() {
     document.getElementById('testMsg').textContent = '';
@@ -576,20 +713,16 @@
   }
   document.getElementById('createClose').onclick = () => createBack.classList.remove('open');
   createBack.onclick = e => { if (e.target === createBack) createBack.classList.remove('open'); };
-
   document.getElementById('testAction').onclick = async () => {
     const title = document.getElementById('testTitle').value.trim();
     const file = document.getElementById('testAvaFile').files[0];
     const tMsg = document.getElementById('testMsg');
     tMsg.className = 'msg';
     if (title.length < 3) { tMsg.classList.add('err'); tMsg.textContent = 'Название должно быть не короче 3 символов'; return; }
-    
     let finalAva = '🦸';
     if (file) { tMsg.textContent = 'Загрузка картинки...'; try { finalAva = await uploadImage(file); } catch (err) { tMsg.classList.add('err'); tMsg.textContent = 'Ошибка: ' + err.message; return; } }
-    
     tMsg.textContent = 'Создаём...';
     const { data, error } = await sb.from('tests').insert({ title: title, avatar: finalAva, author_id: currentUser.id }).select().single();
-    
     if (error) { tMsg.classList.add('err'); tMsg.textContent = 'Ошибка: ' + error.message; } 
     else {
       createBack.classList.remove('open');
@@ -598,33 +731,25 @@
       editorResults = [];
       editorQuestions = [];
       tempIdCounter = 1;
-      showEditorPage();
+      hideAllPages(); editorPage.style.display = 'block'; renderEditor();
     }
   };
-
-  // --- Логика редактора ---
   function renderEditor() {
     const resList = document.getElementById('resultsList');
     resList.innerHTML = '';
     if (editorResults.length === 0) resList.innerHTML = '<p style="color:var(--muted);font-size:14px;margin-bottom:12px;">Пока нет результатов.</p>';
-    
     editorResults.forEach(r => {
       const div = document.createElement('div');
       div.className = 'result-item';
       div.innerHTML = `
         ${r.imageUrl ? `<img src="${r.imageUrl}">` : `<div style="width:60px;height:60px;background:#eee;border-radius:8px;display:flex;align-items:center;justify-content:center;">?</div>`}
-        <div style="flex:1;">
-          <strong style="color:var(--red)">${escapeHtml(r.title)}</strong><br>
-          <span style="font-size:13px;color:var(--muted)">${escapeHtml(r.desc || '')}</span>
-        </div>
+        <div style="flex:1;"><strong style="color:var(--red)">${escapeHtml(r.title)}</strong><br><span style="font-size:13px;color:var(--muted)">${escapeHtml(r.desc || '')}</span></div>
       `;
       resList.appendChild(div);
     });
-
     const qList = document.getElementById('questionsList');
     qList.innerHTML = '';
     if (editorQuestions.length === 0) qList.innerHTML = '<p style="color:var(--muted);font-size:14px;margin-bottom:12px;">Пока нет вопросов.</p>';
-    
     editorQuestions.forEach((q, index) => {
       const div = document.createElement('div');
       div.className = 'question-item';
@@ -632,16 +757,10 @@
         const res = editorResults.find(r => r.tempId === o.resultTempId);
         return `<div>• ${escapeHtml(o.text)} <span style="color:var(--red);font-size:12px;">(→ ${res ? escapeHtml(res.title) : '?'})</span></div>`;
       }).join('');
-      
-      div.innerHTML = `
-        <strong>Вопрос ${index + 1}: ${escapeHtml(q.text)}</strong>
-        <div class="q-opts">${optsHtml}</div>
-      `;
+      div.innerHTML = `<strong>Вопрос ${index + 1}: ${escapeHtml(q.text)}</strong><div class="q-opts">${optsHtml}</div>`;
       qList.appendChild(div);
     });
   }
-
-  // Окно добавления результата
   const resultBack = document.getElementById('resultBack');
   document.getElementById('addResultBtn').onclick = () => {
     document.getElementById('resTitle').value = '';
@@ -652,53 +771,38 @@
   };
   document.getElementById('resultClose').onclick = () => resultBack.classList.remove('open');
   resultBack.onclick = e => { if (e.target === resultBack) resultBack.classList.remove('open'); };
-
   document.getElementById('saveResultBtn').onclick = async () => {
     const title = document.getElementById('resTitle').value.trim();
     const desc = document.getElementById('resDesc').value.trim();
     const file = document.getElementById('resFile').files[0];
     const rMsg = document.getElementById('resMsg');
     rMsg.className = 'msg';
-    
     if (title.length < 2) { rMsg.classList.add('err'); rMsg.textContent = 'Название слишком короткое'; return; }
-    
     let imageUrl = '';
-    if (file) {
-      rMsg.textContent = 'Загрузка картинки...';
-      try { imageUrl = await uploadImage(file); } catch (err) { rMsg.classList.add('err'); rMsg.textContent = 'Ошибка: ' + err.message; return; }
-    }
-    
+    if (file) { rMsg.textContent = 'Загрузка картинки...'; try { imageUrl = await uploadImage(file); } catch (err) { rMsg.classList.add('err'); rMsg.textContent = 'Ошибка: ' + err.message; return; } }
     editorResults.push({ tempId: tempIdCounter++, title, desc, imageUrl });
     resultBack.classList.remove('open');
     renderEditor();
   };
-
-  // Окно добавления вопроса
   const questionBack = document.getElementById('questionBack');
   document.getElementById('addQuestionBtn').onclick = () => {
     if (editorResults.length < 2) { alert('Сначала добавьте хотя бы 2 результата!'); return; }
-    
     document.getElementById('qText').value = '';
     document.getElementById('opt1').value = '';
     document.getElementById('opt2').value = '';
     document.getElementById('qMsg').textContent = '';
-    
     const res1 = document.getElementById('res1');
     const res2 = document.getElementById('res2');
     res1.innerHTML = ''; res2.innerHTML = '';
-    
     editorResults.forEach(r => {
       res1.innerHTML += `<option value="${r.tempId}">${escapeHtml(r.title)}</option>`;
       res2.innerHTML += `<option value="${r.tempId}">${escapeHtml(r.title)}</option>`;
     });
-    
     if (editorResults.length > 1) res2.selectedIndex = 1;
-    
     questionBack.classList.add('open');
   };
   document.getElementById('questionClose').onclick = () => questionBack.classList.remove('open');
   questionBack.onclick = e => { if (e.target === questionBack) questionBack.classList.remove('open'); };
-
   document.getElementById('saveQuestionBtn').onclick = () => {
     const text = document.getElementById('qText').value.trim();
     const opt1 = document.getElementById('opt1').value.trim();
@@ -707,88 +811,39 @@
     const r2 = parseInt(document.getElementById('res2').value);
     const qMsg = document.getElementById('qMsg');
     qMsg.className = 'msg';
-    
     if (text.length < 3) { qMsg.classList.add('err'); qMsg.textContent = 'Текст вопроса слишком короткий'; return; }
     if (!opt1 || !opt2) { qMsg.classList.add('err'); qMsg.textContent = 'Заполните оба варианта ответа'; return; }
-    
-    editorQuestions.push({
-      text: text,
-      options: [
-        { text: opt1, resultTempId: r1 },
-        { text: opt2, resultTempId: r2 }
-      ]
-    });
-    
+    editorQuestions.push({ text: text, options: [{ text: opt1, resultTempId: r1 }, { text: opt2, resultTempId: r2 }] });
     questionBack.classList.remove('open');
     renderEditor();
   };
-
-  // Сохранение всего теста в БД
   document.getElementById('saveTestBtn').onclick = async () => {
     const eMsg = document.getElementById('editorMsg');
     eMsg.className = 'msg';
-    
     if (editorResults.length < 2) { eMsg.classList.add('err'); eMsg.textContent = 'Нужно добавить минимум 2 результата!'; return; }
     if (editorQuestions.length === 0) { eMsg.classList.add('err'); eMsg.textContent = 'Нужно добавить хотя бы 1 вопрос!'; return; }
-    
     eMsg.textContent = 'Сохранение...';
-    
     try {
       const resultIdMap = {}; 
-      
       for (const r of editorResults) {
-        const { data, error } = await sb.from('test_results').insert({
-          test_id: editingTestId,
-          title: r.title,
-          description: r.desc,
-          image_url: r.imageUrl
-        }).select().single();
-        
+        const { data, error } = await sb.from('test_results').insert({ test_id: editingTestId, title: r.title, description: r.desc, image_url: r.imageUrl }).select().single();
         if (error) throw error;
         resultIdMap[r.tempId] = data.id;
       }
-      
       for (const q of editorQuestions) {
-        const mappedOptions = q.options.map(o => ({
-          text: o.text,
-          resultId: resultIdMap[o.resultTempId]
-        }));
-        
-        const { error } = await sb.from('test_questions').insert({
-          test_id: editingTestId,
-          question_text: q.text,
-          options: mappedOptions
-        });
-        
+        const mappedOptions = q.options.map(o => ({ text: o.text, resultId: resultIdMap[o.resultTempId] }));
+        const { error } = await sb.from('test_questions').insert({ test_id: editingTestId, question_text: q.text, options: mappedOptions });
         if (error) throw error;
       }
-      
-      eMsg.classList.add('ok');
-      eMsg.textContent = 'Тест успешно опубликован!';
+      eMsg.classList.add('ok'); eMsg.textContent = 'Тест опубликован!';
       setTimeout(() => { showMainPage(); }, 1000);
-      
     } catch (err) {
-      eMsg.classList.add('err');
-      eMsg.textContent = 'Ошибка сохранения: ' + err.message;
+      eMsg.classList.add('err'); eMsg.textContent = 'Ошибка сохранения: ' + err.message;
     }
   };
-
   document.getElementById('cancelEditorBtn').onclick = () => {
-    if (confirm('Вы уверены? Несохранённые данные будут потеряны.')) showMainPage();
+    if (confirm('Несохранённые данные будут потеряны. Выйти?')) showMainPage();
   };
-
-  // --- Инициализация ---
-  (async () => {
-    const { data } = await sb.auth.getSession();
-    if (data.session) { 
-      currentUser = data.session.user; 
-      await loadProfile(data.session.user); 
-      showMainPage();
-    } else {
-      renderNav();
-      showMainPage();
-    }
-  })();
 </script>
 
 </body>
