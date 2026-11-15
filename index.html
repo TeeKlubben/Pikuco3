@@ -57,6 +57,21 @@
   .question-item{background:#fff;padding:16px;border-radius:12px;border:1px solid #eee;margin-bottom:16px}
   .q-opts{font-size:14px;color:var(--muted);margin-top:8px;padding-left:12px;border-left:2px solid var(--yellow)}
 
+  /* --- Стили прохождения теста --- */
+  #takeTestPage{display:none;padding:40px 24px;max-width:600px;margin:0 auto}
+  .test-header{text-align:center;margin-bottom:32px}
+  .test-header img{width:150px;height:150px;border-radius:16px;object-fit:cover;margin-bottom:16px;box-shadow:0 4px 12px rgba(0,0,0,0.1)}
+  .test-header h2{color:var(--red);font-size:28px}
+  .question-block{background:#fafafa;border:2px solid var(--card-border);border-radius:16px;padding:24px;margin-bottom:24px}
+  .question-block h3{font-size:20px;margin-bottom:16px}
+  .option-btn{display:block;width:100%;text-align:left;background:#fff;border:2px solid #e2e2e2;padding:16px;border-radius:12px;font-size:16px;font-weight:600;cursor:pointer;margin-bottom:12px;transition:all .15s}
+  .option-btn:hover{border-color:var(--yellow);background:#fffdf0}
+  .option-btn.selected{border-color:var(--red);background:#fff3f4;color:var(--red)}
+  .result-screen{text-align:center;background:#fafafa;padding:40px 24px;border-radius:20px;border:4px solid var(--yellow)}
+  .result-screen img{width:200px;height:200px;border-radius:50%;object-fit:cover;margin-bottom:24px;border:6px solid var(--yellow)}
+  .result-screen h2{font-size:32px;color:var(--red);margin-bottom:12px}
+  .result-screen p{font-size:18px;color:var(--muted);margin-bottom:24px}
+
   footer{text-align:center;color:var(--muted);padding:24px;font-size:14px;border-top:4px solid var(--yellow);margin-top:32px}
 
   .modal-back{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;z-index:100}
@@ -119,14 +134,12 @@
   
   <div class="editor-step">
     <h3>1. Результаты теста</h3>
-    <p style="font-size:14px;color:var(--muted);margin-bottom:16px;">Добавьте исходы (например, "Ты кот", "Ты собака").</p>
     <div id="resultsList"></div>
     <button class="btn btn-settings" id="addResultBtn">+ Добавить результат</button>
   </div>
 
   <div class="editor-step">
     <h3>2. Вопросы</h3>
-    <p style="font-size:14px;color:var(--muted);margin-bottom:16px;">Добавьте вопросы. Каждый вариант ответа ведёт к одному из результатов.</p>
     <div id="questionsList"></div>
     <button class="btn btn-settings" id="addQuestionBtn" style="margin-bottom:16px;">+ Добавить вопрос</button>
   </div>
@@ -134,6 +147,24 @@
   <button class="btn btn-create" id="saveTestBtn" style="font-size:18px;padding:16px;width:100%;">Сохранить и опубликовать тест</button>
   <div class="msg" id="editorMsg"></div>
   <button class="btn btn-settings" id="cancelEditorBtn" style="margin-top:12px;background:transparent;color:var(--muted);border:none;width:100%;">Отмена</button>
+</div>
+
+<!-- Страница прохождения теста -->
+<div id="takeTestPage">
+  <div class="test-header">
+    <img id="takeTestImg" src="" alt="Обложка">
+    <h2 id="takeTestTitle">Название теста</h2>
+  </div>
+  <div id="takeTestQuestions"></div>
+  <button class="btn btn-create" id="submitTestBtn" style="display:none;width:100%;font-size:18px;padding:16px;">Узнать результат!</button>
+  
+  <!-- Экран результата -->
+  <div id="testResultScreen" class="result-screen" style="display:none;">
+    <img id="resultImg" src="" alt="Результат">
+    <h2 id="resultTitle">Результат</h2>
+    <p id="resultDesc">Описание</p>
+    <button class="btn btn-profile" onclick="showMainPage()">На главную</button>
+  </div>
 </div>
 
 <footer>Пикуко 3 — пока что сайт для друзей 💛</footer>
@@ -228,15 +259,20 @@
   let currentUser = null;
   let currentProfile = null;
   
-  // Состояние редактора
   let editingTestId = null;
   let editorResults = []; 
   let editorQuestions = []; 
   let tempIdCounter = 1;
 
+  // Состояние прохождения теста
+  let currentTestQuestions = [];
+  let currentTestResults = {};
+  let userAnswers = {}; // question_id -> result_id
+
   const mainPage = document.getElementById('mainPage');
   const profilePage = document.getElementById('profilePage');
   const editorPage = document.getElementById('editorPage');
+  const takeTestPage = document.getElementById('takeTestPage');
 
   function getAvatarUrl(url, loginName) {
     if (url && url.startsWith('http')) return url;
@@ -269,6 +305,9 @@
       const authorName = t.profiles ? t.profiles.login : 'Неизвестный';
       let iconHtml = t.avatar && t.avatar.startsWith('http') ? `<img src="${t.avatar}" alt="icon">` : `<span>${t.avatar || '🦸'}</span>`;
       card.innerHTML = `<div class="test-icon">${iconHtml}</div><h3>${escapeHtml(t.title)}</h3><div class="author">от ${escapeHtml(authorName)}</div>`;
+      
+      // Делаем кликабельным для прохождения
+      card.onclick = () => startTest(t.id, t.title, t.avatar);
       grid.appendChild(card);
     });
   }
@@ -289,6 +328,8 @@
       card.className = 'card';
       let iconHtml = t.avatar && t.avatar.startsWith('http') ? `<img src="${t.avatar}" alt="icon">` : `<span>${t.avatar || '🦸'}</span>`;
       card.innerHTML = `<div class="test-icon">${iconHtml}</div><h3>${escapeHtml(t.title)}</h3>`;
+      // В профиле тоже можно кликать
+      card.onclick = () => startTest(t.id, t.title, t.avatar);
       grid.appendChild(card);
     });
   }
@@ -333,6 +374,7 @@
     mainPage.style.display = 'none';
     profilePage.style.display = 'none';
     editorPage.style.display = 'none';
+    takeTestPage.style.display = 'none';
   }
   function showMainPage() { hideAllPages(); mainPage.style.display = 'block'; loadAllTests(); }
   function showProfilePage() {
@@ -347,6 +389,100 @@
     renderEditor();
   }
   document.getElementById('logoBtn').onclick = showMainPage;
+
+  // --- Прохождение теста ---
+  async function startTest(testId, title, avatar) {
+    hideAllPages();
+    takeTestPage.style.display = 'block';
+    document.getElementById('takeTestTitle').textContent = title;
+    
+    let imgHtml = avatar && avatar.startsWith('http') ? avatar : DEFAULT_AVA + encodeURIComponent(title);
+    document.getElementById('takeTestImg').src = imgHtml;
+    
+    document.getElementById('testResultScreen').style.display = 'none';
+    document.getElementById('submitTestBtn').style.display = 'none';
+    const qContainer = document.getElementById('takeTestQuestions');
+    qContainer.innerHTML = '<p style="text-align:center;color:var(--muted)">Загрузка вопросов...</p>';
+    
+    userAnswers = {};
+
+    // Загружаем вопросы и результаты
+    const { data: questions, error: qErr } = await sb.from('test_questions').select('*').eq('test_id', testId).order('id');
+    const { data: results, error: rErr } = await sb.from('test_results').select('*').eq('test_id', testId);
+
+    if (qErr || rErr || !questions || questions.length === 0) {
+      qContainer.innerHTML = '<p style="text-align:center;color:var(--red)">Ошибка загрузки вопросов или тест пуст.</p>';
+      return;
+    }
+
+    currentTestQuestions = questions;
+    currentTestResults = {};
+    results.forEach(r => { currentTestResults[r.id] = r; });
+
+    qContainer.innerHTML = '';
+    questions.forEach((q, index) => {
+      const block = document.createElement('div');
+      block.className = 'question-block';
+      block.innerHTML = `<h3>${index + 1}. ${escapeHtml(q.question_text)}</h3>`;
+      
+      const optionsDiv = document.createElement('div');
+      q.options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.textContent = opt.text;
+        btn.onclick = () => {
+          // Убираем выделение с других кнопок в этом вопросе
+          optionsDiv.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+          btn.classList.add('selected');
+          
+          userAnswers[q.id] = opt.resultId;
+          
+          // Если ответили на все вопросы, показываем кнопку
+          if (Object.keys(userAnswers).length === questions.length) {
+            document.getElementById('submitTestBtn').style.display = 'block';
+          }
+        };
+        optionsDiv.appendChild(btn);
+      });
+      
+      block.appendChild(optionsDiv);
+      qContainer.appendChild(block);
+    });
+  }
+
+  document.getElementById('submitTestBtn').onclick = () => {
+    // Считаем результаты
+    const counts = {};
+    Object.values(userAnswers).forEach(resId => {
+      counts[resId] = (counts[resId] || 0) + 1;
+    });
+
+    // Находим победителя
+    let maxCount = 0;
+    let winnerId = null;
+    for (const [resId, count] of Object.entries(counts)) {
+      if (count > maxCount) {
+        maxCount = count;
+        winnerId = resId;
+      }
+    }
+
+    const resultObj = currentTestResults[winnerId];
+    
+    // Показываем экран результата
+    document.getElementById('takeTestQuestions').innerHTML = '';
+    document.getElementById('submitTestBtn').style.display = 'none';
+    
+    const resScreen = document.getElementById('testResultScreen');
+    resScreen.style.display = 'block';
+    
+    let resImg = resultObj.image_url && resultObj.image_url.startsWith('http') ? resultObj.image_url : DEFAULT_AVA + encodeURIComponent(resultObj.title);
+    document.getElementById('resultImg').src = resImg;
+    document.getElementById('resultTitle').textContent = resultObj.title;
+    document.getElementById('resultDesc').textContent = resultObj.description || '';
+    
+    window.scrollTo(0, 0);
+  };
 
   // --- Регистрация/Вход ---
   const back = document.getElementById('authBack');
@@ -470,7 +606,7 @@
   function renderEditor() {
     const resList = document.getElementById('resultsList');
     resList.innerHTML = '';
-    if (editorResults.length === 0) resList.innerHTML = '<p style="color:var(--muted);font-size:14px;margin-bottom:12px;">Пока нет результатов. Нажмите кнопку ниже.</p>';
+    if (editorResults.length === 0) resList.innerHTML = '<p style="color:var(--muted);font-size:14px;margin-bottom:12px;">Пока нет результатов.</p>';
     
     editorResults.forEach(r => {
       const div = document.createElement('div');
@@ -598,8 +734,7 @@
     eMsg.textContent = 'Сохранение...';
     
     try {
-      // 1. Сохраняем результаты и запоминаем их реальные ID из базы
-      const resultIdMap = {}; // tempId -> real DB id
+      const resultIdMap = {}; 
       
       for (const r of editorResults) {
         const { data, error } = await sb.from('test_results').insert({
@@ -613,7 +748,6 @@
         resultIdMap[r.tempId] = data.id;
       }
       
-      // 2. Сохраняем вопросы, заменяя tempId на реальные ID
       for (const q of editorQuestions) {
         const mappedOptions = q.options.map(o => ({
           text: o.text,
@@ -623,7 +757,7 @@
         const { error } = await sb.from('test_questions').insert({
           test_id: editingTestId,
           question_text: q.text,
-          options: mappedOptions // JSONB колонка
+          options: mappedOptions
         });
         
         if (error) throw error;
