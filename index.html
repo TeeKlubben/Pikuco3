@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Пикуко 3 — тесты и игры от пользователей</title>
+<title>Печенеги онлайн — тесты и рисунки</title>
 <style>
   :root{
     --red:#d0162c; --darkred:#a81223; --yellow:#f4e238; --yellow2:#ffe980;
@@ -182,13 +182,112 @@
   .msg.ok{color:#1a9e3f}
   .close-x{float:right;font-size:22px;cursor:pointer;color:var(--muted);line-height:1}
   @media(max-width:900px){.editor-wrap{flex-direction:column}.editor-right{width:100%;position:static}.result-layout{flex-direction:column}.result-right{width:100%;position:static}}
+
+  /* ===== Печенеги: навигация ===== */
+  .btn-nav{background:transparent;color:var(--white);border:2px solid rgba(255,255,255,.55);padding:8px 14px}
+  .btn-nav:hover{background:rgba(255,255,255,.15)}
+  header{flex-wrap:wrap;gap:8px}
+  nav{flex-wrap:wrap}
+
+  /* ===== Рисунки: список ===== */
+  .draw-bar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+  .draw-bar .type-tabs{margin:0;flex:1;min-width:240px;max-width:380px}
+  .card .pill{display:inline-block;background:#f3f3f3;color:var(--muted);border-radius:8px;font-size:12px;font-weight:700;padding:3px 8px;margin:2px}
+  .card .card-actions{display:flex;gap:8px;margin-top:10px;width:100%}
+  .card .card-actions .btn{flex:1;padding:8px 10px;font-size:14px}
+  .btn-danger{background:#fff;color:var(--red);border:2px solid var(--red)}
+  .card .test-icon.draw-ico{font-size:48px}
+  .modal .field select{width:100%}
+  .hint-small{font-size:12px;color:var(--muted);margin-top:4px}
+
+  /* ===== Редактор пака ===== */
+  #packEditPage{padding:32px 24px;max-width:760px;margin:0 auto}
+  .counter{font-size:13px;color:var(--muted);margin-top:4px}
+  .counter.bad{color:var(--red);font-weight:700}
+
+  /* ===== Комната ===== */
+  #roomPage{padding:12px 14px 24px;max-width:1500px;margin:0 auto}
+  .room-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--darkred);border:2px solid var(--yellow);border-radius:14px;padding:8px 12px;margin-bottom:10px}
+  .room-title{font-weight:800;font-size:15px;line-height:1.2}
+  .room-title small{display:block;font-weight:600;color:rgba(255,255,255,.75);font-size:12px}
+  .room-word{flex:1;min-width:180px;text-align:center;font-size:22px;font-weight:800;color:var(--yellow);min-height:32px;display:flex;align-items:center;justify-content:center;flex-wrap:wrap}
+  .room-word .w{background:var(--yellow);color:var(--red);border-radius:10px;padding:2px 14px;margin-left:8px}
+  .room-word .sub{font-size:15px;font-weight:600;color:rgba(255,255,255,.9)}
+  .pat{display:inline-flex;gap:4px;flex-wrap:wrap;justify-content:center}
+  .pat b,.pat i{display:inline-block;min-width:22px;text-align:center;border-bottom:3px solid var(--yellow);font-style:normal;line-height:1.2}
+  .pat u{display:inline-block;width:16px}
+  .room-timer{font-size:22px;font-weight:800;background:var(--yellow);color:var(--red);border-radius:10px;padding:2px 12px;min-width:84px;text-align:center}
+  .room-main{display:flex;gap:12px;align-items:flex-start}
+  .players-col{width:210px;flex-shrink:0;display:flex;flex-direction:column;gap:6px;max-height:640px;overflow-y:auto}
+  .pl{position:relative;display:flex;align-items:center;gap:8px;background:var(--white);color:var(--text);border-radius:12px;padding:6px 8px;border:2px solid transparent}
+  .pl.drawer{border-color:var(--yellow);background:#fffbe0}
+  .pl.guessed{background:#eefaf1}
+  .pl .img-ava{cursor:default;flex-shrink:0}
+  .pl.can-kick .img-ava{cursor:pointer;outline:2px dashed #ccc}
+  .pl-info{flex:1;min-width:0}
+  .pl-info b{display:block;font-size:14px;color:var(--red);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .pl-info small{color:var(--muted);font-weight:700;font-size:13px}
+  .pl-badges{font-size:15px;white-space:nowrap}
+  .pl-menu{display:none;position:absolute;left:8px;top:calc(100% - 2px);z-index:20;background:#fff;border:2px solid var(--red);border-radius:10px;padding:4px;box-shadow:0 4px 12px rgba(0,0,0,.3)}
+  .pl-menu.open{display:block}
+  .pl-menu button{background:var(--red);color:#fff;border:none;border-radius:8px;padding:6px 12px;font-weight:700;cursor:pointer}
+  .canvas-col{flex:1;min-width:0}
+  .canvas-wrap{position:relative;background:#fff;border-radius:12px;border:3px solid var(--yellow);overflow:hidden;aspect-ratio:8/5;width:100%}
+  #cv{width:100%;height:100%;display:block;touch-action:none;background:#fff;cursor:crosshair}
+  .room-overlay{position:absolute;inset:0;background:rgba(40,0,6,.72);display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:16px;gap:10px;overflow-y:auto;color:#fff}
+  .room-overlay h2{color:var(--yellow);font-size:26px}
+  .room-overlay p{color:rgba(255,255,255,.9)}
+  .room-overlay .big{font-size:34px;font-weight:800;background:var(--yellow);color:var(--red);border-radius:14px;padding:6px 22px}
+  .room-overlay .opts{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+  .room-overlay .opts button{font-size:22px;font-weight:800;background:var(--yellow);color:var(--red);border:none;border-radius:14px;padding:14px 26px;cursor:pointer}
+  .room-overlay .opts button:hover{background:#fff}
+  .room-overlay .rank{background:rgba(255,255,255,.12);border-radius:10px;padding:6px 12px;min-width:240px;display:flex;justify-content:space-between;gap:16px}
+  .room-overlay .rank.gain b{color:var(--yellow)}
+  .room-overlay .winava{width:90px;height:90px;border-radius:50%;object-fit:cover;border:4px solid var(--yellow);background:#fff}
+  .toolbar{display:none;flex-wrap:wrap;gap:10px 16px;align-items:center;background:var(--white);color:var(--text);border-radius:12px;padding:8px 10px;margin-top:8px}
+  .tb-group{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+  .tool,.tb-btn{background:#f3f3f3;border:2px solid transparent;border-radius:10px;font-size:20px;min-width:42px;height:42px;cursor:pointer;color:var(--text)}
+  .tool:hover,.tb-btn:hover{background:#e8e8e8}
+  .tool.on{border-color:var(--red);background:#fff3f4}
+  .tb-btn:disabled{opacity:.35;cursor:default}
+  #colorPick{width:46px;height:42px;padding:0;border:2px solid #ddd;border-radius:10px;background:#fff;cursor:pointer}
+  .swatches{display:flex;gap:4px;flex-wrap:wrap;max-width:230px}
+  .swatch{width:24px;height:24px;border-radius:6px;border:2px solid #ccc;cursor:pointer}
+  .swatch:hover{transform:scale(1.15)}
+  #sizeRange{width:130px}
+  .size-dot{display:inline-flex;width:44px;height:44px;align-items:center;justify-content:center;background:#f3f3f3;border-radius:10px}
+  .size-dot i{display:block;border-radius:50%;background:#000}
+  .hint-row{display:none;margin-top:8px}
+  .hint-row .btn{padding:8px 16px;font-size:15px}
+  .chats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+  .chat{background:var(--white);color:var(--text);border-radius:12px;display:flex;flex-direction:column;height:240px;overflow:hidden}
+  .chat-head{background:var(--yellow);color:var(--red);font-weight:800;font-size:14px;padding:6px 12px}
+  .chat-log{flex:1;overflow-y:auto;padding:8px 10px;font-size:14px;word-break:break-word}
+  .chat-log div{margin-bottom:4px}
+  .chat-log .sys{color:var(--muted);font-style:italic}
+  .chat-log .okmsg{color:#1a9e3f;font-weight:700}
+  .chat-log b{color:var(--red)}
+  .chat-form{display:flex;gap:6px;padding:6px;border-top:2px solid #eee}
+  .chat-form input{flex:1;padding:9px 10px;border:2px solid #e2e2e2;border-radius:10px;font-size:14px;font-family:inherit;background:#fff;color:var(--text);min-width:0}
+  .chat-form input:focus{outline:none;border-color:var(--red)}
+  .chat-form input:disabled{background:#f3f3f3}
+  .chat-form button{background:var(--red);color:#fff;border:none;border-radius:10px;padding:0 14px;font-weight:800;cursor:pointer}
+  @media(max-width:860px){
+    .room-main{flex-direction:column}
+    .players-col{width:100%;flex-direction:row;max-height:none;overflow-x:auto;overflow-y:visible;padding-bottom:30px}
+    .pl{min-width:150px}
+    .chats{grid-template-columns:1fr}
+    .chat{height:200px}
+    .room-word{font-size:18px}
+    .logo{font-size:22px}
+    .tool,.tb-btn{min-width:46px;height:46px}
+  }
 </style>
-<base target="_blank">
 </head>
 <body>
 
 <header>
-  <div class="logo" onclick="goHome()">Пикуко<span>3</span></div>
+  <div class="logo" onclick="goHome()">Печенеги<span>онлайн</span></div>
   <nav id="navBox"></nav>
 </header>
 
@@ -333,7 +432,125 @@
   <div id="statsQuestions"></div>
 </div>
 
-<footer>Пикуко 3 — пока что сайт для друзей 💛</footer>
+<!-- ============ Рисунки: список ============ -->
+<div id="drawPage" class="page">
+  <section class="hero">
+    <h1>Рисуй и угадывай</h1>
+    <p>Заходи в активную игру или запусти свою по готовому паку слов</p>
+  </section>
+  <section class="tests">
+    <div class="draw-bar">
+      <div class="type-tabs">
+        <div class="tab active" id="dtabGames">Активные игры</div>
+        <div class="tab" id="dtabPacks">Паки</div>
+      </div>
+      <button class="btn btn-create" id="newPackBtn">+ Создать пак</button>
+    </div>
+    <div class="grid" id="drawGrid"></div>
+  </section>
+</div>
+
+<!-- ============ Редактор пака ============ -->
+<div id="packEditPage" class="page">
+  <h2 class="page-title" id="pkHead" style="margin-bottom:20px">Создание пака</h2>
+  <div class="editor-step">
+    <div class="field"><label>Название пака</label><input id="pkTitle" maxlength="40" placeholder="например, Сказочные герои"></div>
+    <div class="field"><label>Описание</label><textarea id="pkDesc" rows="2" maxlength="120" placeholder="Коротко о чём слова"></textarea></div>
+    <div class="field"><label>Слова: каждое с новой строки (до 25 символов, можно сочетания слов)</label>
+      <textarea id="pkWords" rows="14" placeholder="кошка&#10;зелёный чайник&#10;Колобок"></textarea>
+      <div class="counter" id="pkCount">Слов: 0 (нужно минимум 10)</div>
+    </div>
+  </div>
+  <div class="editor-step">
+    <h3>👁 Так пак выглядит в списке</h3>
+    <div class="card" style="cursor:default;max-width:260px">
+      <div class="test-icon draw-ico">🎨</div>
+      <h3 id="pkPvTitle">Название пака</h3>
+      <div class="desc" id="pkPvDesc">Описание</div>
+      <div class="author" id="pkPvAuthor">от вас</div>
+    </div>
+  </div>
+  <button class="btn btn-create" id="pkSave" style="font-size:18px;padding:16px;width:100%">Сохранить пак</button>
+  <div class="msg" id="pkMsg" style="color:#fff"></div>
+</div>
+
+<!-- ============ Комната ============ -->
+<div id="roomPage" class="page">
+  <div class="room-top">
+    <button class="btn btn-profile" id="roomLeave" style="padding:8px 14px">← Выйти</button>
+    <div class="room-title"><span id="roomTitle">Игра</span><small id="roomSub"></small></div>
+    <div class="room-word" id="roomWord">Подключаемся…</div>
+    <div class="room-timer" id="roomTimer">—</div>
+  </div>
+  <div class="room-main">
+    <div class="players-col" id="playersCol"></div>
+    <div class="canvas-col">
+      <div class="canvas-wrap">
+        <canvas id="cv" width="800" height="500"></canvas>
+        <div class="room-overlay" id="roomOverlay"></div>
+      </div>
+      <div class="toolbar" id="toolbar">
+        <div class="tb-group" id="toolBtns">
+          <button class="tool on" data-tool="pencil" title="Карандаш">✏️</button>
+          <button class="tool" data-tool="eraser" title="Ластик">🧽</button>
+          <button class="tool" data-tool="fill" title="Заливка">🪣</button>
+          <button class="tool" data-tool="rect" title="Квадрат">⬜</button>
+          <button class="tool" data-tool="tri" title="Треугольник">🔺</button>
+          <button class="tool" data-tool="line" title="Полоска">➖</button>
+        </div>
+        <div class="tb-group">
+          <input type="color" id="colorPick" value="#000000" title="Любой цвет">
+          <div class="swatches" id="swatches"></div>
+        </div>
+        <div class="tb-group" id="sizeGroup">
+          <span class="size-dot"><i id="sizeDot"></i></span>
+          <input type="range" id="sizeRange" min="1" max="60" value="6">
+          <b id="sizeVal">6</b>
+        </div>
+        <div class="tb-group">
+          <button class="tb-btn" id="btnUndo" title="Назад (Ctrl+Z)">↶</button>
+          <button class="tb-btn" id="btnRedo" title="Вперёд (Ctrl+X)">↷</button>
+          <button class="tb-btn" id="btnClear" title="Очистить">🗑</button>
+        </div>
+      </div>
+      <div class="hint-row" id="hintRow"><button class="btn btn-create" id="hintBtn">💡 Подсказка</button></div>
+    </div>
+  </div>
+  <div class="chats">
+    <div class="chat">
+      <div class="chat-head">🔍 Угадывание</div>
+      <div class="chat-log" id="chatGuess"></div>
+      <div class="chat-form"><input id="inGuess" maxlength="100" placeholder="Ваш вариант слова…" autocomplete="off"><button id="sendGuess">➤</button></div>
+    </div>
+    <div class="chat">
+      <div class="chat-head">💬 Чат</div>
+      <div class="chat-log" id="chatTalk"></div>
+      <div class="chat-form"><input id="inTalk" maxlength="150" placeholder="Сообщение игрокам…" autocomplete="off"><button id="sendTalk">➤</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- Модалка запуска игры -->
+<div class="modal-back" id="launchBack">
+  <div class="modal">
+    <span class="close-x" id="launchClose">&times;</span>
+    <h2>Запуск игры</h2>
+    <div class="sub" id="launchPack"></div>
+    <div class="field"><label>Играем до очков</label><input id="launchScore" type="number" min="20" max="500" value="88">
+      <div class="hint-small">От 20 до 500. При 88 партия обычно занимает 6–10 ходов.</div></div>
+    <div class="field"><label>Выбор слов</label>
+      <select id="launchMode">
+        <option value="no_repeat">Случайно, без повторов, пока не сыграны все слова</option>
+        <option value="cooldown">Случайно, сыгранное не выпадает следующие 20 ходов</option>
+        <option value="random">Всегда случайно</option>
+      </select></div>
+    <div class="hint-small">Вы станете админом игры: только вы сможете кикать игроков. Если вы выйдете, игра закроется для всех.</div>
+    <button class="btn btn-create" id="launchGo">Запустить</button>
+    <div class="msg" id="launchMsg"></div>
+  </div>
+</div>
+
+<footer>Печенеги онлайн — пока что сайт для друзей 💛</footer>
 
 <!-- Модалка входа/регистрации -->
 <div class="modal-back" id="authBack">
@@ -372,7 +589,7 @@
   const SUPABASE_URL = "https://lniuacahjlwcwoyxqntz.supabase.co";
   const SUPABASE_KEY = "sb_publishable_pa1-ktdc8x-P4T3pIJzBMg_jWTnMj9_";
   const FAKE_DOMAIN = "@pikuko3.local";
-  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY, { realtime: { params: { eventsPerSecond: 40 } } });
   const DEFAULT_AVA = "https://ui-avatars.com/api/?background=f4e238&color=d0162c&bold=true&name=";
 
   let currentUser = null;
@@ -402,8 +619,15 @@
   function renderNav(){
     const nav = document.getElementById('navBox');
     nav.innerHTML = '';
+    const navTests = document.createElement('a');
+    navTests.href = '#'; navTests.className = 'btn btn-nav'; navTests.textContent = 'Тесты';
+    navTests.onclick = e => { e.preventDefault(); goHome(); };
+    nav.appendChild(navTests);
+    const navDraw = document.createElement('a');
+    navDraw.href = '#/draw'; navDraw.className = 'btn btn-nav'; navDraw.textContent = 'Рисунки';
+    nav.appendChild(navDraw);
     const createBtn = document.createElement('a');
-    createBtn.href = '#/create'; createBtn.className = 'btn btn-create'; createBtn.textContent = 'Создать';
+    createBtn.href = '#/create'; createBtn.className = 'btn btn-create'; createBtn.textContent = 'Создать тест';
     createBtn.onclick = e => {
       e.preventDefault();
       if(currentUser) location.hash = '#/create';
@@ -438,6 +662,7 @@
 
   function route(){
     const h = location.hash;
+    if(window.drawRoute && window.drawRoute(h)) return;
     if(h.startsWith('#/test/')){ openTestPage(h.slice(7)); return; }
     if(h.startsWith('#/result/')){ openStatsPage(h.slice(9)); return; }
     if(h.startsWith('#/user/')){ openProfilePage(h.slice(7)); return; }
@@ -1211,6 +1436,1121 @@
       setTimeout(() => settingsBack.classList.remove('open'), 800);
     }
   };
+
+  // =====================================================================
+  //                       ПЕЧЕНЕГИ: РАЗДЕЛ «РИСУНКИ»
+  // =====================================================================
+  (function(){
+  'use strict';
+  const $ = id => document.getElementById(id);
+  const esc = s => escapeHtml(s);
+
+  const DRAW_W = 800, DRAW_H = 500;
+  const ROUND_MS = 120000, CHOOSE_MS = 15000, BETWEEN_MS = 7000, OVER_MS = 12000, START_MS = 5000;
+  const COOLDOWN_TURNS = 20, MAX_WORD = 25, MIN_WORDS = 10, MAX_WORDS = 500, MAX_HINTS = 4;
+  const SWATCHES = ['#000000','#7f7f7f','#ffffff','#d0162c','#ff7a00','#f4e238','#2ea043','#00b3b3','#1f6feb','#7c3aed','#ff6fb5','#8b5a2b'];
+  const MODE_NAMES = { random:'всегда случайно', no_repeat:'без повторов', cooldown:'сыгранное не выпадает 20 ходов' };
+  const LETTER = /[\p{L}\p{N}]/u;
+  const SHAPE = { rect:'r', tri:'t', line:'l' };
+
+  // ---------- чистые функции ----------
+  function flat(s){ return String(s || '').toLowerCase().replace(/ё/g, 'е').replace(/[^\p{L}\p{N}]/gu, ''); }
+  function shuffle(a){ a = a.slice(); for(let i = a.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+  function rid(){ return Math.random().toString(36).slice(2, 9); }
+  function censorText(text, word){
+    const target = flat(word);
+    if(!target) return text;
+    const src = String(text);
+    let fl = '', map = [];
+    for(let i = 0; i < src.length; i++){
+      const c = src[i].toLowerCase().replace('ё', 'е');
+      for(const ch of c){ if(LETTER.test(ch)){ fl += ch; map.push(i); } }
+    }
+    const out = src.split('');
+    let from = 0;
+    while(true){
+      const k = fl.indexOf(target, from);
+      if(k < 0) break;
+      for(let j = k; j < k + target.length; j++) out[map[j]] = '*';
+      from = k + target.length;
+    }
+    return out.join('');
+  }
+  function makePattern(word, order, k){
+    const open = new Set(order.slice(0, k));
+    let out = '';
+    for(let i = 0; i < word.length; i++){
+      const c = word[i];
+      if(LETTER.test(c)) out += open.has(i) ? c : '_'; else out += c;
+    }
+    return out;
+  }
+  function patternHtml(p){
+    return '<span class="pat">' + p.split('').map(ch => ch === '_' ? '<i>&nbsp;</i>' : (ch === ' ' ? '<u></u>' : '<b>' + esc(ch) + '</b>')).join('') + '</span>';
+  }
+  function parseWords(txt){
+    const seen = new Set(), out = [], tooLong = [];
+    String(txt).split(/\r?\n/).forEach((line, i) => {
+      const w = line.replace(/\s+/g, ' ').trim();
+      if(!w) return;
+      if(w.length > MAX_WORD){ tooLong.push(i + 1); return; }
+      const k = flat(w) || w.toLowerCase();
+      if(seen.has(k)) return;
+      seen.add(k); out.push(w);
+    });
+    return { out, tooLong };
+  }
+  function fmtTime(ms){
+    const s = Math.max(0, Math.ceil(ms / 1000));
+    return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+  }
+  function hexToRgb(h){ const n = parseInt(h.slice(1), 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; }
+
+  // =====================================================================
+  //                           СПИСОК: ИГРЫ И ПАКИ
+  // =====================================================================
+  let drawTab = 'games', drawPoll = null;
+
+  async function openDrawPage(){
+    showPage('drawPage');
+    setDrawTab(drawTab);
+  }
+  function setDrawTab(t){
+    drawTab = t;
+    $('dtabGames').classList.toggle('active', t === 'games');
+    $('dtabPacks').classList.toggle('active', t === 'packs');
+    clearInterval(drawPoll); drawPoll = null;
+    if(t === 'games'){ loadGames(); drawPoll = setInterval(loadGames, 8000); }
+    else loadPacks();
+  }
+  $('dtabGames').onclick = () => setDrawTab('games');
+  $('dtabPacks').onclick = () => setDrawTab('packs');
+  $('newPackBtn').onclick = () => {
+    if(!currentUser){ openAuth('Войдите, чтобы создавать паки'); return; }
+    location.hash = '#/draw/pack/new';
+  };
+
+  async function loadGames(){
+    const grid = $('drawGrid');
+    if(drawTab !== 'games') return;
+    const since = new Date(Date.now() - 75000).toISOString();
+    const { data, error } = await sb.from('rooms')
+      .select('id, win_score, word_mode, player_count, status, admin_id, packs(title, description), profiles(login)')
+      .eq('closed', false).gt('last_seen', since).order('created_at', { ascending: false });
+    if(drawTab !== 'games') return;
+    grid.innerHTML = '';
+    if(error){ grid.innerHTML = '<p style="color:#fff">Не удалось загрузить игры: ' + esc(error.message) + '</p>'; return; }
+    if(!data || !data.length){
+      grid.innerHTML = '<p style="color:rgba(255,255,255,.85)">Сейчас нет активных игр. Откройте вкладку «Паки» и запустите свою!</p>';
+      return;
+    }
+    data.forEach(r => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      const pk = r.packs || {};
+      card.innerHTML = '<div class="test-icon draw-ico">🎨</div>' +
+        '<h3>' + esc(pk.title || 'Игра') + '</h3>' +
+        (pk.description ? '<div class="desc">' + esc(pk.description) + '</div>' : '') +
+        '<div class="author">админ: ' + esc(r.profiles ? r.profiles.login : '???') + '</div>' +
+        '<div><span class="pill">👥 ' + r.player_count + '</span><span class="pill">до ' + r.win_score + ' очк.</span>' +
+        '<span class="pill">' + (r.status === 'lobby' ? 'ожидание' : 'идёт игра') + '</span></div>' +
+        '<div class="card-actions"><button class="btn btn-create">Войти</button></div>';
+      card.onclick = () => enterFromList(r.id);
+      grid.appendChild(card);
+    });
+  }
+  function enterFromList(id){
+    if(!currentUser){ openAuth('Войдите, чтобы играть'); return; }
+    location.hash = '#/draw/room/' + id;
+  }
+
+  async function loadPacks(){
+    const grid = $('drawGrid');
+    grid.innerHTML = '<p style="color:rgba(255,255,255,.8)">Загрузка...</p>';
+    const { data, error } = await sb.from('packs')
+      .select('id, title, description, words, author_id, is_default, profiles(login)')
+      .order('is_default', { ascending: false }).order('created_at', { ascending: false });
+    if(drawTab !== 'packs') return;
+    grid.innerHTML = '';
+    if(error){ grid.innerHTML = '<p style="color:#fff">Ошибка: ' + esc(error.message) + '. Выполнили ли вы setup.sql?</p>'; return; }
+    if(!data || !data.length){ grid.innerHTML = '<p style="color:rgba(255,255,255,.85)">Паков пока нет.</p>'; return; }
+    data.forEach(p => {
+      const mine = currentUser && p.author_id === currentUser.id;
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.style.cursor = 'default';
+      const n = Array.isArray(p.words) ? p.words.length : 0;
+      card.innerHTML = '<div class="test-icon draw-ico">📝</div>' +
+        '<h3>' + esc(p.title) + '</h3>' +
+        (p.description ? '<div class="desc">' + esc(p.description) + '</div>' : '') +
+        '<div class="author" style="cursor:default">от ' + esc(p.profiles ? p.profiles.login : 'Печенеги') + '</div>' +
+        '<div><span class="pill">слов: ' + n + '</span></div>' +
+        '<div class="card-actions"><button class="btn btn-create pk-run">▶ Запустить</button>' +
+        (mine ? '<button class="btn btn-profile pk-edit" title="Изменить">✏️</button><button class="btn btn-danger pk-del" title="Удалить">🗑</button>' : '') + '</div>';
+      grid.appendChild(card);
+      card.querySelector('.pk-run').onclick = () => openLaunch(p);
+      if(mine){
+        card.querySelector('.pk-edit').onclick = () => location.hash = '#/draw/pack/' + p.id;
+        card.querySelector('.pk-del').onclick = async () => {
+          if(!confirm('Удалить пак «' + p.title + '»? Запущенные по нему игры тоже закроются.')) return;
+          const { error: e2 } = await sb.from('packs').delete().eq('id', p.id);
+          if(e2) alert('Ошибка: ' + e2.message); else loadPacks();
+        };
+      }
+    });
+  }
+
+  // ---------- запуск игры ----------
+  let launchPackObj = null;
+  function openLaunch(p){
+    if(!currentUser){ openAuth('Войдите, чтобы запускать игры'); return; }
+    if(!Array.isArray(p.words) || p.words.length < 2){ alert('В паке слишком мало слов'); return; }
+    launchPackObj = p;
+    $('launchPack').textContent = 'Пак: ' + p.title + ' (слов: ' + p.words.length + ')';
+    $('launchMsg').textContent = '';
+    $('launchBack').classList.add('open');
+  }
+  $('launchClose').onclick = () => $('launchBack').classList.remove('open');
+  $('launchBack').onclick = e => { if(e.target === $('launchBack')) $('launchBack').classList.remove('open'); };
+  $('launchGo').onclick = async () => {
+    const m = $('launchMsg'); m.className = 'msg';
+    let win = Math.round(Number($('launchScore').value) || 88);
+    win = Math.max(20, Math.min(500, win));
+    const mode = $('launchMode').value;
+    m.textContent = 'Запускаем...';
+    try {
+      await sb.from('rooms').update({ closed: true }).eq('admin_id', currentUser.id).eq('closed', false);
+      const { data, error } = await sb.from('rooms')
+        .insert({ pack_id: launchPackObj.id, admin_id: currentUser.id, win_score: win, word_mode: mode }).select().single();
+      if(error) throw error;
+      $('launchBack').classList.remove('open');
+      location.hash = '#/draw/room/' + data.id;
+    } catch(err){ m.classList.add('err'); m.textContent = 'Ошибка: ' + err.message; }
+  };
+
+  // =====================================================================
+  //                           РЕДАКТОР ПАКА
+  // =====================================================================
+  let editPackId = null;
+  async function openPackEditor(id){
+    if(!currentUser){ openAuth('Войдите, чтобы создавать паки'); location.hash = '#/draw'; return; }
+    showPage('packEditPage');
+    editPackId = (id && id !== 'new') ? id : null;
+    $('pkHead').textContent = editPackId ? 'Редактирование пака' : 'Создание пака';
+    $('pkTitle').value = ''; $('pkDesc').value = ''; $('pkWords').value = ''; $('pkMsg').textContent = '';
+    if(editPackId){
+      const { data } = await sb.from('packs').select('*').eq('id', editPackId).maybeSingle();
+      if(!data || data.author_id !== currentUser.id){ alert('Этот пак нельзя редактировать'); location.hash = '#/draw'; return; }
+      $('pkTitle').value = data.title; $('pkDesc').value = data.description || '';
+      $('pkWords').value = (data.words || []).join('\n');
+    }
+    updPackPreview();
+  }
+  function updPackPreview(){
+    $('pkPvTitle').textContent = $('pkTitle').value.trim() || 'Название пака';
+    $('pkPvDesc').textContent = $('pkDesc').value.trim() || 'Описание';
+    $('pkPvAuthor').textContent = 'от ' + (currentProfile ? currentProfile.login : 'вас');
+    const { out, tooLong } = parseWords($('pkWords').value);
+    const c = $('pkCount');
+    let t = 'Слов: ' + out.length + (out.length < MIN_WORDS ? ' (нужно минимум ' + MIN_WORDS + ')' : '');
+    let bad = out.length < MIN_WORDS;
+    if(tooLong.length){ t += ' · длиннее ' + MAX_WORD + ' символов в строках: ' + tooLong.slice(0, 8).join(', '); bad = true; }
+    if(out.length > MAX_WORDS){ t += ' · максимум ' + MAX_WORDS; bad = true; }
+    c.textContent = t; c.className = 'counter' + (bad ? ' bad' : '');
+  }
+  ['pkTitle', 'pkDesc', 'pkWords'].forEach(i => $(i).addEventListener('input', updPackPreview));
+  $('pkSave').onclick = async () => {
+    const m = $('pkMsg'); m.className = 'msg'; m.style.color = '#fff';
+    const title = $('pkTitle').value.trim(), desc = $('pkDesc').value.trim();
+    const { out, tooLong } = parseWords($('pkWords').value);
+    const fail = t => { m.classList.add('err'); m.style.color = '#ffe980'; m.textContent = t; };
+    if(title.length < 3) return fail('Название: минимум 3 символа');
+    if(tooLong.length) return fail('Есть слова длиннее ' + MAX_WORD + ' символов (строки: ' + tooLong.join(', ') + ')');
+    if(out.length < MIN_WORDS) return fail('Нужно минимум ' + MIN_WORDS + ' разных слов');
+    if(out.length > MAX_WORDS) return fail('Максимум ' + MAX_WORDS + ' слов');
+    m.textContent = 'Сохраняем...';
+    try {
+      if(editPackId){
+        const { error } = await sb.from('packs').update({ title, description: desc, words: out }).eq('id', editPackId);
+        if(error) throw error;
+      } else {
+        const { error } = await sb.from('packs').insert({ author_id: currentUser.id, title, description: desc, words: out });
+        if(error) throw error;
+      }
+      m.classList.add('ok'); m.textContent = 'Пак сохранён!';
+      drawTab = 'packs';
+      setTimeout(() => location.hash = '#/draw', 600);
+    } catch(err){ fail('Ошибка: ' + err.message); }
+  };
+
+  // =====================================================================
+  //                              КОМНАТА
+  // =====================================================================
+  let G = null, entering = null;
+  const D = {
+    cv: $('cv'), ctx: $('cv').getContext('2d', { willReadFrequently: true }),
+    acts: [], redo: [], live: null, synced: true, syncing: false, syncAt: 0, parts: {},
+    tool: 'pencil', color: '#000000', sizes: { pencil: 6, eraser: 24, shape: 6 },
+    down: false, start: null, last: null, snap: null, shape: null, pend: [], flushT: null
+  };
+  const isDrawer = () => !!(G && G.state && G.state.drawerId === G.me.id);
+  const guard = f => (...a) => { if(G) f(...a); };
+
+  // ---------- вход ----------
+  async function enterRoom(id){
+    if(!currentUser || !currentProfile){ openAuth('Войдите, чтобы играть'); location.hash = '#/draw'; return; }
+    entering = id;
+    showPage('roomPage');
+    resetRoomUI();
+    const { data: room } = await sb.from('rooms')
+      .select('*, packs(id, title, description, words), profiles(login)').eq('id', id).maybeSingle();
+    if(entering !== id) return;
+    entering = null;
+    const stale = room ? (Date.now() - new Date(room.last_seen).getTime() > 90000) : true;
+    if(!room || !room.packs || room.closed || (stale && room.admin_id !== currentUser.id)){
+      alert('Эта игра уже закрыта'); location.hash = '#/draw'; return;
+    }
+    const me = { id: currentUser.id, name: currentProfile.login, avatar: getAvatarUrl(currentProfile.avatar, currentProfile.login) };
+    G = {
+      roomId: id, room, pack: room.packs, words: (room.packs.words || []).map(String), me,
+      isHost: room.admin_id === me.id, adminId: room.admin_id, adminName: room.profiles ? room.profiles.login : '',
+      state: null, skew: 0, present: {}, chat: { guess: [], talk: [] }, send: {},
+      myWord: null, opts: null, pattern: null, hints: 0, adminGone: null, H: null
+    };
+    dwReset();
+    $('roomTitle').textContent = G.pack.title;
+    $('roomSub').textContent = 'админ: ' + (G.adminName || '—') + ' · до ' + room.win_score + ' очк. · ' + MODE_NAMES[room.word_mode];
+    if(G.isHost) hostInit();
+
+    G.my = sb.channel('pechenegi-u-' + id + '-' + me.id, { config: { broadcast: { self: false } } });
+    G.my.on('broadcast', { event: '*' }, guard(m => onPrivate(m.event, m.payload))).subscribe();
+
+    G.ch = sb.channel('pechenegi-room-' + id, { config: { presence: { key: me.id }, broadcast: { self: false } } });
+    G.ch.on('presence', { event: 'sync' }, guard(onPresence))
+      .on('broadcast', { event: 'state' }, guard(m => onState(m.payload)))
+      .on('broadcast', { event: 'chat' }, guard(m => addChat(m.payload)))
+      .on('broadcast', { event: 'draw' }, guard(m => dwRemote(m.payload)))
+      .on('broadcast', { event: 'kick' }, guard(m => { if(m.payload && m.payload.id === G.me.id) gotKicked(); }))
+      .on('broadcast', { event: 'closed' }, guard(() => roomClosed('Админ закрыл игру')))
+      .subscribe(async status => {
+        if(!G) return;
+        if(status === 'SUBSCRIBED'){
+          await G.ch.track({ id: me.id, name: me.name, avatar: me.avatar });
+          if(G && G.isHost) hostPush();
+        }
+      });
+    G.tickUI = setInterval(tickUI, 250);
+    renderAll();
+  }
+
+  function leaveRoom(){
+    if(!G) return;
+    const g = G; G = null; entering = null;
+    clearInterval(g.tickUI); clearInterval(g.tickHost); clearInterval(g.pushHost); clearInterval(g.beatHost);
+    clearTimeout(g.adminGone);
+    try {
+      if(g.isHost){
+        g.ch.send({ type: 'broadcast', event: 'closed', payload: {} });
+        sb.from('rooms').update({ closed: true }).eq('id', g.roomId).then(() => {}, () => {});
+      }
+      g.ch.untrack();
+    } catch(_){}
+    setTimeout(() => {
+      try { sb.removeChannel(g.ch); sb.removeChannel(g.my); Object.values(g.send).forEach(c => sb.removeChannel(c)); } catch(_){}
+    }, 400);
+    dwReset();
+  }
+  function roomClosed(text){
+    if(!G) return;
+    leaveRoom();
+    alert(text + '. Возвращаемся к списку игр.');
+    location.hash = '#/draw';
+  }
+  function gotKicked(){
+    if(!G) return;
+    leaveRoom();
+    alert('Админ кикнул вас из игры. Вы можете зайти снова.');
+    location.hash = '#/draw';
+  }
+  $('roomLeave').onclick = () => { location.hash = '#/draw'; };
+  window.addEventListener('beforeunload', () => { if(G) leaveRoom(); });
+
+  window.drawRoute = function(h){
+    const inRoom = h.startsWith('#/draw/room/');
+    const rid2 = inRoom ? h.slice(12) : null;
+    if(G && !(inRoom && rid2 === G.roomId)) leaveRoom();
+    if(entering && !(inRoom && rid2 === entering)) entering = null;
+    if(drawPoll && h !== '#/draw'){ clearInterval(drawPoll); drawPoll = null; }
+    if(!h.startsWith('#/draw')) return false;
+    if(inRoom){
+      if((G && G.roomId === rid2) || entering === rid2) return true;
+      enterRoom(rid2); return true;
+    }
+    if(h === '#/draw/pack/new'){ openPackEditor('new'); return true; }
+    if(h.startsWith('#/draw/pack/')){ openPackEditor(h.slice(12)); return true; }
+    openDrawPage(); return true;
+  };
+
+  // ---------- сообщения ----------
+  function sendTo(uid, event, payload){
+    if(!G) return;
+    if(uid === G.me.id){ setTimeout(() => { if(G) onPrivate(event, payload); }, 0); return; }
+    const topic = 'pechenegi-u-' + G.roomId + '-' + uid;
+    let ch = G.send[topic];
+    if(!ch){ ch = sb.channel(topic); G.send[topic] = ch; }
+    try {
+      const p = (typeof ch.httpSend === 'function') ? ch.httpSend(event, payload) : ch.send({ type: 'broadcast', event, payload });
+      Promise.resolve(p).catch(() => {});
+    } catch(_){}
+  }
+  function bcast(event, payload){
+    if(!G || !G.ch) return;
+    try { G.ch.send({ type: 'broadcast', event, payload }); } catch(_){}
+  }
+
+  function onPrivate(event, p){
+    if(!G || !p) return;
+    switch(event){
+      case 'chat':  if(G.isHost) hostChat(p.u, p.chan, p.text); break;
+      case 'hint':  if(G.isHost) hostHint(p.u); break;
+      case 'pick':  if(G.isHost) hostPickFrom(p.u, p.word); break;
+      case 'options': G.opts = { r: p.r, words: p.words, ends: p.ends, picked: false }; renderOverlay(); break;
+      case 'word':    G.myWord = { r: p.r, word: p.word }; renderTop(); break;
+      case 'hintres': G.pattern = { r: p.r, p: p.p, n: p.n }; G.hints = p.n; renderTop(); renderHintBtn(); break;
+      case 'need':    if(isDrawer() && G.state && p.r === G.state.roundId) dwSendSync(p.from); break;
+      case 'sync':    dwSyncIn(p); break;
+    }
+  }
+
+  function onPresence(){
+    const raw = G.ch.presenceState();
+    const pres = {};
+    Object.keys(raw).forEach(k => { const m = raw[k] && raw[k][0]; if(m) pres[k] = { id: m.id || k, name: m.name || '???', avatar: m.avatar || '' }; });
+    G.present = pres;
+    if(G.isHost) hostSyncPlayers();
+    else {
+      if(pres[G.adminId]){ clearTimeout(G.adminGone); G.adminGone = null; }
+      else if(!G.adminGone){
+        G.adminGone = setTimeout(() => { if(G && !G.present[G.adminId]) roomClosed('Админ покинул игру'); }, 9000);
+      }
+    }
+  }
+
+  // ---------- состояние (у всех) ----------
+  function onState(st){
+    if(!G || !st) return;
+    G.skew = st.now - Date.now();
+    const prev = G.state;
+    G.state = st;
+    const roundChanged = !prev || prev.roundId !== st.roundId;
+    if(roundChanged){
+      dwReset();
+      D.synced = (st.phase === 'choosing');
+      G.pattern = null; G.hints = 0;
+      if(G.myWord && G.myWord.r !== st.roundId) G.myWord = null;
+      if(G.opts && G.opts.r !== st.roundId) G.opts = null;
+    }
+    if(st.phase === 'drawing' && !isDrawer() && !D.synced) requestSync();
+    renderAll();
+  }
+
+  // =====================================================================
+  //                      ХОСТ (админ — «сервер» игры)
+  // =====================================================================
+  function hostInit(){
+    const r = G.room;
+    G.H = {
+      v: 0, phase: 'lobby', startsAt: 0, players: {}, order: [], cursor: 0, scoreMap: {}, trophyMap: {},
+      kicked: {}, rm: {}, drawerId: null, roundId: '', roundNo: 0, word: '', flat: '', options: [],
+      chooseEnds: 0, endsAt: 0, nextAt: 0, guessed: {}, hintsUsed: {}, gains: {}, lastWord: '', hintOrder: [],
+      final: false, winnerId: null,
+      used: (r.used_words && r.used_words.list) || [], turn: (r.used_words && r.used_words.turn) || 0
+    };
+    hostAddPlayer(G.me, true);
+    G.tickHost = setInterval(hostTick, 400);
+    G.pushHost = setInterval(hostPush, 4000);
+    G.beatHost = setInterval(hostBeat, 20000);
+  }
+  function hostBeat(){
+    if(!G || !G.isHost) return;
+    const H = G.H;
+    sb.from('rooms').update({
+      last_seen: new Date().toISOString(), player_count: H.order.length, status: H.phase === 'lobby' ? 'lobby' : 'playing'
+    }).eq('id', G.roomId).then(() => {}, () => {});
+  }
+  function hostState(){
+    const H = G.H;
+    return {
+      v: ++H.v, now: Date.now(), phase: H.phase, adminId: G.me.id, drawerId: H.drawerId, roundId: H.roundId, roundNo: H.roundNo,
+      endsAt: H.endsAt, startsAt: H.startsAt, nextAt: H.nextAt, chooseEnds: H.chooseEnds,
+      winScore: G.room.win_score, mode: G.room.word_mode, gains: H.gains, winnerId: H.winnerId, final: H.final,
+      reveal: (H.phase === 'between' || H.phase === 'over') ? H.lastWord : null,
+      players: H.order.map(id => ({
+        id, name: H.players[id].name, avatar: H.players[id].avatar,
+        score: H.scoreMap[id] || 0, tr: H.trophyMap[id] || 0, g: !!H.guessed[id]
+      }))
+    };
+  }
+  function hostPush(){
+    if(!G || !G.isHost) return;
+    const st = hostState();
+    bcast('state', st);
+    onState(st);
+  }
+  function bcastChat(chan, kind, p, text){
+    const m = { c: chan, k: kind, u: p ? p.id : null, n: p ? p.name : '', t: text, ts: Date.now() };
+    bcast('chat', m);
+    addChat(m);
+  }
+  function hostSys(text){ bcastChat('guess', 'sys', null, text); }
+
+  function hostAddPlayer(info, silent){
+    const H = G.H;
+    if(H.players[info.id]){ clearTimeout(H.rm[info.id]); delete H.rm[info.id]; return; }
+    H.players[info.id] = { id: info.id, name: info.name, avatar: info.avatar };
+    H.order.push(info.id);
+    if(!silent) hostSys('➕ ' + info.name + ' присоединился(ась)');
+  }
+  function hostSyncPlayers(){
+    const H = G.H, pres = G.present;
+    let changed = false;
+    Object.keys(pres).forEach(id => {
+      if(H.kicked[id] && Date.now() - H.kicked[id] < 5000) return;
+      if(!H.players[id]){ hostAddPlayer(pres[id], false); changed = true; }
+      else if(H.rm[id]){ clearTimeout(H.rm[id]); delete H.rm[id]; }
+    });
+    Object.keys(H.players).forEach(id => {
+      if(id !== G.me.id && !pres[id] && !H.rm[id]){
+        H.rm[id] = setTimeout(() => {
+          if(!G || !G.isHost) return;
+          delete G.H.rm[id];
+          if(!G.present[id]) hostRemovePlayer(id, 'left');
+        }, 3000);
+      }
+    });
+    if(changed){ hostMaybeCountdown(); hostBeat(); hostPush(); }
+  }
+  function hostRemovePlayer(id, why){
+    const H = G.H, p = H.players[id];
+    if(!p) return;
+    const idx = H.order.indexOf(id);
+    delete H.players[id];
+    if(idx >= 0){ H.order.splice(idx, 1); if(idx < H.cursor) H.cursor--; }
+    hostSys(why === 'kicked' ? '⛔ ' + p.name + ' кикнут админом' : '➖ ' + p.name + ' вышел(ла)');
+    if(H.phase === 'choosing' || H.phase === 'drawing'){
+      if(id === H.drawerId) hostEndRound('drawer left');
+      else if(H.phase === 'drawing') hostCheckAllGuessed();
+    }
+    if(H.phase !== 'lobby' && H.order.length < 2) hostAbort();
+    if(H.phase === 'lobby') hostMaybeCountdown();
+    hostBeat(); hostPush();
+  }
+  function hostKick(id){
+    if(!G || !G.isHost || id === G.me.id || !G.H.players[id]) return;
+    G.H.kicked[id] = Date.now();
+    bcast('kick', { id });
+    hostRemovePlayer(id, 'kicked');
+  }
+
+  function hostMaybeCountdown(){
+    const H = G.H;
+    if(H.phase !== 'lobby') return;
+    if(H.order.length >= 2){ if(!H.startsAt) H.startsAt = Date.now() + START_MS; }
+    else H.startsAt = 0;
+  }
+  function hostTick(){
+    if(!G || !G.isHost) return;
+    const H = G.H, t = Date.now();
+    switch(H.phase){
+      case 'lobby':
+        if(H.startsAt && t >= H.startsAt){ if(H.order.length >= 2) hostStartGame(); else { H.startsAt = 0; hostPush(); } }
+        break;
+      case 'choosing':
+        if(t >= H.chooseEnds){ const w = H.options[Math.floor(Math.random() * H.options.length)]; hostDoPick(w); }
+        break;
+      case 'drawing': if(t >= H.endsAt) hostEndRound('time'); break;
+      case 'between': if(t >= H.nextAt) hostAfterRound(); break;
+      case 'over': if(t >= H.nextAt) hostResetLobby(); break;
+    }
+  }
+  function hostStartGame(){
+    const H = G.H;
+    H.scoreMap = {}; H.roundNo = 0; H.final = false; H.winnerId = null; H.startsAt = 0;
+    hostSys('🎮 Игра началась! Побеждает тот, кто первым наберёт ' + G.room.win_score + ' очков.');
+    hostBeat();
+    hostStartRound();
+  }
+  function hostAbort(){
+    const H = G.H;
+    H.phase = 'lobby'; H.scoreMap = {}; H.startsAt = 0; H.final = false; H.winnerId = null; H.drawerId = null; H.gains = {};
+    H.word = ''; H.guessed = {};
+    hostSys('⏸ Недостаточно игроков — игра остановлена, очки сброшены.');
+    hostMaybeCountdown(); hostBeat();
+  }
+  function hostResetLobby(){
+    const H = G.H;
+    H.phase = 'lobby'; H.scoreMap = {}; H.final = false; H.winnerId = null; H.drawerId = null; H.gains = {}; H.word = '';
+    H.guessed = {}; H.startsAt = 0;
+    hostMaybeCountdown(); hostBeat(); hostPush();
+  }
+
+  function hostEligible(){
+    const H = G.H, all = G.words, mode = G.room.word_mode;
+    if(mode === 'no_repeat'){
+      const used = new Set(H.used.map(e => flat(e.w)));
+      let el = all.filter(w => !used.has(flat(w)));
+      if(!el.length){ H.used = []; hostSys('♻️ Все слова пака уже сыграны — круг начинается заново'); el = all.slice(); }
+      return el;
+    }
+    if(mode === 'cooldown'){
+      const ban = new Set(H.used.filter(e => H.turn - e.t <= COOLDOWN_TURNS).map(e => flat(e.w)));
+      const el = all.filter(w => !ban.has(flat(w)));
+      return el.length >= 2 ? el : all.slice();
+    }
+    return all.slice();
+  }
+  function hostPickOptions(){
+    const el = shuffle(hostEligible());
+    const out = [el[0]];
+    let second = el.find(w => flat(w) !== flat(el[0]));
+    if(!second) second = shuffle(G.words).find(w => flat(w) !== flat(el[0]));
+    if(second) out.push(second);
+    return out;
+  }
+  function hostStartRound(){
+    const H = G.H;
+    if(H.order.length < 2){ hostAbort(); hostPush(); return; }
+    const idx = H.cursor % H.order.length;
+    H.drawerId = H.order[idx];
+    H.cursor = idx + 1;
+    H.roundNo++; H.roundId = rid(); H.word = ''; H.flat = ''; H.guessed = {}; H.hintsUsed = {}; H.gains = {};
+    H.options = hostPickOptions();
+    H.phase = 'choosing'; H.chooseEnds = Date.now() + CHOOSE_MS; H.endsAt = 0; H.nextAt = 0;
+    sendTo(H.drawerId, 'options', { r: H.roundId, words: H.options, ends: H.chooseEnds });
+    hostPush();
+  }
+  function hostPickFrom(uid, word){
+    const H = G.H;
+    if(H.phase !== 'choosing' || uid !== H.drawerId || H.options.indexOf(word) < 0) return;
+    hostDoPick(word);
+  }
+  function hostDoPick(word){
+    const H = G.H;
+    H.word = word; H.flat = flat(word);
+    const letters = [];
+    for(let i = 0; i < word.length; i++) if(LETTER.test(word[i])) letters.push(i);
+    H.hintOrder = shuffle(letters);
+    H.phase = 'drawing'; H.endsAt = Date.now() + ROUND_MS;
+    H.used.push({ w: word, t: H.turn }); H.turn++;
+    if(H.used.length > 1000) H.used = H.used.slice(-1000);
+    sb.from('rooms').update({ used_words: { turn: H.turn, list: H.used } }).eq('id', G.roomId).then(() => {}, () => {});
+    sendTo(H.drawerId, 'word', { r: H.roundId, word });
+    hostPush();
+  }
+  function hostAdd(uid, pts){
+    const H = G.H;
+    H.scoreMap[uid] = (H.scoreMap[uid] || 0) + pts;
+    H.gains[uid] = (H.gains[uid] || 0) + pts;
+  }
+  function hostCheckAllGuessed(){
+    const H = G.H;
+    const guessers = H.order.filter(id => id !== H.drawerId);
+    if(guessers.length && guessers.every(id => H.guessed[id])) hostEndRound('all');
+  }
+  function hostEndRound(reason){
+    const H = G.H;
+    if(H.phase !== 'drawing' && H.phase !== 'choosing') return;
+    const wasDrawing = H.phase === 'drawing';
+    const sc = G.room.win_score / 88;
+    if(wasDrawing && H.players[H.drawerId]){
+      const n = Object.keys(H.guessed).filter(id => H.players[id]).length;
+      if(n) hostAdd(H.drawerId, Math.min(Math.round(sc * 4 * n), Math.round(sc * 18)));
+    }
+    H.lastWord = wasDrawing ? H.word : '';
+    H.phase = 'between'; H.nextAt = Date.now() + BETWEEN_MS; H.endsAt = 0;
+    if(wasDrawing) hostSys('📖 Слово было: «' + H.word + '»' + (reason === 'drawer left' ? ' (рисующий вышел)' : ''));
+    else hostSys('⏭ Рисующий вышел, ход пропущен');
+    if(wasDrawing){
+      let best = null;
+      H.order.forEach(id => { const s = H.scoreMap[id] || 0; if(s >= G.room.win_score && (best === null || s > (H.scoreMap[best] || 0))) best = id; });
+      if(best){
+        H.final = true; H.winnerId = best; H.trophyMap[best] = (H.trophyMap[best] || 0) + 1;
+        hostSys('🏆 ' + H.players[best].name + ' побеждает со счётом ' + H.scoreMap[best] + '!');
+      }
+    }
+    hostPush();
+  }
+  function hostAfterRound(){
+    const H = G.H;
+    if(H.final){ H.phase = 'over'; H.nextAt = Date.now() + OVER_MS; hostPush(); }
+    else hostStartRound();
+  }
+
+  function hostChat(uid, chan, text){
+    const H = G.H, p = H.players[uid];
+    if(!p) return;
+    text = String(text || '').replace(/\s+/g, ' ').trim().slice(0, 200);
+    if(!text) return;
+    const drawing = H.phase === 'drawing' && H.word;
+    if(chan === 'guess'){
+      if(drawing){
+        if(uid === H.drawerId || H.guessed[uid]) return;
+        if(flat(text) === H.flat){
+          const frac = Math.max(0, Math.min(1, (H.endsAt - Date.now()) / ROUND_MS));
+          const sc = G.room.win_score / 88;
+          let pts = Math.round(sc * (6 + 18 * frac));
+          pts = Math.max(1, Math.round(pts * (1 - 0.1 * (H.hintsUsed[uid] || 0))));
+          hostAdd(uid, pts);
+          H.guessed[uid] = true;
+          bcastChat('guess', 'ok', null, '✅ ' + p.name + ' отгадал(а) слово! +' + pts);
+          hostCheckAllGuessed();
+          if(H.phase === 'drawing') hostPush();
+        } else bcastChat('guess', 'msg', p, censorText(text, H.word));
+        return;
+      }
+      bcastChat('guess', 'msg', p, text);
+    } else {
+      bcastChat('talk', 'msg', p, drawing ? censorText(text, H.word) : text);
+    }
+  }
+  function hostHint(uid){
+    const H = G.H;
+    if(H.phase !== 'drawing' || uid === H.drawerId || H.guessed[uid] || !H.players[uid]) return;
+    let n = H.hintsUsed[uid] || 0;
+    if(n >= MAX_HINTS) return;
+    n++; H.hintsUsed[uid] = n;
+    const letters = H.hintOrder.length;
+    const k = Math.min(Math.max(0, n - 1), Math.max(0, letters - 1));
+    sendTo(uid, 'hintres', { r: H.roundId, n, p: makePattern(H.word, H.hintOrder, k) });
+  }
+
+  // =====================================================================
+  //                          ЧАТЫ И ИНТЕРФЕЙС
+  // =====================================================================
+  function addChat(m){
+    if(!G || !G.chat[m.c]) return;
+    const arr = G.chat[m.c];
+    arr.push(m); if(arr.length > 150) arr.shift();
+    renderChat(m.c);
+  }
+  function renderChat(c){
+    const box = $(c === 'guess' ? 'chatGuess' : 'chatTalk');
+    const arr = G ? G.chat[c] : [];
+    box.innerHTML = arr.map(m => {
+      if(m.k === 'sys') return '<div class="sys">' + esc(m.t) + '</div>';
+      if(m.k === 'ok') return '<div class="okmsg">' + esc(m.t) + '</div>';
+      return '<div><b>' + esc(m.n) + ':</b> ' + esc(m.t) + '</div>';
+    }).join('');
+    box.scrollTop = box.scrollHeight;
+  }
+  function sendChat(chan){
+    if(!G) return;
+    const inp = $(chan === 'guess' ? 'inGuess' : 'inTalk');
+    const text = inp.value.trim();
+    if(!text || inp.disabled) return;
+    inp.value = '';
+    if(G.isHost) hostChat(G.me.id, chan, text);
+    else sendTo(G.adminId, 'chat', { u: G.me.id, chan, text });
+  }
+  $('sendGuess').onclick = () => sendChat('guess');
+  $('sendTalk').onclick = () => sendChat('talk');
+  $('inGuess').addEventListener('keydown', e => { if(e.key === 'Enter') sendChat('guess'); });
+  $('inTalk').addEventListener('keydown', e => { if(e.key === 'Enter') sendChat('talk'); });
+
+  function resetRoomUI(){
+    $('chatGuess').innerHTML = ''; $('chatTalk').innerHTML = ''; $('playersCol').innerHTML = '';
+    $('roomOverlay').style.display = 'none'; $('toolbar').style.display = 'none'; $('hintRow').style.display = 'none';
+    $('roomWord').textContent = 'Подключаемся…'; $('roomTimer').textContent = '—';
+    $('roomTitle').textContent = 'Игра'; $('roomSub').textContent = '';
+  }
+  function renderAll(){
+    if(!G) return;
+    renderTop(); renderPlayers(); renderOverlay(); renderToolbar(); renderHintBtn(); renderChatInputs();
+  }
+  function meGuessed(){
+    const st = G && G.state; if(!st) return false;
+    const me = st.players.find(p => p.id === G.me.id);
+    return !!(me && me.g);
+  }
+  function renderTop(){
+    const el = $('roomWord'), st = G && G.state;
+    if(!st){ el.textContent = 'Подключаемся…'; return; }
+    const dr = st.players.find(p => p.id === st.drawerId);
+    if(st.phase === 'drawing'){
+      if(isDrawer()){
+        const w = (G.myWord && G.myWord.r === st.roundId) ? G.myWord.word : '…';
+        el.innerHTML = '<span class="sub">Рисуйте:</span><span class="w">' + esc(w) + '</span>';
+      } else if(meGuessed()) el.innerHTML = '<span class="sub">✅ Вы отгадали! Ждём остальных</span>';
+      else if(G.pattern && G.pattern.r === st.roundId) el.innerHTML = patternHtml(G.pattern.p);
+      else el.innerHTML = '<span class="sub">' + esc(dr ? dr.name : '') + ' рисует. Угадайте слово! (подсказки 💡 ниже)</span>';
+    } else if(st.phase === 'between' || st.phase === 'over'){
+      el.innerHTML = st.reveal ? '<span class="sub">Слово:</span><span class="w">' + esc(st.reveal) + '</span>' : '<span class="sub">Ход пропущен</span>';
+    } else if(st.phase === 'choosing'){
+      el.innerHTML = '<span class="sub">' + esc(dr ? dr.name : '') + ' выбирает слово…</span>';
+    } else el.innerHTML = '<span class="sub">Ожидание игроков</span>';
+  }
+  function renderPlayers(){
+    const st = G.state, box = $('playersCol');
+    if(!st){ box.innerHTML = ''; return; }
+    box.innerHTML = '';
+    st.players.forEach(p => {
+      const div = document.createElement('div');
+      const canKick = G.isHost && p.id !== G.me.id;
+      div.className = 'pl' + (p.id === st.drawerId && (st.phase === 'drawing' || st.phase === 'choosing') ? ' drawer' : '') + (p.g && st.phase === 'drawing' ? ' guessed' : '') + (canKick ? ' can-kick' : '');
+      const badges = (p.id === st.drawerId && (st.phase === 'drawing' || st.phase === 'choosing') ? '✏️' : '') + (p.g && st.phase === 'drawing' ? '✔️' : '') +
+        (p.id === st.adminId ? '👑' : '') + (p.tr ? '🏆' + (p.tr > 1 ? '×' + p.tr : '') : '');
+      div.innerHTML = '<img class="img-ava" src="' + esc(getAvatarUrl(p.avatar, p.name)) + '" title="' + (canKick ? 'Нажмите, чтобы открыть меню' : '') + '">' +
+        '<div class="pl-info"><b>' + esc(p.name) + (p.id === G.me.id ? ' (вы)' : '') + '</b><small>' + p.score + ' очк.</small></div>' +
+        '<span class="pl-badges">' + badges + '</span>' +
+        (canKick ? '<div class="pl-menu"><button>⛔ Кикнуть</button></div>' : '');
+      box.appendChild(div);
+      if(canKick){
+        const menu = div.querySelector('.pl-menu');
+        div.querySelector('.img-ava').onclick = e => {
+          e.stopPropagation();
+          box.querySelectorAll('.pl-menu.open').forEach(m => { if(m !== menu) m.classList.remove('open'); });
+          menu.classList.toggle('open');
+        };
+        menu.querySelector('button').onclick = e => { e.stopPropagation(); menu.classList.remove('open'); hostKick(p.id); };
+      }
+    });
+  }
+  document.addEventListener('click', () => { document.querySelectorAll('.pl-menu.open').forEach(m => m.classList.remove('open')); });
+
+  function renderOverlay(){
+    const ov = $('roomOverlay');
+    if(!G){ ov.style.display = 'none'; return; }
+    const st = G.state;
+    let html = '';
+    const nameOf = id => { const p = st && st.players.find(x => x.id === id); return p ? p.name : '???'; };
+    if(!st) html = '<h2>Подключаемся…</h2>';
+    else if(st.phase === 'lobby'){
+      const n = st.players.length;
+      html = n < 2
+        ? '<h2>Ждём игроков…</h2><p>Для старта нужно минимум 2. Сейчас в комнате: ' + n + '</p><p>Пригласите друзей: пусть зайдут в «Рисунки» → «Активные игры»</p>'
+        : '<h2>Старт через <span id="ovCount">…</span></h2><p>Игроков: ' + n + '</p>';
+      html += '<p>Победа при ' + st.winScore + ' очках · слова: ' + MODE_NAMES[st.mode] + '</p>';
+    } else if(st.phase === 'choosing'){
+      if(isDrawer()){
+        if(G.opts && G.opts.r === st.roundId && !G.opts.picked){
+          html = '<h2>Выберите слово для рисунка</h2><div class="opts">' +
+            G.opts.words.map((w, i) => '<button data-i="' + i + '">' + esc(w) + '</button>').join('') + '</div><p>Осталось: <span id="ovCount">…</span></p>';
+        } else if(G.opts && G.opts.r === st.roundId) html = '<h2>Слово выбрано, начинаем…</h2>';
+        else html = '<h2>Загружаем слова…</h2>';
+      } else html = '<h2>' + esc(nameOf(st.drawerId)) + ' выбирает слово…</h2><p>Приготовьтесь угадывать!</p>';
+    } else if(st.phase === 'between'){
+      html = st.reveal ? '<p>Слово было</p><div class="big">' + esc(st.reveal) + '</div>' : '<h2>Ход пропущен</h2>';
+      const gained = Object.keys(st.gains || {}).filter(id => st.gains[id] > 0);
+      html += gained.length ? gained.map(id => '<div class="rank gain"><span>' + esc(nameOf(id)) + '</span><b>+' + st.gains[id] + '</b></div>').join('') : '<p>Никто не отгадал</p>';
+      if(st.final) html += '<h2>🏆 ' + esc(nameOf(st.winnerId)) + ' побеждает!</h2>';
+    } else if(st.phase === 'over'){
+      const w = st.players.find(p => p.id === st.winnerId);
+      html = '<h2>🏆 Победитель: ' + esc(w ? w.name : '???') + '</h2>' +
+        (w ? '<img class="winava" src="' + esc(getAvatarUrl(w.avatar, w.name)) + '">' : '') +
+        st.players.slice().sort((a, b) => b.score - a.score).map(p => '<div class="rank"><span>' + esc(p.name) + '</span><b>' + p.score + '</b></div>').join('') +
+        '<p>Новая игра начнётся автоматически. Кубки остаются до конца сессии.</p>';
+    }
+    ov.innerHTML = html;
+    ov.style.display = html ? 'flex' : 'none';
+    ov.querySelectorAll('.opts button').forEach(b => b.onclick = () => pickWord(Number(b.dataset.i)));
+  }
+  function pickWord(i){
+    if(!G || !G.opts || G.opts.picked) return;
+    const w = G.opts.words[i]; if(w === undefined) return;
+    G.opts.picked = true;
+    G.myWord = { r: G.opts.r, word: w };
+    if(G.isHost) hostPickFrom(G.me.id, w); else sendTo(G.adminId, 'pick', { u: G.me.id, word: w });
+    renderOverlay(); renderTop();
+  }
+
+  function tickUI(){
+    if(!G || !G.state) return;
+    const st = G.state, t = Date.now() + G.skew;
+    let txt = '—';
+    if(st.phase === 'drawing') txt = fmtTime(st.endsAt - t);
+    else if(st.phase === 'choosing') txt = fmtTime(st.chooseEnds - t);
+    else if(st.phase === 'lobby' && st.startsAt) txt = fmtTime(st.startsAt - t);
+    $('roomTimer').textContent = txt;
+    const oc = $('ovCount');
+    if(oc) oc.textContent = (st.phase === 'lobby') ? Math.max(0, Math.ceil((st.startsAt - t) / 1000)) + ' с' : Math.max(0, Math.ceil((st.chooseEnds - t) / 1000)) + ' с';
+  }
+
+  function renderHintBtn(){
+    const row = $('hintRow'), st = G && G.state;
+    const show = !!(st && st.phase === 'drawing' && !isDrawer() && !meGuessed());
+    row.style.display = show ? 'block' : 'none';
+    if(!show) return;
+    const b = $('hintBtn');
+    b.textContent = '💡 Подсказка (' + G.hints + '/' + MAX_HINTS + ')';
+    b.disabled = G.hints >= MAX_HINTS;
+  }
+  $('hintBtn').onclick = () => {
+    if(!G || !G.state || G.state.phase !== 'drawing' || G.hints >= MAX_HINTS) return;
+    if(G.isHost) hostHint(G.me.id); else sendTo(G.adminId, 'hint', { u: G.me.id });
+  };
+  function renderChatInputs(){
+    const st = G && G.state;
+    const g = $('inGuess');
+    const locked = !!(st && st.phase === 'drawing' && (isDrawer() || meGuessed()));
+    g.disabled = locked; $('sendGuess').disabled = locked;
+    g.placeholder = locked ? (isDrawer() ? 'Вы рисуете, угадывать нельзя' : 'Вы уже отгадали слово') : 'Ваш вариант слова…';
+  }
+
+  // =====================================================================
+  //                              ХОЛСТ
+  // =====================================================================
+  const cv = D.cv, ctx = D.ctx;
+  function dwReset(){
+    D.acts = []; D.redo = []; D.live = null; D.down = false; D.snap = null; D.shape = null; D.pend = [];
+    clearInterval(D.flushT); D.parts = {}; D.syncing = false;
+    ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, DRAW_W, DRAW_H);
+  }
+  function dwRedraw(){
+    ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, DRAW_W, DRAW_H);
+    D.acts.forEach(dwDraw);
+  }
+  function dwStyle(a){
+    ctx.lineCap = 'round'; ctx.lineJoin = a.t === 's' ? 'miter' : 'round';
+    ctx.strokeStyle = a.c; ctx.fillStyle = a.c; ctx.lineWidth = a.s;
+  }
+  function dwSeg(x1, y1, x2, y2, a){
+    dwStyle(a); ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+  }
+  function dwDraw(a){
+    if(a.t === 'x'){ ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, DRAW_W, DRAW_H); return; }
+    if(a.t === 'f'){ dwFill(a.x, a.y, a.c); return; }
+    dwStyle(a);
+    if(a.t === 'p'){
+      const p = a.p;
+      if(p.length < 4){ ctx.beginPath(); ctx.arc(p[0], p[1], a.s / 2, 0, Math.PI * 2); ctx.fill(); }
+      else { ctx.beginPath(); ctx.moveTo(p[0], p[1]); for(let i = 2; i < p.length; i += 2) ctx.lineTo(p[i], p[i + 1]); ctx.stroke(); }
+    } else if(a.t === 's'){
+      const [x1, y1, x2, y2] = a.a;
+      ctx.beginPath();
+      if(a.k === 'l'){ ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); }
+      else if(a.k === 'r'){ ctx.rect(x1, y1, x2 - x1, y2 - y1); }
+      else { ctx.moveTo((x1 + x2) / 2, y1); ctx.lineTo(x2, y2); ctx.lineTo(x1, y2); ctx.closePath(); }
+      ctx.stroke();
+    }
+  }
+  function dwFill(sx, sy, hex){
+    sx = Math.floor(sx); sy = Math.floor(sy);
+    if(sx < 0 || sy < 0 || sx >= DRAW_W || sy >= DRAW_H) return;
+    const W = DRAW_W, H = DRAW_H;
+    const img = ctx.getImageData(0, 0, W, H), d = img.data;
+    const [fr, fg, fb] = hexToRgb(hex);
+    const i0 = (sy * W + sx) * 4;
+    const tr = d[i0], tg = d[i0 + 1], tb = d[i0 + 2];
+    if(tr === fr && tg === fg && tb === fb) return;
+    const tol = 48;
+    const match = i => Math.abs(d[i] - tr) + Math.abs(d[i + 1] - tg) + Math.abs(d[i + 2] - tb) <= tol;
+    const seen = new Uint8Array(W * H);
+    const stack = [sx, sy];
+    while(stack.length){
+      const y = stack.pop(), x = stack.pop();
+      let xl = x;
+      while(xl >= 0 && !seen[y * W + xl] && match((y * W + xl) * 4)) xl--;
+      xl++;
+      let up = false, down = false;
+      for(let xi = xl; xi < W && !seen[y * W + xi] && match((y * W + xi) * 4); xi++){
+        const o = (y * W + xi) * 4;
+        seen[y * W + xi] = 1; d[o] = fr; d[o + 1] = fg; d[o + 2] = fb; d[o + 3] = 255;
+        if(y > 0){
+          const ok = !seen[(y - 1) * W + xi] && match(((y - 1) * W + xi) * 4);
+          if(ok && !up){ stack.push(xi, y - 1); up = true; } else if(!ok) up = false;
+        }
+        if(y < H - 1){
+          const ok = !seen[(y + 1) * W + xi] && match(((y + 1) * W + xi) * 4);
+          if(ok && !down){ stack.push(xi, y + 1); down = true; } else if(!ok) down = false;
+        }
+      }
+    }
+    ctx.putImageData(img, 0, 0);
+  }
+
+  // --- ввод рисующего ---
+  const dwCan = () => !!(G && G.state && G.state.phase === 'drawing' && isDrawer());
+  function bcastDraw(p){ if(!G || !G.state) return; p.r = G.state.roundId; bcast('draw', p); }
+  function dwPos(e){
+    const r = cv.getBoundingClientRect();
+    return [Math.round((e.clientX - r.left) * DRAW_W / r.width * 10) / 10, Math.round((e.clientY - r.top) * DRAW_H / r.height * 10) / 10];
+  }
+  function dwFlush(){ if(!D.pend.length) return; bcastDraw({ k: 'pp', p: D.pend }); D.pend = []; }
+  function dwCommit(a, k){
+    D.acts.push(a); D.redo = []; dwDraw(a);
+    bcastDraw({ k, a, n: D.acts.length });
+    renderToolbarState();
+  }
+  cv.addEventListener('pointerdown', e => {
+    if(!dwCan() || e.button > 0) return;
+    e.preventDefault();
+    try { cv.setPointerCapture(e.pointerId); } catch(_){}
+    const [x, y] = dwPos(e), tool = D.tool;
+    if(tool === 'fill'){ dwCommit({ t: 'f', c: D.color, x: Math.round(x), y: Math.round(y) }, 'fl'); return; }
+    D.down = true; D.start = [x, y]; D.last = [x, y];
+    if(tool === 'pencil' || tool === 'eraser'){
+      D.live = { t: 'p', c: tool === 'eraser' ? '#ffffff' : D.color, s: D.sizes[tool], p: [x, y] };
+      dwDraw(D.live);
+      bcastDraw({ k: 'ps', c: D.live.c, s: D.live.s, x, y });
+      D.pend = []; clearInterval(D.flushT); D.flushT = setInterval(dwFlush, 80);
+    } else { D.snap = ctx.getImageData(0, 0, DRAW_W, DRAW_H); D.shape = null; }
+  });
+  cv.addEventListener('pointermove', e => {
+    if(!D.down) return;
+    if(!dwCan()){ dwEnd(); return; }
+    const [x, y] = dwPos(e);
+    if(D.live){
+      const [lx, ly] = D.last;
+      if(Math.hypot(x - lx, y - ly) < 1.2) return;
+      D.live.p.push(x, y); dwSeg(lx, ly, x, y, D.live); D.pend.push(x, y); D.last = [x, y];
+    } else if(D.snap){
+      ctx.putImageData(D.snap, 0, 0);
+      D.shape = { t: 's', k: SHAPE[D.tool], c: D.color, s: D.sizes.shape, a: [D.start[0], D.start[1], x, y] };
+      dwDraw(D.shape);
+    }
+  });
+  function dwEnd(){
+    if(!D.down) return;
+    D.down = false; clearInterval(D.flushT);
+    if(D.live){
+      dwFlush();
+      D.acts.push(D.live); D.redo = [];
+      bcastDraw({ k: 'pe', n: D.acts.length });
+      D.live = null;
+    } else if(D.snap){
+      const a = D.shape; D.snap = null; D.shape = null;
+      if(a && Math.hypot(a.a[2] - a.a[0], a.a[3] - a.a[1]) > 2){
+        D.acts.push(a); D.redo = [];
+        bcastDraw({ k: 'sh', a, n: D.acts.length });
+      } else dwRedraw();
+    }
+    renderToolbarState();
+  }
+  cv.addEventListener('pointerup', dwEnd);
+  cv.addEventListener('pointercancel', dwEnd);
+
+  function dwUndo(){
+    if(!dwCan() || D.down || !D.acts.length) return;
+    D.redo.push(D.acts.pop()); dwRedraw();
+    bcastDraw({ k: 'un', n: D.acts.length }); renderToolbarState();
+  }
+  function dwRedo(){
+    if(!dwCan() || D.down || !D.redo.length) return;
+    D.acts.push(D.redo.pop()); dwRedraw();
+    bcastDraw({ k: 're', n: D.acts.length }); renderToolbarState();
+  }
+  function dwClearAll(){
+    if(!dwCan() || D.down || !D.acts.length) return;
+    dwCommit({ t: 'x' }, 'cl');
+  }
+  document.addEventListener('keydown', e => {
+    if(!G || !dwCan() || !(e.ctrlKey || e.metaKey)) return;
+    const t = e.target;
+    if(t && (t.tagName === 'TEXTAREA' || (t.tagName === 'INPUT' && t.type !== 'range' && t.type !== 'color'))) return;
+    if(e.code === 'KeyZ' && !e.shiftKey){ e.preventDefault(); dwUndo(); }
+    else if(e.code === 'KeyX' || e.code === 'KeyY' || (e.code === 'KeyZ' && e.shiftKey)){ e.preventDefault(); dwRedo(); }
+  });
+
+  // --- панель инструментов ---
+  const sizeKey = () => D.tool === 'pencil' ? 'pencil' : (D.tool === 'eraser' ? 'eraser' : 'shape');
+  function renderToolbarState(){
+    $('btnUndo').disabled = !D.acts.length;
+    $('btnRedo').disabled = !D.redo.length;
+    $('btnClear').disabled = !D.acts.length;
+    const sg = $('sizeGroup');
+    sg.style.display = D.tool === 'fill' ? 'none' : 'flex';
+    const s = D.sizes[sizeKey()];
+    $('sizeRange').value = s; $('sizeVal').textContent = s;
+    const dot = $('sizeDot'); const dd = Math.max(2, Math.min(40, s));
+    dot.style.width = dd + 'px'; dot.style.height = dd + 'px';
+    dot.style.background = D.tool === 'eraser' ? '#fff' : D.color;
+    dot.style.border = D.tool === 'eraser' ? '1px solid #999' : '0';
+  }
+  function renderToolbar(){
+    const show = dwCan();
+    $('toolbar').style.display = show ? 'flex' : 'none';
+    cv.style.cursor = show ? 'crosshair' : 'default';
+    renderToolbarState();
+  }
+  document.querySelectorAll('#toolBtns .tool').forEach(b => b.onclick = () => {
+    D.tool = b.dataset.tool;
+    document.querySelectorAll('#toolBtns .tool').forEach(x => x.classList.toggle('on', x === b));
+    renderToolbarState();
+  });
+  const swBox = $('swatches');
+  SWATCHES.forEach(c => {
+    const s = document.createElement('div');
+    s.className = 'swatch'; s.style.background = c; s.title = c;
+    s.onclick = () => { D.color = c; $('colorPick').value = c; if(D.tool === 'eraser'){ D.tool = 'pencil'; document.querySelectorAll('#toolBtns .tool').forEach(x => x.classList.toggle('on', x.dataset.tool === 'pencil')); } renderToolbarState(); };
+    swBox.appendChild(s);
+  });
+  $('colorPick').addEventListener('input', e => {
+    D.color = e.target.value;
+    if(D.tool === 'eraser'){ D.tool = 'pencil'; document.querySelectorAll('#toolBtns .tool').forEach(x => x.classList.toggle('on', x.dataset.tool === 'pencil')); }
+    renderToolbarState();
+  });
+  $('sizeRange').addEventListener('input', e => { D.sizes[sizeKey()] = Number(e.target.value); renderToolbarState(); });
+  $('btnUndo').onclick = dwUndo; $('btnRedo').onclick = dwRedo; $('btnClear').onclick = dwClearAll;
+  renderToolbarState();
+
+  // --- зрители ---
+  function dwRemote(p){
+    if(!G || !G.state || !p || p.r !== G.state.roundId || isDrawer() || !D.synced) return;
+    const checkN = () => { if(p.n !== undefined && p.n !== D.acts.length) requestSync(); };
+    switch(p.k){
+      case 'ps':
+        D.live = { t: 'p', c: p.c, s: p.s, p: [p.x, p.y] }; dwDraw(D.live); break;
+      case 'pp':
+        if(!D.live) break;
+        for(let i = 0; i < p.p.length; i += 2){
+          const L = D.live, px = L.p[L.p.length - 2], py = L.p[L.p.length - 1];
+          L.p.push(p.p[i], p.p[i + 1]); dwSeg(px, py, p.p[i], p.p[i + 1], L);
+        }
+        break;
+      case 'pe':
+        if(D.live){ D.acts.push(D.live); D.live = null; D.redo = []; }
+        checkN(); break;
+      case 'sh': case 'fl': case 'cl':
+        D.acts.push(p.a); D.redo = []; dwDraw(p.a); checkN(); break;
+      case 'un':
+        if(D.acts.length){ D.redo.push(D.acts.pop()); dwRedraw(); }
+        checkN(); break;
+      case 're':
+        if(D.redo.length){ D.acts.push(D.redo.pop()); dwRedraw(); }
+        checkN(); break;
+    }
+  }
+  function requestSync(){
+    if(!G || !G.state || !G.state.drawerId) return;
+    if(D.syncing && Date.now() - D.syncAt < 3000) return;
+    D.syncing = true; D.syncAt = Date.now(); D.parts = {}; D.synced = false;
+    sendTo(G.state.drawerId, 'need', { from: G.me.id, r: G.state.roundId });
+  }
+  function dwSendSync(to){
+    const chunks = []; let cur = [], size = 0;
+    D.acts.forEach(a => {
+      const s = JSON.stringify(a).length;
+      if(size + s > 30000 && cur.length){ chunks.push(cur); cur = []; size = 0; }
+      cur.push(a); size += s;
+    });
+    chunks.push(cur);
+    chunks.forEach((c, i) => sendTo(to, 'sync', { r: G.state.roundId, i, n: chunks.length, acts: c }));
+  }
+  function dwSyncIn(p){
+    if(!G || !G.state || p.r !== G.state.roundId) return;
+    D.parts[p.i] = p.acts;
+    if(Object.keys(D.parts).length === p.n){
+      let all = [];
+      for(let i = 0; i < p.n; i++) all = all.concat(D.parts[i] || []);
+      D.acts = all; D.redo = []; D.live = null; D.synced = true; D.syncing = false; D.parts = {};
+      dwRedraw();
+    }
+  }
+
+  // для тестов в консоли
+  window.__pechenegi = { flat, censorText, makePattern, parseWords };
+  })();
+
 
   (async () => {
     const { data } = await sb.auth.getSession();
