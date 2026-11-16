@@ -456,7 +456,7 @@
   <div class="editor-step">
     <div class="field"><label>Название пака</label><input id="pkTitle" maxlength="40" placeholder="например, Сказочные герои"></div>
     <div class="field"><label>Описание</label><textarea id="pkDesc" rows="2" maxlength="120" placeholder="Коротко о чём слова"></textarea></div>
-    <div class="field"><label>Слова: каждое с новой строки (до 25 символов, можно сочетания слов)</label>
+    <div class="field"><label>Слова: каждое с новой строки (до 50 символов, можно сочетания слов, строк сколько угодно)</label>
       <textarea id="pkWords" rows="14" placeholder="кошка&#10;зелёный чайник&#10;Колобок"></textarea>
       <div class="counter" id="pkCount">Слов: 0 (нужно минимум 10)</div>
     </div>
@@ -669,6 +669,7 @@
     if(h.startsWith('#/stats/')){ openTestStats(h.slice(8)); return; }
     if(h === '#/create'){
       if(!currentUser){ openAuth('Сначала войдите, чтобы создавать тесты!'); goHome(); return; }
+      if(document.getElementById('createPage').style.display === 'block') return;
       openEditor(); return;
     }
     openMainPage();
@@ -1447,7 +1448,7 @@
 
   const DRAW_W = 800, DRAW_H = 500;
   const ROUND_MS = 120000, CHOOSE_MS = 15000, BETWEEN_MS = 7000, OVER_MS = 12000, START_MS = 5000;
-  const COOLDOWN_TURNS = 20, MAX_WORD = 25, MIN_WORDS = 10, MAX_WORDS = 500, MAX_HINTS = 4;
+  const COOLDOWN_TURNS = 20, MAX_WORD = 50, MIN_WORDS = 10, MAX_HINTS = 4;
   const SWATCHES = ['#000000','#7f7f7f','#ffffff','#d0162c','#ff7a00','#f4e238','#2ea043','#00b3b3','#1f6feb','#7c3aed','#ff6fb5','#8b5a2b'];
   const MODE_NAMES = { random:'всегда случайно', no_repeat:'без повторов', cooldown:'сыгранное не выпадает 20 ходов' };
   const LETTER = /[\p{L}\p{N}]/u;
@@ -1631,10 +1632,11 @@
   // =====================================================================
   //                           РЕДАКТОР ПАКА
   // =====================================================================
-  let editPackId = null;
+  let editPackId = null, editorKey = null;
   async function openPackEditor(id){
     if(!currentUser){ openAuth('Войдите, чтобы создавать паки'); location.hash = '#/draw'; return; }
     showPage('packEditPage');
+    editorKey = id || 'new';
     editPackId = (id && id !== 'new') ? id : null;
     $('pkHead').textContent = editPackId ? 'Редактирование пака' : 'Создание пака';
     $('pkTitle').value = ''; $('pkDesc').value = ''; $('pkWords').value = ''; $('pkMsg').textContent = '';
@@ -1655,7 +1657,6 @@
     let t = 'Слов: ' + out.length + (out.length < MIN_WORDS ? ' (нужно минимум ' + MIN_WORDS + ')' : '');
     let bad = out.length < MIN_WORDS;
     if(tooLong.length){ t += ' · длиннее ' + MAX_WORD + ' символов в строках: ' + tooLong.slice(0, 8).join(', '); bad = true; }
-    if(out.length > MAX_WORDS){ t += ' · максимум ' + MAX_WORDS; bad = true; }
     c.textContent = t; c.className = 'counter' + (bad ? ' bad' : '');
   }
   ['pkTitle', 'pkDesc', 'pkWords'].forEach(i => $(i).addEventListener('input', updPackPreview));
@@ -1667,7 +1668,6 @@
     if(title.length < 3) return fail('Название: минимум 3 символа');
     if(tooLong.length) return fail('Есть слова длиннее ' + MAX_WORD + ' символов (строки: ' + tooLong.join(', ') + ')');
     if(out.length < MIN_WORDS) return fail('Нужно минимум ' + MIN_WORDS + ' разных слов');
-    if(out.length > MAX_WORDS) return fail('Максимум ' + MAX_WORDS + ' слов');
     m.textContent = 'Сохраняем...';
     try {
       if(editPackId){
@@ -1781,13 +1781,17 @@
     if(G && !(inRoom && rid2 === G.roomId)) leaveRoom();
     if(entering && !(inRoom && rid2 === entering)) entering = null;
     if(drawPoll && h !== '#/draw'){ clearInterval(drawPoll); drawPoll = null; }
+    if(!h.startsWith('#/draw/pack/')) editorKey = null;
     if(!h.startsWith('#/draw')) return false;
     if(inRoom){
       if((G && G.roomId === rid2) || entering === rid2) return true;
       enterRoom(rid2); return true;
     }
-    if(h === '#/draw/pack/new'){ openPackEditor('new'); return true; }
-    if(h.startsWith('#/draw/pack/')){ openPackEditor(h.slice(12)); return true; }
+    if(h.startsWith('#/draw/pack/')){
+      const key = h.slice(12);
+      if(editorKey === key && $('packEditPage').style.display === 'block') return true;
+      openPackEditor(key); return true;
+    }
     openDrawPage(); return true;
   };
 
