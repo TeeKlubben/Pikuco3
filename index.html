@@ -282,6 +282,30 @@
     .logo{font-size:22px}
     .tool,.tb-btn{min-width:46px;height:46px}
   }
+
+  /* ===== Этап 1 ===== */
+  .img-row{flex-direction:column;align-items:stretch}
+  .img-row .thumb{width:100%;height:auto;max-height:260px;object-fit:contain;background:#f3f3f3;border-radius:12px}
+  .card-edit-btn{position:absolute;top:8px;left:8px;background:var(--white);border:2px solid var(--yellow);border-radius:10px;padding:3px 9px;cursor:pointer;font-size:15px;z-index:2}
+  .card-edit-btn:hover{background:var(--yellow)}
+  .history-item .h-del{margin-left:4px;font-size:16px;padding:6px 10px}
+  .quiz-progress{display:flex;align-items:center;gap:12px;margin-bottom:14px;color:rgba(255,255,255,.92);font-weight:700;font-size:15px}
+  .quiz-progress .bar{flex:1;height:10px;background:rgba(255,255,255,.25);border-radius:8px;overflow:hidden}
+  .quiz-progress .bar div{height:100%;background:var(--yellow);border-radius:8px;transition:width .25s}
+  .quiz-nav{display:flex;gap:10px;margin:-8px 0 24px}
+  .quiz-nav .btn{flex:1}
+  .btn-ghost{background:rgba(255,255,255,.18);color:#fff}
+  .btn-ghost:hover{background:rgba(255,255,255,.3)}
+  .btn:disabled{opacity:.45;cursor:default}
+  .tool svg,.tb-btn svg{width:26px;height:26px;display:block;margin:auto;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .tool svg .f{fill:currentColor}
+  .tb-wide{min-width:auto;padding:0 14px;font-size:14px;font-weight:700;display:flex;align-items:center;gap:6px}
+  .tb-wide svg{width:20px;height:20px}
+  .help-btn{width:24px;height:24px;border-radius:50%;border:2px solid var(--red);background:#fff;color:var(--red);font-weight:800;cursor:pointer;margin-left:8px;font-size:14px;line-height:1;padding:0;vertical-align:middle}
+  .help-btn:hover{background:var(--red);color:#fff}
+  .help-list{padding-left:20px;font-size:14px;line-height:1.5}
+  .help-list li{margin-bottom:6px}
+  .card .author.nolink:hover{color:var(--muted);text-decoration:none}
 </style>
 </head>
 <body>
@@ -323,11 +347,11 @@
 
 <!-- Редактор -->
 <div id="createPage" class="page">
-  <h2 class="page-title" style="margin-bottom:24px">Создание теста</h2>
+  <h2 class="page-title" id="edPageTitle" style="margin-bottom:24px">Создание теста</h2>
   <div class="editor-wrap">
     <div class="editor-left">
       <div class="editor-step">
-        <h3>1. Основное</h3>
+        <h3>Основное</h3>
         <div class="field"><label>Название теста</label><input id="edTitle" maxlength="60" placeholder="например, Какой ты кот?"></div>
         <div class="field"><label>Описание (видно на карточке)</label><textarea id="edDesc" rows="2" maxlength="120" placeholder="Коротко о чём тест"></textarea></div>
         <div class="field"><label>Картинка для превью</label>
@@ -335,12 +359,12 @@
         </div>
       </div>
       <div class="editor-step">
-        <h3>2. Вопросы</h3>
+        <h3>Вопросы</h3>
         <div id="edQuestions"></div>
         <button class="add-btn" id="edAddQ">+ Добавить вопрос</button>
       </div>
       <div class="editor-step">
-        <h3>3. Результаты</h3>
+        <h3>Результаты</h3>
         <div id="edResults"></div>
         <button class="add-btn" id="edAddR" style="margin-bottom:16px">+ Добавить результат</button>
         <div id="edBounds"></div>
@@ -368,7 +392,7 @@
       <h2 id="tkTitle"></h2>
       <div class="tdesc" id="tkDesc"></div>
       <div class="tauthor" id="tkAuthor"></div>
-      <div style="margin-top:14px"><button class="btn btn-profile" id="tkStatsBtn">📊 Статистика теста</button></div>
+      <div style="margin-top:14px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap"><button class="btn btn-profile" id="tkStatsBtn">📊 Статистика теста</button><button class="btn btn-create" id="tkEditBtn" style="display:none">✏️ Редактировать</button></div>
     </div>
     <div class="quiz-col">
       <div id="tkQuestions"></div>
@@ -456,7 +480,7 @@
   <div class="editor-step">
     <div class="field"><label>Название пака</label><input id="pkTitle" maxlength="40" placeholder="например, Сказочные герои"></div>
     <div class="field"><label>Описание</label><textarea id="pkDesc" rows="2" maxlength="120" placeholder="Коротко о чём слова"></textarea></div>
-    <div class="field"><label>Слова: каждое с новой строки (до 50 символов, можно сочетания слов, строк сколько угодно)</label>
+    <div class="field"><label>Слова: каждое с новой строки <button type="button" class="help-btn" id="packHelpBtn" title="Правила заполнения">?</button></label>
       <textarea id="pkWords" rows="14" placeholder="кошка&#10;зелёный чайник&#10;Колобок"></textarea>
       <div class="counter" id="pkCount">Слов: 0 (нужно минимум 10)</div>
     </div>
@@ -491,12 +515,16 @@
       </div>
       <div class="toolbar" id="toolbar">
         <div class="tb-group" id="toolBtns">
-          <button class="tool on" data-tool="pencil" title="Карандаш">✏️</button>
-          <button class="tool" data-tool="eraser" title="Ластик">🧽</button>
-          <button class="tool" data-tool="fill" title="Заливка">🪣</button>
-          <button class="tool" data-tool="rect" title="Квадрат">⬜</button>
-          <button class="tool" data-tool="tri" title="Треугольник">🔺</button>
-          <button class="tool" data-tool="line" title="Полоска">➖</button>
+          <button class="tool on" data-tool="pencil" title="Карандаш"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button>
+          <button class="tool" data-tool="eraser" title="Ластик"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 20H9"/><path d="M5.2 13.2 13 5.4a2 2 0 0 1 2.8 0l3.8 3.8a2 2 0 0 1 0 2.8L11 20.6H8l-2.8-2.8a2 2 0 0 1 0-2.6z"/><path d="m9 9 6 6"/></svg></button>
+          <button class="tool" data-tool="fill" title="Заливка (ведро)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m19 11-8-8-8.6 8.6a2 2 0 0 0 0 2.8l5.2 5.2a2 2 0 0 0 2.8 0L19 11Z"/><path d="m5 2 5 5"/><path d="M2 13h15"/><path class="f" d="M22 20a2 2 0 1 1-4 0c0-1.6 1.7-2.4 2-4 .3 1.6 2 2.4 2 4Z"/></svg></button>
+          <button class="tool" data-tool="line" title="Полоска"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20 20 4"/></svg></button>
+          <button class="tool" data-tool="rect" title="Квадрат (контур)"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="1"/></svg></button>
+          <button class="tool" data-tool="rectF" title="Квадрат (залитый)"><svg viewBox="0 0 24 24" aria-hidden="true"><rect class="f" x="4" y="5" width="16" height="14" rx="1"/></svg></button>
+          <button class="tool" data-tool="tri" title="Треугольник (контур)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4 21 20H3z"/></svg></button>
+          <button class="tool" data-tool="triF" title="Треугольник (залитый)"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="f" d="M12 4 21 20H3z"/></svg></button>
+          <button class="tool" data-tool="circle" title="Круг (контур)"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/></svg></button>
+          <button class="tool" data-tool="circleF" title="Круг (залитый)"><svg viewBox="0 0 24 24" aria-hidden="true"><circle class="f" cx="12" cy="12" r="8"/></svg></button>
         </div>
         <div class="tb-group">
           <input type="color" id="colorPick" value="#000000" title="Любой цвет">
@@ -510,7 +538,7 @@
         <div class="tb-group">
           <button class="tb-btn" id="btnUndo" title="Назад (Ctrl+Z)">↶</button>
           <button class="tb-btn" id="btnRedo" title="Вперёд (Ctrl+X)">↷</button>
-          <button class="tb-btn" id="btnClear" title="Очистить">🗑</button>
+          <button class="tb-btn tb-wide" id="btnClear" title="Очистить весь холст"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M6 6l1 14h10l1-14"/></svg>Очистить всё</button>
         </div>
       </div>
       <div class="hint-row" id="hintRow"><button class="btn btn-create" id="hintBtn">💡 Подсказка</button></div>
@@ -527,6 +555,26 @@
       <div class="chat-log" id="chatTalk"></div>
       <div class="chat-form"><input id="inTalk" maxlength="150" placeholder="Сообщение игрокам…" autocomplete="off"><button id="sendTalk">➤</button></div>
     </div>
+  </div>
+</div>
+
+<!-- Справка по пакам -->
+<div class="modal-back" id="packHelpBack">
+  <div class="modal">
+    <span class="close-x" id="packHelpClose">&times;</span>
+    <h2>Как заполнять пак</h2>
+    <div class="sub">Правила для списка слов</div>
+    <ul class="help-list">
+      <li><b>Одна строка = одна загадка.</b> Это может быть слово или сочетание слов («зелёный чайник»).</li>
+      <li>В строке <b>не больше 50 символов</b>, считая пробелы. Слишком длинные строки не сохранятся: редактор покажет их номера.</li>
+      <li>Нужно <b>минимум 10 разных слов</b>. Максимума нет, чем больше, тем реже повторы.</li>
+      <li>Пустые строки пропускаются. Повторы (даже с другим регистром или «е» вместо «ё») удаляются автоматически.</li>
+      <li>Рисующему на выбор дают <b>два случайных слова</b>, поэтому пишите то, что реально можно нарисовать.</li>
+      <li>При угадывании не важны регистр, «ё/е», пробелы и знаки препинания: «Зелёный чайник» и «зеленый-чайник» засчитаются одинаково.</li>
+      <li>Подсказки показывают длину слова, затем открывают случайные буквы. Пробелы между словами видны сразу.</li>
+      <li>Само загаданное слово в чатах заменяется звёздочками.</li>
+    </ul>
+    <button class="btn btn-create" id="packHelpOk">Понятно</button>
   </div>
 </div>
 
@@ -619,10 +667,6 @@
   function renderNav(){
     const nav = document.getElementById('navBox');
     nav.innerHTML = '';
-    const navTests = document.createElement('a');
-    navTests.href = '#'; navTests.className = 'btn btn-nav'; navTests.textContent = 'Тесты';
-    navTests.onclick = e => { e.preventDefault(); goHome(); };
-    nav.appendChild(navTests);
     const navDraw = document.createElement('a');
     navDraw.href = '#/draw'; navDraw.className = 'btn btn-nav'; navDraw.textContent = 'Рисунки';
     nav.appendChild(navDraw);
@@ -667,11 +711,13 @@
     if(h.startsWith('#/result/')){ openStatsPage(h.slice(9)); return; }
     if(h.startsWith('#/user/')){ openProfilePage(h.slice(7)); return; }
     if(h.startsWith('#/stats/')){ openTestStats(h.slice(8)); return; }
-    if(h === '#/create'){
+    if(h === '#/create' || h.startsWith('#/edit/')){
       if(!currentUser){ openAuth('Сначала войдите, чтобы создавать тесты!'); goHome(); return; }
-      if(document.getElementById('createPage').style.display === 'block') return;
-      openEditor(); return;
+      const key = h === '#/create' ? 'new' : h.slice(7);
+      if(testEditorKey === key && document.getElementById('createPage').style.display === 'block') return;
+      openEditor(key === 'new' ? null : key); return;
     }
+    testEditorKey = null;
     openMainPage();
   }
   window.addEventListener('hashchange', route);
@@ -728,30 +774,46 @@
       const card = document.createElement('div');
       card.className = 'card';
       const icon = (t.avatar && t.avatar.startsWith('http')) ? '<img src="' + t.avatar + '">' : '<span>' + (t.avatar || '🦸') + '</span>';
-      card.innerHTML = '<div class="card-stats-btn" id="ps' + t.id + '">📊</div><div class="test-icon">' + icon + '</div><h3>' + escapeHtml(t.title) + '</h3>' +
+      card.innerHTML = (isMe ? '<div class="card-edit-btn" id="pe' + t.id + '" title="Редактировать">✏️</div>' : '') +
+        '<div class="card-stats-btn" id="ps' + t.id + '">📊</div><div class="test-icon">' + icon + '</div><h3>' + escapeHtml(t.title) + '</h3>' +
         (t.description ? '<div class="desc">' + escapeHtml(t.description) + '</div>' : '');
       card.onclick = () => location.hash = '#/test/' + t.id;
       grid.appendChild(card);
       document.getElementById('ps' + t.id).onclick = e => { e.stopPropagation(); location.hash = '#/stats/' + t.id; };
+      if(isMe) document.getElementById('pe' + t.id).onclick = e => { e.stopPropagation(); location.hash = '#/edit/' + t.id; };
     });
   }
 
   async function loadHistory(){
     const list = document.getElementById('historyList');
     list.innerHTML = '<p style="color:rgba(255,255,255,.8)">Загрузка...</p>';
-    const { data } = await sb.from('user_history')
-      .select('id, created_at, tests(title, avatar), test_results(title, image_url)')
-      .eq('user_id', currentUser.id).order('created_at', { ascending: false });
+    const cols = 'id, test_id, created_at, tests(title, avatar), test_results(title, image_url)';
+    let res = await sb.from('user_history').select(cols).eq('user_id', currentUser.id).eq('hidden', false).order('created_at', { ascending: false });
+    if(res.error) res = await sb.from('user_history').select(cols).eq('user_id', currentUser.id).order('created_at', { ascending: false });
     list.innerHTML = '';
-    if(!data || data.length === 0){ list.innerHTML = '<p style="color:rgba(255,255,255,.8)">Вы пока не проходили тесты.</p>'; return; }
-    data.forEach(h => {
-      if(!h.tests || !h.test_results) return;
+    const seen = new Set(), rows = [];
+    (res.data || []).forEach(h => {
+      if(!h.tests || !h.test_results || seen.has(h.test_id)) return;
+      seen.add(h.test_id); rows.push(h);
+    });
+    const empty = () => { list.innerHTML = '<p style="color:rgba(255,255,255,.8)">Вы пока не проходили тесты.</p>'; };
+    if(!rows.length){ empty(); return; }
+    rows.forEach(h => {
       const div = document.createElement('div');
       div.className = 'history-item';
       const img = (h.tests.avatar && h.tests.avatar.startsWith('http')) ? h.tests.avatar : DEFAULT_AVA + encodeURIComponent(h.tests.title);
       div.innerHTML = '<img src="' + img + '"><div class="info"><h4>' + escapeHtml(h.tests.title) + '</h4>' +
-        '<p>Результат: <strong>' + escapeHtml(h.test_results.title) + '</strong> · ' + fmtDate(h.created_at) + '</p></div><div class="badge">Смотреть</div>';
+        '<p>Результат: <strong>' + escapeHtml(h.test_results.title) + '</strong> · ' + fmtDate(h.created_at) + '</p></div><div class="badge">Смотреть</div>' +
+        '<button class="icon-btn h-del" title="Убрать из профиля">✕</button>';
       div.onclick = () => location.hash = '#/result/' + h.id;
+      div.querySelector('.h-del').onclick = async e => {
+        e.stopPropagation();
+        if(!confirm('Убрать «' + h.tests.title + '» из пройденных? На статистику теста это не повлияет.')) return;
+        const { error } = await sb.from('user_history').update({ hidden: true }).eq('user_id', currentUser.id).eq('test_id', h.test_id);
+        if(error){ alert('Не удалось убрать: ' + error.message + '. Выполнили ли вы stage1.sql в Supabase?'); return; }
+        div.remove();
+        if(!list.children.length) empty();
+      };
       list.appendChild(div);
     });
   }
@@ -766,6 +828,7 @@
     edQuestions = [];
     document.querySelectorAll('#edQuestions .qe').forEach(b => {
       edQuestions.push({
+        id: b.dataset.id || null,
         text: b.querySelector('.qe-text').value,
         desc: b.querySelector('.qe-desc').value,
         comment: b.querySelector('.qe-comment').value,
@@ -780,6 +843,7 @@
     edResults = [];
     document.querySelectorAll('#edResults .re').forEach(b => {
       edResults.push({
+        id: b.dataset.id || null,
         title: b.querySelector('.re-title').value,
         desc: b.querySelector('.re-desc').value,
         imageUrl: b.dataset.img || ''
@@ -802,6 +866,7 @@
       const div = document.createElement('div');
       div.className = 'qe';
       div.dataset.type = q.type;
+      div.dataset.id = q.id || '';
       div.dataset.img = q.imageUrl || '';
       let ansHtml = '';
       (q.answers && q.answers.length ? q.answers : [{text:'',points:0},{text:'',points:0}]).forEach(a => ansHtml += answerRowHTML(q.type, a));
@@ -855,6 +920,7 @@
     edResults.forEach((r, i) => {
       const div = document.createElement('div');
       div.className = 're';
+      div.dataset.id = r.id || '';
       div.dataset.img = r.imageUrl || '';
       div.innerHTML =
         '<div class="re-head"><strong>Результат ' + (i+1) + '</strong><button class="icon-btn re-del">🗑</button></div>' +
@@ -974,14 +1040,46 @@
     renderBounds();
   };
 
-  function openEditor(){
-    showPage('createPage');
-    edQuestions = []; edResults = []; edBounds = [];
+  let editTestId = null, testEditorKey = null, editOrig = { q: [], r: [] };
+
+  function resetEditorFields(){
+    edQuestions = []; edResults = []; edBounds = []; pvImageUrl = '';
     document.getElementById('edTitle').value = '';
     document.getElementById('edDesc').value = '';
     document.getElementById('edAvaFile').value = '';
-    document.getElementById('edAvaPreview').style.display = 'none';
-    document.getElementById('pubMsg').textContent = '';
+    const p = document.getElementById('edAvaPreview');
+    p.style.display = 'none'; p.removeAttribute('src');
+    const m = document.getElementById('pubMsg');
+    m.textContent = ''; m.className = 'msg';
+    editOrig = { q: [], r: [] };
+  }
+
+  async function openEditor(editId){
+    showPage('createPage');
+    testEditorKey = editId || 'new';
+    editTestId = editId || null;
+    resetEditorFields();
+    document.getElementById('edPageTitle').textContent = editId ? 'Редактирование теста' : 'Создание теста';
+    document.getElementById('publishBtn').textContent = editId ? 'Сохранить изменения' : 'Опубликовать тест';
+    if(editId){
+      const { data: t } = await sb.from('tests').select('*').eq('id', editId).maybeSingle();
+      if(!t || !currentUser || t.author_id !== currentUser.id){ alert('Этот тест нельзя редактировать'); testEditorKey = null; goHome(); return; }
+      const { data: qs } = await sb.from('test_questions').select('*').eq('test_id', editId).order('id');
+      const { data: rs } = await sb.from('test_results').select('*').eq('test_id', editId).order('min_points', { ascending: true });
+      if(testEditorKey !== editId) return;
+      document.getElementById('edTitle').value = t.title || '';
+      document.getElementById('edDesc').value = t.description || '';
+      pvImageUrl = (t.avatar && t.avatar.startsWith('http')) ? t.avatar : '';
+      if(pvImageUrl){ const p = document.getElementById('edAvaPreview'); p.src = pvImageUrl; p.style.display = 'block'; }
+      edQuestions = (qs || []).map(q => ({
+        id: q.id, text: q.question_text || '', desc: q.question_desc || '', comment: q.after_comment || '',
+        type: q.type || 'choice', imageUrl: q.image_url || '',
+        answers: (q.options || []).map(o => ({ text: o.text, points: Number(o.points) || 0 }))
+      }));
+      edResults = (rs || []).map(r => ({ id: r.id, title: r.title || '', desc: r.description || '', imageUrl: r.image_url || '' }));
+      edBounds = (rs || []).slice(0, -1).map(r => Number(r.min_points) || 0);
+      editOrig = { q: edQuestions.map(q => q.id), r: edResults.map(r => r.id) };
+    }
     renderQuestions(); renderResults(); renderBounds(); updatePreview();
   }
 
@@ -1029,37 +1127,68 @@
     for(let i = 0; i < edResults.length; i++){
       if(edResults[i].title.trim().length < 2){ m.classList.add('err'); m.textContent = 'Заполните название результата ' + (i + 1); return; }
     }
-    m.textContent = 'Публикация...';
+    m.textContent = editTestId ? 'Сохраняем...' : 'Публикация...';
     try {
       let ava = pvImageUrl;
       const avaFile = document.getElementById('edAvaFile').files[0];
       if(avaFile && ava.startsWith('data:')) ava = await uploadImage(avaFile);
       if(!ava) ava = '🦸';
-      const { data: test, error: tErr } = await sb.from('tests')
-        .insert({ title, description: desc, avatar: ava, author_id: currentUser.id }).select().single();
-      if(tErr) throw tErr;
+      let testId = editTestId, warn = 0;
+      if(editTestId){
+        const { error } = await sb.from('tests').update({ title, description: desc, avatar: ava }).eq('id', editTestId);
+        if(error) throw error;
+      } else {
+        const { data: test, error: tErr } = await sb.from('tests')
+          .insert({ title, description: desc, avatar: ava, author_id: currentUser.id }).select().single();
+        if(tErr) throw tErr;
+        testId = test.id;
+      }
 
+      const keepR = new Set();
       for(let i = 0; i < edResults.length; i++){
         const file = document.querySelectorAll('#edResults .re')[i].querySelector('.re-img').files[0];
         let img = edResults[i].imageUrl;
         if(file) img = await uploadImage(file);
         const minP = i < edResults.length - 1 ? edBounds[i] : 100;
-        const { error } = await sb.from('test_results')
-          .insert({ test_id: test.id, title: edResults[i].title.trim(), description: edResults[i].desc.trim(), image_url: img, min_points: minP });
-        if(error) throw error;
+        const row = { title: edResults[i].title.trim(), description: edResults[i].desc.trim(), image_url: img, min_points: minP };
+        if(edResults[i].id){
+          const { error } = await sb.from('test_results').update(row).eq('id', edResults[i].id);
+          if(error) throw error;
+          keepR.add(String(edResults[i].id));
+        } else {
+          const { error } = await sb.from('test_results').insert({ test_id: testId, ...row });
+          if(error) throw error;
+        }
       }
+      const keepQ = new Set();
       for(let i = 0; i < edQuestions.length; i++){
         const q = edQuestions[i];
         const file = document.querySelectorAll('#edQuestions .qe')[i].querySelector('.qe-img').files[0];
         let img = q.imageUrl;
         if(file) img = await uploadImage(file);
-        const { error } = await sb.from('test_questions')
-          .insert({ test_id: test.id, question_text: q.text.trim(), question_desc: q.desc.trim(), after_comment: q.comment.trim(),
-                    image_url: img, type: q.type, options: q.answers });
-        if(error) throw error;
+        const row = { question_text: q.text.trim(), question_desc: q.desc.trim(), after_comment: q.comment.trim(),
+                      image_url: img, type: q.type, options: q.answers };
+        if(q.id){
+          const { error } = await sb.from('test_questions').update(row).eq('id', q.id);
+          if(error) throw error;
+          keepQ.add(String(q.id));
+        } else {
+          const { error } = await sb.from('test_questions').insert({ test_id: testId, ...row });
+          if(error) throw error;
+        }
       }
-      m.classList.add('ok'); m.textContent = 'Тест опубликован!';
-      setTimeout(() => location.hash = '#/test/' + test.id, 700);
+      if(editTestId){
+        for(const id of editOrig.r){
+          if(!keepR.has(String(id))){ const { error } = await sb.from('test_results').delete().eq('id', id); if(error) warn++; }
+        }
+        for(const id of editOrig.q){
+          if(!keepQ.has(String(id))){ const { error } = await sb.from('test_questions').delete().eq('id', id); if(error) warn++; }
+        }
+      }
+      m.classList.add('ok');
+      m.textContent = (editTestId ? 'Изменения сохранены!' : 'Тест опубликован!') + (warn ? ' (не удалось удалить элементов: ' + warn + ')' : '');
+      testEditorKey = null;
+      setTimeout(() => location.hash = '#/test/' + testId, warn ? 2500 : 700);
     } catch(err){
       m.classList.add('err'); m.textContent = 'Ошибка: ' + err.message;
     }
@@ -1091,45 +1220,86 @@
     aBox.innerHTML = 'от <b>' + escapeHtml(test.profiles ? test.profiles.login : 'Неизвестный') + '</b>';
     aBox.querySelector('b').onclick = () => location.hash = '#/user/' + test.author_id;
     document.getElementById('tkStatsBtn').onclick = () => location.hash = '#/stats/' + test.id;
+    const tkEd = document.getElementById('tkEditBtn');
+    tkEd.style.display = (currentUser && test.author_id === currentUser.id) ? 'inline-block' : 'none';
+    tkEd.onclick = () => location.hash = '#/edit/' + test.id;
     renderQuizQuestions();
   }
 
-  function renderQuizQuestions(){
+  let tkIndex = 0;
+  function renderQuizQuestions(){ tkIndex = 0; showQuestion(); }
+
+  function showQuestion(){
     const box = document.getElementById('tkQuestions');
+    const total = tkQuestions.length, idx = tkIndex, q = tkQuestions[idx];
+    const isLast = idx === total - 1;
     box.innerHTML = '';
-    tkQuestions.forEach((q, idx) => {
-      const div = document.createElement('div');
-      div.className = 'question-block';
-      let inner = '';
-      if(q.image_url) inner += '<img class="q-img" src="' + q.image_url + '">';
-      inner += '<h3>' + (idx + 1) + '. ' + escapeHtml(q.question_text) + '</h3>';
-      if(q.question_desc) inner += '<div class="qd">' + escapeHtml(q.question_desc) + '</div>';
-      div.innerHTML = inner;
-      box.appendChild(div);
-      const body = document.createElement('div');
-      if(q.type === 'input'){
-        const inp = document.createElement('input');
-        inp.className = 'answer-input'; inp.placeholder = 'Впишите ответ...'; inp.maxLength = 80;
-        inp.oninput = () => { if(inp.value.trim()) tkAnswers[q.id] = { type: 'input', value: inp.value.trim() }; else delete tkAnswers[q.id]; checkComplete(); };
-        body.appendChild(inp);
-      } else {
-        (q.options || []).forEach(opt => {
-          const btn = document.createElement('button');
-          btn.className = 'option-btn'; btn.textContent = opt.text;
-          btn.onclick = () => {
-            body.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
-            btn.classList.add('selected');
-            tkAnswers[q.id] = { type: 'choice', text: opt.text, points: Number(opt.points) || 0 };
-            checkComplete();
-          };
-          body.appendChild(btn);
-        });
-      }
-      div.appendChild(body);
-    });
+    const prog = document.createElement('div');
+    prog.className = 'quiz-progress';
+    prog.innerHTML = '<span>Вопрос ' + (idx + 1) + ' из ' + total + '</span><div class="bar"><div style="width:' + Math.round((idx + 1) / total * 100) + '%"></div></div>';
+    box.appendChild(prog);
+
+    const div = document.createElement('div');
+    div.className = 'question-block';
+    let inner = '';
+    if(q.image_url) inner += '<img class="q-img" src="' + q.image_url + '">';
+    inner += '<h3>' + escapeHtml(q.question_text) + '</h3>';
+    if(q.question_desc) inner += '<div class="qd">' + escapeHtml(q.question_desc) + '</div>';
+    div.innerHTML = inner;
+    const body = document.createElement('div');
+    const goNext = () => { if(!isLast){ tkIndex = idx + 1; showQuestion(); } else checkComplete(); };
+    let nextBtn = null;
+
+    if(q.type === 'input'){
+      const inp = document.createElement('input');
+      inp.className = 'answer-input'; inp.placeholder = 'Впишите ответ...'; inp.maxLength = 80;
+      inp.value = tkAnswers[q.id] ? tkAnswers[q.id].value : '';
+      inp.oninput = () => {
+        if(inp.value.trim()) tkAnswers[q.id] = { type: 'input', value: inp.value.trim() }; else delete tkAnswers[q.id];
+        if(nextBtn) nextBtn.disabled = !inp.value.trim();
+        checkComplete();
+      };
+      inp.onkeydown = e => { if(e.key === 'Enter' && inp.value.trim() && !isLast) goNext(); };
+      body.appendChild(inp);
+    } else {
+      (q.options || []).forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn' + ((tkAnswers[q.id] && tkAnswers[q.id].text === opt.text) ? ' selected' : '');
+        btn.textContent = opt.text;
+        btn.onclick = () => {
+          body.querySelectorAll('.option-btn').forEach(x => x.classList.remove('selected'));
+          btn.classList.add('selected');
+          tkAnswers[q.id] = { type: 'choice', text: opt.text, points: Number(opt.points) || 0 };
+          if(!isLast) setTimeout(() => { if(tkIndex === idx) goNext(); }, 250);
+          else checkComplete();
+        };
+        body.appendChild(btn);
+      });
+    }
+    div.appendChild(body);
+    box.appendChild(div);
+
+    const nav = document.createElement('div');
+    nav.className = 'quiz-nav';
+    if(idx > 0){
+      const back = document.createElement('button');
+      back.className = 'btn btn-ghost'; back.textContent = '← Назад';
+      back.onclick = () => { tkIndex = idx - 1; showQuestion(); };
+      nav.appendChild(back);
+    }
+    if(q.type === 'input' && !isLast){
+      nextBtn = document.createElement('button');
+      nextBtn.className = 'btn btn-create'; nextBtn.textContent = 'Далее →';
+      nextBtn.disabled = !tkAnswers[q.id];
+      nextBtn.onclick = goNext;
+      nav.appendChild(nextBtn);
+    }
+    if(nav.children.length) box.appendChild(nav);
+    checkComplete();
   }
   function checkComplete(){
-    document.getElementById('submitQuizBtn').style.display = (Object.keys(tkAnswers).length === tkQuestions.length) ? 'block' : 'none';
+    const ready = Object.keys(tkAnswers).length === tkQuestions.length && tkIndex === tkQuestions.length - 1;
+    document.getElementById('submitQuizBtn').style.display = ready ? 'block' : 'none';
   }
 
   function maxScoreOf(questions){
@@ -1452,7 +1622,8 @@
   const SWATCHES = ['#000000','#7f7f7f','#ffffff','#d0162c','#ff7a00','#f4e238','#2ea043','#00b3b3','#1f6feb','#7c3aed','#ff6fb5','#8b5a2b'];
   const MODE_NAMES = { random:'всегда случайно', no_repeat:'без повторов', cooldown:'сыгранное не выпадает 20 ходов' };
   const LETTER = /[\p{L}\p{N}]/u;
-  const SHAPE = { rect:'r', tri:'t', line:'l' };
+  const SHAPE = { rect:'r', rectF:'r', tri:'t', triF:'t', circle:'c', circleF:'c', line:'l' };
+  const FILLED = { rectF:true, triF:true, circleF:true };
 
   // ---------- чистые функции ----------
   function flat(s){ return String(s || '').toLowerCase().replace(/ё/g, 'е').replace(/[^\p{L}\p{N}]/gu, ''); }
@@ -1552,11 +1723,12 @@
       card.innerHTML = '<div class="test-icon draw-ico">🎨</div>' +
         '<h3>' + esc(pk.title || 'Игра') + '</h3>' +
         (pk.description ? '<div class="desc">' + esc(pk.description) + '</div>' : '') +
-        '<div class="author">админ: ' + esc(r.profiles ? r.profiles.login : '???') + '</div>' +
+        '<div class="author" title="Открыть профиль">админ: ' + esc(r.profiles ? r.profiles.login : '???') + '</div>' +
         '<div><span class="pill">👥 ' + r.player_count + '</span><span class="pill">до ' + r.win_score + ' очк.</span>' +
         '<span class="pill">' + (r.status === 'lobby' ? 'ожидание' : 'идёт игра') + '</span></div>' +
         '<div class="card-actions"><button class="btn btn-create">Войти</button></div>';
       card.onclick = () => enterFromList(r.id);
+      card.querySelector('.author').onclick = e => { e.stopPropagation(); location.hash = '#/user/' + r.admin_id; };
       grid.appendChild(card);
     });
   }
@@ -1584,12 +1756,13 @@
       card.innerHTML = '<div class="test-icon draw-ico">📝</div>' +
         '<h3>' + esc(p.title) + '</h3>' +
         (p.description ? '<div class="desc">' + esc(p.description) + '</div>' : '') +
-        '<div class="author" style="cursor:default">от ' + esc(p.profiles ? p.profiles.login : 'Печенеги') + '</div>' +
+        '<div class="author' + (p.author_id ? '" title="Открыть профиль' : ' nolink" style="cursor:default') + '">от ' + esc(p.profiles ? p.profiles.login : 'Печенеги') + '</div>' +
         '<div><span class="pill">слов: ' + n + '</span></div>' +
         '<div class="card-actions"><button class="btn btn-create pk-run">▶ Запустить</button>' +
         (mine ? '<button class="btn btn-profile pk-edit" title="Изменить">✏️</button><button class="btn btn-danger pk-del" title="Удалить">🗑</button>' : '') + '</div>';
       grid.appendChild(card);
       card.querySelector('.pk-run').onclick = () => openLaunch(p);
+      if(p.author_id) card.querySelector('.author').onclick = () => { location.hash = '#/user/' + p.author_id; };
       if(mine){
         card.querySelector('.pk-edit').onclick = () => location.hash = '#/draw/pack/' + p.id;
         card.querySelector('.pk-del').onclick = async () => {
@@ -1600,6 +1773,10 @@
       }
     });
   }
+
+  $('packHelpBtn').onclick = e => { e.preventDefault(); $('packHelpBack').classList.add('open'); };
+  $('packHelpClose').onclick = $('packHelpOk').onclick = () => $('packHelpBack').classList.remove('open');
+  $('packHelpBack').onclick = e => { if(e.target === $('packHelpBack')) $('packHelpBack').classList.remove('open'); };
 
   // ---------- запуск игры ----------
   let launchPackObj = null;
@@ -2333,8 +2510,9 @@
       ctx.beginPath();
       if(a.k === 'l'){ ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); }
       else if(a.k === 'r'){ ctx.rect(x1, y1, x2 - x1, y2 - y1); }
+      else if(a.k === 'c'){ ctx.ellipse((x1 + x2) / 2, (y1 + y2) / 2, Math.abs(x2 - x1) / 2, Math.abs(y2 - y1) / 2, 0, 0, Math.PI * 2); }
       else { ctx.moveTo((x1 + x2) / 2, y1); ctx.lineTo(x2, y2); ctx.lineTo(x1, y2); ctx.closePath(); }
-      ctx.stroke();
+      if(a.f) ctx.fill(); else ctx.stroke();
     }
   }
   function dwFill(sx, sy, hex){
@@ -2409,7 +2587,7 @@
       D.live.p.push(x, y); dwSeg(lx, ly, x, y, D.live); D.pend.push(x, y); D.last = [x, y];
     } else if(D.snap){
       ctx.putImageData(D.snap, 0, 0);
-      D.shape = { t: 's', k: SHAPE[D.tool], c: D.color, s: D.sizes.shape, a: [D.start[0], D.start[1], x, y] };
+      D.shape = { t: 's', k: SHAPE[D.tool], f: !!FILLED[D.tool], c: D.color, s: D.sizes.shape, a: [D.start[0], D.start[1], x, y] };
       dwDraw(D.shape);
     }
   });
@@ -2462,7 +2640,7 @@
     $('btnRedo').disabled = !D.redo.length;
     $('btnClear').disabled = !D.acts.length;
     const sg = $('sizeGroup');
-    sg.style.display = D.tool === 'fill' ? 'none' : 'flex';
+    sg.style.display = (D.tool === 'fill' || FILLED[D.tool]) ? 'none' : 'flex';
     const s = D.sizes[sizeKey()];
     $('sizeRange').value = s; $('sizeVal').textContent = s;
     const dot = $('sizeDot'); const dd = Math.max(2, Math.min(40, s));
