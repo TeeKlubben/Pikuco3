@@ -306,6 +306,51 @@
   .help-list{padding-left:20px;font-size:14px;line-height:1.5}
   .help-list li{margin-bottom:6px}
   .card .author.nolink:hover{color:var(--muted);text-decoration:none}
+
+  /* ===== Этап 2 ===== */
+  #testStatsPage{max-width:760px}
+  .intro-wrap{display:flex;gap:24px;align-items:flex-start}
+  .intro-main{flex:1;min-width:0}
+  .intro-card{background:var(--white);color:var(--text);border:4px solid var(--yellow);border-radius:20px;overflow:hidden}
+  .intro-img{display:block;width:100%;aspect-ratio:16/9;max-height:420px;object-fit:cover;background:var(--yellow)}
+  .intro-body{padding:22px}
+  .intro-body h2{font-size:28px;color:var(--red);margin-bottom:8px}
+  .intro-desc{color:var(--muted);font-size:16px;margin-bottom:14px}
+  .intro-author{display:inline-flex;align-items:center;gap:10px;cursor:pointer;font-weight:700;color:var(--red);padding:5px 14px 5px 5px;border-radius:30px;background:#fff8d6;border:2px solid var(--card-border);margin-bottom:12px}
+  .intro-author:hover{border-color:var(--yellow)}
+  .intro-author img{width:36px;height:36px;border-radius:50%;object-fit:cover;background:#fff}
+  .intro-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+  .intro-start{width:100%;font-size:20px;padding:16px}
+  .intro-actions{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap}
+  .intro-actions .btn{flex:1;border:2px solid var(--card-border)}
+  .intro-side{width:300px;flex-shrink:0}
+  .intro-side h3{color:var(--yellow);margin-bottom:12px}
+  .intro-side p{color:rgba(255,255,255,.85);font-size:14px}
+  .sim-item{display:flex;gap:10px;align-items:center;background:var(--white);color:var(--text);border:2px solid var(--card-border);border-radius:12px;padding:8px;margin-bottom:10px;cursor:pointer}
+  .sim-item:hover{border-color:var(--yellow)}
+  .sim-item img{width:64px;height:64px;border-radius:10px;object-fit:cover;flex-shrink:0;background:var(--yellow)}
+  .sim-item b{display:block;font-size:15px;color:var(--red);margin-bottom:2px}
+  .sim-item small{color:var(--muted)}
+  @media(max-width:900px){.intro-wrap{flex-direction:column}.intro-side{width:100%}}
+  .genre-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px}
+  .genre{display:flex;align-items:center;justify-content:center;text-align:center;aspect-ratio:1.25;padding:6px;border-radius:12px;border:2px solid #e2e2e2;background:#fff;font-weight:700;font-size:14px;cursor:pointer;color:var(--muted);user-select:none}
+  .genre:hover{border-color:var(--yellow)}
+  .genre.on{background:var(--yellow);border-color:var(--red);color:var(--red)}
+  .tag-add{display:flex;gap:8px;margin-bottom:10px}
+  .tag-add input{flex:1;padding:10px 12px;border:2px solid #e2e2e2;border-radius:10px;font-size:15px;font-family:inherit;background:#fff;color:var(--text)}
+  .tag-add .btn{padding:8px 16px}
+  .tag-chips{display:flex;gap:6px;flex-wrap:wrap}
+  .tag-chip{padding:6px 12px;border-radius:20px;border:2px solid #e2e2e2;background:#fff;font-size:14px;font-weight:700;color:var(--muted);cursor:pointer;user-select:none}
+  .tag-chip:hover{border-color:var(--yellow)}
+  .tag-chip.on{background:var(--yellow);border-color:var(--red);color:var(--red)}
+  .c-act.disliked{color:var(--red)}
+  .ach-list{display:flex;gap:12px;flex-wrap:wrap}
+  .ach{display:flex;align-items:center;gap:14px;background:var(--white);color:var(--text);border:2px solid var(--yellow);border-radius:16px;padding:12px 18px;min-width:260px}
+  .ach .ach-ico{font-size:40px;line-height:1}
+  .ach.locked .ach-ico{filter:grayscale(1);opacity:.45}
+  .ach b{display:block;color:var(--red);font-size:16px}
+  .ach span{color:var(--muted);font-size:14px}
+  .ach span i{font-style:normal;font-weight:800;color:var(--red);font-size:18px}
 </style>
 </head>
 <body>
@@ -337,6 +382,8 @@
       <button class="btn btn-settings" id="openSettingsBtn" style="display:none">⚙️ Настройки профиля</button>
     </div>
   </div>
+  <h2 style="color:var(--yellow);margin-bottom:16px">Ачивки</h2>
+  <div class="ach-list" id="achList" style="margin-bottom:32px"></div>
   <h2 style="color:var(--yellow);margin-bottom:16px">Тесты пользователя</h2>
   <div class="grid" id="myTestGrid"></div>
   <div id="historySection" style="display:none;margin-top:40px">
@@ -357,6 +404,16 @@
         <div class="field"><label>Картинка для превью</label>
           <div class="img-row"><input type="file" id="edAvaFile" accept="image/*"><img class="thumb" id="edAvaPreview" style="display:none"></div>
         </div>
+      </div>
+      <div class="editor-step">
+        <h3>Жанры и теги</h3>
+        <div class="field"><label>Жанры (выберите до 2)</label><div class="genre-grid" id="genreGrid"></div></div>
+        <div class="field"><label>Свои теги (выберите до 2, новые сохраняются для всех)</label>
+          <div class="tag-add"><input id="tagInput" maxlength="20" placeholder="например, котики"><button type="button" class="btn btn-create" id="tagAddBtn">Добавить</button></div>
+          <div class="tag-chips" id="tagChips"></div>
+          <div class="hint-small" id="tagMsg"></div>
+        </div>
+        <div class="hint-small" id="tagCount"></div>
       </div>
       <div class="editor-step">
         <h3>Вопросы</h3>
@@ -386,13 +443,37 @@
 
 <!-- Прохождение теста -->
 <div id="takeTestPage" class="page">
+  <div id="testIntro" style="display:none">
+    <div class="intro-wrap">
+      <div class="intro-main">
+        <div class="intro-card">
+          <img id="inImg" class="intro-img" src="" alt="Обложка">
+          <div class="intro-body">
+            <h2 id="inTitle"></h2>
+            <div class="intro-desc" id="inDesc"></div>
+            <div class="intro-author" id="inAuthor"></div>
+            <div class="intro-tags" id="inTags"></div>
+            <button class="btn btn-create intro-start" id="inStart">▶ Начать</button>
+            <div class="intro-actions">
+              <button class="btn btn-profile" id="tkStatsBtn">📊 Статистика и комментарии</button>
+              <button class="btn btn-create" id="tkEditBtn" style="display:none">✏️ Редактировать</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <aside class="intro-side">
+        <h3>Похожие тесты</h3>
+        <div id="similarList"></div>
+      </aside>
+    </div>
+  </div>
   <div id="quizContent">
     <div class="test-header">
       <img id="tkImg" src="" alt="Обложка">
       <h2 id="tkTitle"></h2>
       <div class="tdesc" id="tkDesc"></div>
       <div class="tauthor" id="tkAuthor"></div>
-      <div style="margin-top:14px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap"><button class="btn btn-profile" id="tkStatsBtn">📊 Статистика теста</button><button class="btn btn-create" id="tkEditBtn" style="display:none">✏️ Редактировать</button></div>
+      
     </div>
     <div class="quiz-col">
       <div id="tkQuestions"></div>
@@ -437,6 +518,14 @@
   <h2 class="page-title" id="tsTitle">Статистика теста</h2>
   <div class="ts-meta" id="tsMeta"></div>
   <div id="tsBars"></div>
+  <div class="comments-box" style="margin-top:32px">
+    <h3>💬 Комментарии</h3>
+    <div id="statsCommentList"></div>
+    <div class="comment-form">
+      <textarea id="statsCommentText" placeholder="Оставьте комментарий..." maxlength="300"></textarea>
+      <button class="btn btn-create" id="statsSendComment">Отправить</button>
+    </div>
+  </div>
   <div style="margin-top:20px"><button class="btn btn-profile" id="tsBackBtn">← К тесту</button></div>
 </div>
 
@@ -643,6 +732,7 @@
   let currentUser = null;
   let currentProfile = null;
 
+  const gid = id => document.getElementById(id);
   function goHome(){ location.hash = ""; }
   function escapeHtml(s){return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
   function getAvatarUrl(url, name){ return (url && url.startsWith('http')) ? url : DEFAULT_AVA + encodeURIComponent(name || 'User'); }
@@ -764,6 +854,7 @@
     document.getElementById('openSettingsBtn').style.display = isMe ? 'inline-block' : 'none';
     document.getElementById('historySection').style.display = isMe ? 'block' : 'none';
     if(isMe) loadHistory();
+    loadAchievements(userId);
 
     const grid = document.getElementById('myTestGrid');
     grid.innerHTML = '<p style="color:rgba(255,255,255,.8)">Загрузка...</p>';
@@ -782,6 +873,18 @@
       document.getElementById('ps' + t.id).onclick = e => { e.stopPropagation(); location.hash = '#/stats/' + t.id; };
       if(isMe) document.getElementById('pe' + t.id).onclick = e => { e.stopPropagation(); location.hash = '#/edit/' + t.id; };
     });
+  }
+
+  async function loadAchievements(uid){
+    const box = gid('achList');
+    box.innerHTML = '';
+    const { count, error } = await sb.from('draw_wins').select('id', { count: 'exact', head: true }).eq('winner_id', uid);
+    const n = error ? 0 : (count || 0);
+    const div = document.createElement('div');
+    div.className = 'ach' + (n ? '' : ' locked');
+    div.innerHTML = '<div class="ach-ico">🏆</div><div><b>Победы в рисунках</b><span>Побед: <i>' + n + '</i></span></div>';
+    div.title = 'Побеждайте в партиях раздела «Рисунки»';
+    box.appendChild(div);
   }
 
   async function loadHistory(){
@@ -1040,10 +1143,66 @@
     renderBounds();
   };
 
+  const GENRES = ['Игры', 'География', 'Политика', 'История', 'Еда', 'Фэнтези', 'Фильмы', 'Аниме', 'Общество', 'Наука'];
+  let edGenres = [], edTags = [], savedTags = [], newTags = new Set();
+
+  function renderTagPickers(){
+    const g = gid('genreGrid');
+    g.innerHTML = '';
+    GENRES.forEach(name => {
+      const d = document.createElement('div');
+      d.className = 'genre' + (edGenres.includes(name) ? ' on' : '');
+      d.textContent = name;
+      d.onclick = () => {
+        if(edGenres.includes(name)) edGenres = edGenres.filter(x => x !== name);
+        else if(edGenres.length < 2) edGenres.push(name);
+        else gid('tagMsg').textContent = 'Можно выбрать только 2 жанра: сначала снимите один.';
+        renderTagPickers();
+      };
+      g.appendChild(d);
+    });
+    const c = gid('tagChips');
+    c.innerHTML = '';
+    [...new Set([...edTags, ...savedTags])].forEach(t => {
+      const d = document.createElement('div');
+      d.className = 'tag-chip' + (edTags.includes(t) ? ' on' : '');
+      d.textContent = t;
+      d.onclick = () => {
+        if(edTags.includes(t)) edTags = edTags.filter(x => x !== t);
+        else if(edTags.length < 2) edTags.push(t);
+        else gid('tagMsg').textContent = 'Можно выбрать только 2 тега: сначала снимите один.';
+        renderTagPickers();
+      };
+      c.appendChild(d);
+    });
+    gid('tagCount').textContent = 'Выбрано: жанров ' + edGenres.length + ' из 2, тегов ' + edTags.length + ' из 2';
+  }
+  function addTag(){
+    const inp = gid('tagInput'), msg = gid('tagMsg');
+    const t = inp.value.trim().toLowerCase().replace(/\s+/g, ' ');
+    msg.textContent = '';
+    if(t.length < 2){ msg.textContent = 'Тег: минимум 2 символа'; return; }
+    if(GENRES.some(x => x.toLowerCase() === t)){ msg.textContent = 'Это основной жанр, выберите его выше'; return; }
+    if(!savedTags.includes(t)){ savedTags.unshift(t); newTags.add(t); }
+    if(!edTags.includes(t)){
+      if(edTags.length >= 2){ msg.textContent = 'Тег сохранён в список, но выбрать можно только 2: снимите один.'; inp.value = ''; renderTagPickers(); return; }
+      edTags.push(t);
+    }
+    inp.value = '';
+    renderTagPickers();
+  }
+  gid('tagAddBtn').onclick = addTag;
+  gid('tagInput').addEventListener('keydown', e => { if(e.key === 'Enter'){ e.preventDefault(); addTag(); } });
+  async function loadSavedTags(){
+    const { data } = await sb.from('custom_tags').select('name').order('created_at', { ascending: false }).limit(80);
+    if(data){ savedTags = [...new Set([...newTags, ...data.map(r => r.name)])]; renderTagPickers(); }
+  }
+
   let editTestId = null, testEditorKey = null, editOrig = { q: [], r: [] };
 
   function resetEditorFields(){
     edQuestions = []; edResults = []; edBounds = []; pvImageUrl = '';
+    edGenres = []; edTags = []; newTags = new Set(); gid('tagMsg').textContent = ''; gid('tagInput').value = '';
     document.getElementById('edTitle').value = '';
     document.getElementById('edDesc').value = '';
     document.getElementById('edAvaFile').value = '';
@@ -1061,6 +1220,7 @@
     resetEditorFields();
     document.getElementById('edPageTitle').textContent = editId ? 'Редактирование теста' : 'Создание теста';
     document.getElementById('publishBtn').textContent = editId ? 'Сохранить изменения' : 'Опубликовать тест';
+    renderTagPickers(); loadSavedTags();
     if(editId){
       const { data: t } = await sb.from('tests').select('*').eq('id', editId).maybeSingle();
       if(!t || !currentUser || t.author_id !== currentUser.id){ alert('Этот тест нельзя редактировать'); testEditorKey = null; goHome(); return; }
@@ -1078,9 +1238,12 @@
       }));
       edResults = (rs || []).map(r => ({ id: r.id, title: r.title || '', desc: r.description || '', imageUrl: r.image_url || '' }));
       edBounds = (rs || []).slice(0, -1).map(r => Number(r.min_points) || 0);
+      const tg = t.tags || [];
+      edGenres = tg.filter(x => GENRES.includes(x)).slice(0, 2);
+      edTags = tg.filter(x => !GENRES.includes(x)).slice(0, 2);
       editOrig = { q: edQuestions.map(q => q.id), r: edResults.map(r => r.id) };
     }
-    renderQuestions(); renderResults(); renderBounds(); updatePreview();
+    renderQuestions(); renderResults(); renderBounds(); updatePreview(); renderTagPickers();
   }
 
   function updatePreview(){
@@ -1133,15 +1296,20 @@
       const avaFile = document.getElementById('edAvaFile').files[0];
       if(avaFile && ava.startsWith('data:')) ava = await uploadImage(avaFile);
       if(!ava) ava = '🦸';
+      const tags = [...edGenres, ...edTags];
       let testId = editTestId, warn = 0;
       if(editTestId){
-        const { error } = await sb.from('tests').update({ title, description: desc, avatar: ava }).eq('id', editTestId);
+        let { error } = await sb.from('tests').update({ title, description: desc, avatar: ava, tags }).eq('id', editTestId);
+        if(error && /tags/.test(error.message)) ({ error } = await sb.from('tests').update({ title, description: desc, avatar: ava }).eq('id', editTestId));
         if(error) throw error;
       } else {
-        const { data: test, error: tErr } = await sb.from('tests')
-          .insert({ title, description: desc, avatar: ava, author_id: currentUser.id }).select().single();
-        if(tErr) throw tErr;
-        testId = test.id;
+        let ins = await sb.from('tests').insert({ title, description: desc, avatar: ava, author_id: currentUser.id, tags }).select().single();
+        if(ins.error && /tags/.test(ins.error.message)) ins = await sb.from('tests').insert({ title, description: desc, avatar: ava, author_id: currentUser.id }).select().single();
+        if(ins.error) throw ins.error;
+        testId = ins.data.id;
+      }
+      for(const t of edTags){
+        if(newTags.has(t)){ try { await sb.from('custom_tags').insert({ name: t, created_by: currentUser.id }); } catch(_){} }
       }
 
       const keepR = new Set();
@@ -1197,33 +1365,80 @@
   // ================= ПРОХОЖДЕНИЕ ТЕСТА =================
   let tkTest = null, tkQuestions = [], tkResults = [], tkAnswers = {}, lastHistoryId = null;
 
-  async function openTestPage(id){
+  async function openTestPage(id, skipIntro){
     showPage('takeTestPage');
-    document.getElementById('quizContent').style.display = 'block';
-    document.getElementById('quizResultView').style.display = 'none';
-    document.getElementById('submitQuizBtn').style.display = 'none';
-    document.getElementById('tkQuestions').innerHTML = '<p style="text-align:center;color:rgba(255,255,255,.85)">Загрузка...</p>';
-    const { data: test, error } = await sb.from('tests')
-      .select('id, title, description, avatar, author_id, profiles(login)').eq('id', id).single();
-    if(error || !test){ goHome(); return; }
+    gid('testIntro').style.display = 'none';
+    gid('quizContent').style.display = 'none';
+    gid('quizResultView').style.display = 'none';
+    gid('submitQuizBtn').style.display = 'none';
+    gid('tkQuestions').innerHTML = '';
+    const base = 'id, title, description, avatar, author_id, profiles(login, avatar)';
+    let r = await sb.from('tests').select(base + ', tags').eq('id', id).single();
+    if(r.error) r = await sb.from('tests').select(base).eq('id', id).single();
+    const test = r.data;
+    if(!test){ goHome(); return; }
     const { data: questions } = await sb.from('test_questions').select('*').eq('test_id', id).order('id');
     const { data: results } = await sb.from('test_results').select('*').eq('test_id', id).order('min_points', { ascending: true });
-    if(!questions || questions.length === 0 || !results || results.length === 0){
-      document.getElementById('tkQuestions').innerHTML = '<p style="text-align:center;color:#fff">Тест ещё не готов.</p>';
-      return;
-    }
-    tkTest = test; tkQuestions = questions; tkResults = results; tkAnswers = {}; lastHistoryId = null;
-    document.getElementById('tkTitle').textContent = test.title;
-    document.getElementById('tkDesc').textContent = test.description || '';
-    document.getElementById('tkImg').src = (test.avatar && test.avatar.startsWith('http')) ? test.avatar : DEFAULT_AVA + encodeURIComponent(test.title);
-    const aBox = document.getElementById('tkAuthor');
-    aBox.innerHTML = 'от <b>' + escapeHtml(test.profiles ? test.profiles.login : 'Неизвестный') + '</b>';
+    tkTest = test; tkAnswers = {}; lastHistoryId = null;
+    const cover = (test.avatar && test.avatar.startsWith('http')) ? test.avatar : DEFAULT_AVA + encodeURIComponent(test.title);
+    const authorName = test.profiles ? test.profiles.login : 'Неизвестный';
+    const authorAva = getAvatarUrl(test.profiles ? test.profiles.avatar : '', authorName);
+    const ready = questions && questions.length && results && results.length;
+
+    // шапка прохождения
+    gid('tkTitle').textContent = test.title;
+    gid('tkDesc').textContent = test.description || '';
+    gid('tkImg').src = cover;
+    const aBox = gid('tkAuthor');
+    aBox.innerHTML = 'от <b>' + escapeHtml(authorName) + '</b>';
     aBox.querySelector('b').onclick = () => location.hash = '#/user/' + test.author_id;
-    document.getElementById('tkStatsBtn').onclick = () => location.hash = '#/stats/' + test.id;
-    const tkEd = document.getElementById('tkEditBtn');
+
+    // предстраница
+    gid('inImg').src = cover;
+    gid('inTitle').textContent = test.title;
+    gid('inDesc').textContent = test.description || '';
+    const inA = gid('inAuthor');
+    inA.innerHTML = '<img src="' + escapeHtml(authorAva) + '"><span>' + escapeHtml(authorName) + '</span>';
+    inA.onclick = () => location.hash = '#/user/' + test.author_id;
+    gid('inTags').innerHTML = (test.tags || []).map(t => '<span class="tag">' + escapeHtml(t) + '</span>').join('');
+    gid('tkStatsBtn').onclick = () => location.hash = '#/stats/' + test.id;
+    const tkEd = gid('tkEditBtn');
     tkEd.style.display = (currentUser && test.author_id === currentUser.id) ? 'inline-block' : 'none';
     tkEd.onclick = () => location.hash = '#/edit/' + test.id;
-    renderQuizQuestions();
+    const startBtn = gid('inStart');
+    startBtn.disabled = !ready;
+    startBtn.textContent = ready ? '▶ Начать' : 'Тест ещё не готов';
+    loadSimilar(test);
+
+    if(!ready){ gid('testIntro').style.display = 'block'; return; }
+    tkQuestions = questions; tkResults = results;
+    const startQuiz = () => {
+      gid('testIntro').style.display = 'none';
+      gid('quizContent').style.display = 'block';
+      window.scrollTo(0, 0);
+      renderQuizQuestions();
+    };
+    startBtn.onclick = startQuiz;
+    if(skipIntro) startQuiz(); else gid('testIntro').style.display = 'block';
+  }
+
+  async function loadSimilar(test){
+    const box = gid('similarList');
+    const tags = test.tags || [];
+    if(!tags.length){ box.innerHTML = '<p>У этого теста нет жанров и тегов.</p>'; return; }
+    box.innerHTML = '<p>Загрузка...</p>';
+    const { data } = await sb.from('tests').select('id, title, avatar, profiles(login)').overlaps('tags', tags).neq('id', test.id).order('created_at', { ascending: false }).limit(8);
+    if(!tkTest || tkTest.id !== test.id) return;
+    box.innerHTML = '';
+    if(!data || !data.length){ box.innerHTML = '<p>Похожих тестов пока нет.</p>'; return; }
+    data.forEach(t => {
+      const div = document.createElement('div');
+      div.className = 'sim-item';
+      const img = (t.avatar && t.avatar.startsWith('http')) ? t.avatar : DEFAULT_AVA + encodeURIComponent(t.title);
+      div.innerHTML = '<img src="' + escapeHtml(img) + '"><div><b>' + escapeHtml(t.title) + '</b><small>от ' + escapeHtml(t.profiles ? t.profiles.login : '???') + '</small></div>';
+      div.onclick = () => location.hash = '#/test/' + t.id;
+      box.appendChild(div);
+    });
   }
 
   let tkIndex = 0;
@@ -1354,10 +1569,10 @@
     } else {
       toStats.style.display = 'none';
     }
-    loadLikes(); loadComments();
+    loadLikes(); loadCommentsFor(tkTest.id, 'commentList');
     window.scrollTo(0,0);
   }
-  document.getElementById('retryBtn').onclick = () => openTestPage(tkTest.id);
+  document.getElementById('retryBtn').onclick = () => openTestPage(tkTest.id, true);
 
   // --- лайки теста ---
   let myLike = 0;
@@ -1389,39 +1604,57 @@
   document.getElementById('likeBtn').onclick = () => setLike(1);
   document.getElementById('dislikeBtn').onclick = () => setLike(-1);
 
-  // --- комментарии (с лайками и ответами) ---
-  let commentLikes = {}; // id -> {count, mine}
-  async function loadComments(){
-    const box = document.getElementById('commentList');
+  // --- комментарии (лайки, дизлайки, ответы) ---
+  let cmtTestId = null, cmtBoxId = 'commentList', commentVotes = {};
+  function loadComments(){ return loadCommentsFor(cmtTestId, cmtBoxId); }
+  async function loadCommentsFor(testId, boxId){
+    cmtTestId = testId; cmtBoxId = boxId;
+    const box = gid(boxId);
     const { data } = await sb.from('test_comments')
       .select('id, text, parent_id, created_at, user_id, profiles(login, avatar)')
-      .eq('test_id', tkTest.id).order('created_at', { ascending: false }).limit(100);
+      .eq('test_id', testId).order('created_at', { ascending: false }).limit(200);
+    if(cmtBoxId !== boxId || cmtTestId !== testId) return;
     box.innerHTML = '';
     if(!data || data.length === 0){ box.innerHTML = '<p style="color:rgba(255,255,255,.8);font-size:14px">Пока нет комментариев.</p>'; return; }
-    commentLikes = {};
+    commentVotes = {};
     const ids = data.map(c => c.id);
-    const { data: cl } = await sb.from('comment_likes').select('comment_id, user_id').in('comment_id', ids);
-    (cl || []).forEach(r => {
-      if(!commentLikes[r.comment_id]) commentLikes[r.comment_id] = { count: 0, mine: false };
-      commentLikes[r.comment_id].count++;
-      if(currentUser && r.user_id === currentUser.id) commentLikes[r.comment_id].mine = true;
+    let res = await sb.from('comment_likes').select('comment_id, user_id, value').in('comment_id', ids);
+    if(res.error) res = await sb.from('comment_likes').select('comment_id, user_id').in('comment_id', ids);
+    (res.data || []).forEach(r => {
+      const v = r.value === -1 ? -1 : 1;
+      const o = commentVotes[r.comment_id] || (commentVotes[r.comment_id] = { up: 0, down: 0, mine: 0 });
+      if(v === 1) o.up++; else o.down++;
+      if(currentUser && r.user_id === currentUser.id) o.mine = v;
     });
     const parents = data.filter(c => !c.parent_id);
     const children = data.filter(c => c.parent_id);
     parents.forEach(c => box.appendChild(commentEl(c, children)));
   }
+  async function setCommentVote(cid, v, mine){
+    if(!currentUser){ openAuth('Войдите, чтобы оценивать комментарии'); return; }
+    await sb.from('comment_likes').delete().eq('comment_id', cid).eq('user_id', currentUser.id);
+    if(mine !== v){
+      const { error } = await sb.from('comment_likes').insert({ comment_id: cid, user_id: currentUser.id, value: v });
+      if(error){
+        if(v === 1) await sb.from('comment_likes').insert({ comment_id: cid, user_id: currentUser.id });
+        else alert('Дизлайки заработают после запуска stage2.sql в Supabase');
+      }
+    }
+    loadComments();
+  }
   function commentEl(c, allChildren){
     const div = document.createElement('div');
     div.className = 'comment';
-    const lk = commentLikes[c.id] || { count: 0, mine: false };
+    const lk = commentVotes[c.id] || { up: 0, down: 0, mine: 0 };
     const ava = getAvatarUrl(c.profiles ? c.profiles.avatar : '', c.profiles ? c.profiles.login : 'U');
     const canDel = currentUser && c.user_id === currentUser.id;
     div.innerHTML =
-      '<div class="c-head"><img src="' + ava + '"><b>' + escapeHtml(c.profiles ? c.profiles.login : '???') + '</b><span>' + fmtDate(c.created_at) + '</span>' +
+      '<div class="c-head"><img src="' + escapeHtml(ava) + '"><b>' + escapeHtml(c.profiles ? c.profiles.login : '???') + '</b><span>' + fmtDate(c.created_at) + '</span>' +
       (canDel ? '<button class="icon-btn c-del">🗑</button>' : '') + '</div>' +
       '<p>' + escapeHtml(c.text) + '</p>' +
       '<div class="c-actions">' +
-        '<button class="c-act c-like' + (lk.mine ? ' liked' : '') + '">👍 <span>' + lk.count + '</span></button>' +
+        '<button class="c-act c-like' + (lk.mine === 1 ? ' liked' : '') + '">👍 <span>' + lk.up + '</span></button>' +
+        '<button class="c-act c-dislike' + (lk.mine === -1 ? ' disliked' : '') + '">👎 <span>' + lk.down + '</span></button>' +
         '<button class="c-act c-reply">Ответить</button>' +
       '</div>' +
       '<div class="reply-box"><textarea maxlength="300" placeholder="Ваш ответ..."></textarea>' +
@@ -1432,15 +1665,8 @@
       await sb.from('test_comments').delete().eq('id', c.id);
       loadComments();
     };
-    div.querySelector('.c-like').onclick = async () => {
-      if(!currentUser){ openAuth('Войдите, чтобы лайкать комментарии'); return; }
-      if(lk.mine){ await sb.from('comment_likes').delete().eq('comment_id', c.id).eq('user_id', currentUser.id); }
-      else {
-        const { data: ex } = await sb.from('comment_likes').select('id').eq('comment_id', c.id).eq('user_id', currentUser.id).maybeSingle();
-        if(!ex) await sb.from('comment_likes').insert({ comment_id: c.id, user_id: currentUser.id });
-      }
-      loadComments();
-    };
+    div.querySelector('.c-like').onclick = () => setCommentVote(c.id, 1, lk.mine);
+    div.querySelector('.c-dislike').onclick = () => setCommentVote(c.id, -1, lk.mine);
     const replyBox = div.querySelector('.reply-box');
     div.querySelector('.c-reply').onclick = () => {
       if(!currentUser){ openAuth('Войдите, чтобы отвечать'); return; }
@@ -1449,7 +1675,7 @@
     replyBox.querySelector('button').onclick = async () => {
       const text = replyBox.querySelector('textarea').value.trim();
       if(!text) return;
-      const { error } = await sb.from('test_comments').insert({ test_id: tkTest.id, user_id: currentUser.id, text, parent_id: c.id });
+      const { error } = await sb.from('test_comments').insert({ test_id: cmtTestId, user_id: currentUser.id, text, parent_id: c.id });
       if(!error) loadComments();
     };
     const kids = allChildren.filter(k => k.parent_id === c.id);
@@ -1457,14 +1683,16 @@
     kids.forEach(k => kidsBox.appendChild(commentEl(k, allChildren)));
     return div;
   }
-  document.getElementById('sendCommentBtn').onclick = async () => {
+  async function postComment(taId){
     if(!currentUser){ openAuth('Войдите, чтобы оставлять комментарии'); return; }
-    const ta = document.getElementById('commentText');
+    const ta = gid(taId);
     const text = ta.value.trim();
     if(!text) return;
-    const { error } = await sb.from('test_comments').insert({ test_id: tkTest.id, user_id: currentUser.id, text });
+    const { error } = await sb.from('test_comments').insert({ test_id: cmtTestId, user_id: currentUser.id, text });
     if(!error){ ta.value = ''; loadComments(); }
-  };
+  }
+  gid('sendCommentBtn').onclick = () => postComment('commentText');
+  gid('statsSendComment').onclick = () => postComment('statsCommentText');
 
   // ================= СТАТИСТИКА ТЕСТА =================
   async function openTestStats(id){
@@ -1473,6 +1701,7 @@
     if(!test){ goHome(); return; }
     document.getElementById('tsTitle').textContent = '📊 ' + test.title;
     document.getElementById('tsBackBtn').onclick = () => location.hash = '#/test/' + id;
+    loadCommentsFor(id, 'statsCommentList');
 
     const { data: results } = await sb.from('test_results').select('*').eq('test_id', id).order('min_points', { ascending: true });
     const { data: hist } = await sb.from('user_history').select('result_id').eq('test_id', id);
@@ -2256,6 +2485,7 @@
       H.order.forEach(id => { const s = H.scoreMap[id] || 0; if(s >= G.room.win_score && (best === null || s > (H.scoreMap[best] || 0))) best = id; });
       if(best){
         H.final = true; H.winnerId = best; H.trophyMap[best] = (H.trophyMap[best] || 0) + 1;
+        sb.from('draw_wins').insert({ winner_id: best, room_id: G.roomId }).then(() => {}, () => {});
         hostSys('🏆 ' + H.players[best].name + ' побеждает со счётом ' + H.scoreMap[best] + '!');
       }
     }
