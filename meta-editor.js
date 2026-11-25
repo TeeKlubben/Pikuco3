@@ -1150,10 +1150,22 @@ function loadToUI(){
 }
 
 // ---------- открыть страницу проекта ----------
+async function waitForUser(){
+  // ждём до 3 секунд, пока Supabase восстановит сессию
+  for(let i = 0; i < 30; i++){
+    if(window.currentUser) return window.currentUser;
+    await new Promise(r => setTimeout(r, 100));
+  }
+  return null;
+}
+
 async function openProjectPage(id){
   injectStyles();
   buildPage();
-  if(!window.currentUser){
+  
+  // Ждём пользователя
+  const user = await waitForUser();
+  if(!user){
     alert('Войдите, чтобы открыть метаредактор');
     location.hash = '';
     return;
