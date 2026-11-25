@@ -943,9 +943,9 @@
 
   function route(){
     const h = location.hash;
-    if(window.metaRoute && window.metaRoute(h)) return;
     if(window.drawRoute && window.drawRoute(h)) return;
     if(h.startsWith('#/test/')){ openTestPage(h.slice(7)); return; }
+    if(h.startsWith('#/result/')){ openStatsPage(h.slice(9)); return; }
     if(h.startsWith('#/user/')){ openProfilePage(h.slice(7)); return; }
     if(h.startsWith('#/stats/')){ openTestStats(h.slice(8)); return; }
     if(h.startsWith('#/create') || h.startsWith('#/edit/')){
@@ -4377,7 +4377,6 @@
     route();
   })();
 </script>
-<script src="meta-editor.js"></script>
 
 </body>
 </html>
