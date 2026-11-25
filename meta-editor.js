@@ -1572,5 +1572,19 @@ window.metaRoute = function(h){
   const t = setInterval(() => { tryOverride(); if(document.getElementById('navBox')) { addBtn(); clearInterval(t); } }, 200);
   setTimeout(addBtn, 1000);
 })();
-
-})();
+// ДИАГНОСТИКА
+window.metaDebug = function(){
+  console.log('--- ДИАГНОСТИКА ---');
+  console.log('window.currentUser:', window.currentUser);
+  console.log('window.currentProfile:', window.currentProfile);
+  console.log('typeof showPage:', typeof window.showPage);
+  console.log('typeof metaRoute:', typeof window.metaRoute);
+  console.log('есть ли metaPage в DOM:', !!document.getElementById('metaPage'));
+  console.log('location.hash:', location.hash);
+  const { data } = supabase.auth.getSession ? { data: null } : { data: null };
+  if(window.sb) {
+    window.sb.auth.getSession().then(res => {
+      console.log('Сессия Supabase:', res.data.session ? res.data.session.user.email : 'НЕТ СЕССИИ');
+    });
+  }
+};
