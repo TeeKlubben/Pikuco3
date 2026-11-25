@@ -1,1023 +1,279 @@
-/* ============================================================
-   МЕТАРЕДАКТОР — изолированный модуль
-   ============================================================ */
 (function(){
 'use strict';
-
 const $ = id => document.getElementById(id);
 const sb = window.sb;
 const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const uid = () => Math.random().toString(36).slice(2, 10);
+const BUCKET = 'meta-images', GRID = 20, BLOCK_W = 800, BLOCK_H = 600;
 
-const BUCKET = 'meta-images';
-const GRID = 20;
-const BLOCK_W = 800;
-const BLOCK_H = 600;
-const SCHEMA_VERSION = 1;
+// Синхронизация пользователя
+sb.auth.onAuthStateChange((event, session) => {
+  window.currentUser = (session && session.user) ? session.user : null;
+});
+sb.auth.getSession().then(({data}) => {
+  if(data && data.session) window.currentUser = data.session.user;
+});
 
 const ELEMENT_TYPES = {
-  text: {
-    category: 'output', name: 'Текст', icon: 'Т',
-    defaultSize: { w: 320, h: 40 },
-    props: { text: '' },
-    render: (el, ctx) => `<div class="meta-text">${esc(el.props.text || '')}</div>`
-  },
-  desc: {
-    category: 'output', name: 'Описание', icon: 'О',
-    defaultSize: { w: 360, h: 60 },
-    props: { text: '' },
-    render: (el, ctx) => `<div class="meta-desc">${esc(el.props.text || '')}</div>`
-  },
-  image: {
-    category: 'output', name: 'Иллюстрация', icon: '🖼',
-    defaultSize: { w: 260, h: 180 },
-    props: { url: '' },
-    render: (el, ctx) => el.props.url
-      ? `<img class="meta-img" src="${esc(el.props.url)}" alt="">`
-      : `<div class="meta-img-ph">нет картинки</div>`
-  },
-  input_text: {
-    category: 'input', name: 'Поле ввода', icon: '⌨',
-    defaultSize: { w: 320, h: 48 },
-    props: { placeholder: 'Введите ответ…' },
-    render: (el, ctx) => `<input class="meta-input" placeholder="${esc(el.props.placeholder || '')}" ${ctx.play ? '' : 'disabled'}>`
-  },
-  compare: {
-    category: 'logic', name: 'Сравнение ответа', icon: '≡',
-    defaultSize: { w: 300, h: 140 },
-    props: { variants: [{ text: '', points: 0 }] },
-    render: (el, ctx) => {
-      const v = (el.props.variants || []).map(x => `<div class="meta-cmp-row"><span>${esc(x.text || '…')}</span><b>+${Number(x.points)||0}</b></div>`).join('');
-      return `<div class="meta-compare">${v || '<span class="meta-muted">пусто</span>'}</div>`;
-    }
-  }
+  text: { category: 'output', name: 'Текст', icon: 'Т', defaultSize: { w: 320, h: 40 }, props: { text: '' }, render: (el) => `<div class="meta-text">${esc(el.props.text || '')}</div>` },
+  desc: { category: 'output', name: 'Описание', icon: 'О', defaultSize: { w: 360, h: 60 }, props: { text: '' }, render: (el) => `<div class="meta-desc">${esc(el.props.text || '')}</div>` },
+  image: { category: 'output', name: 'Иллюстрация', icon: '🖼', defaultSize: { w: 260, h: 180 }, props: { url: '' }, render: (el) => el.props.url ? `<img class="meta-img" src="${esc(el.props.url)}">` : `<div class="meta-img-ph">нет картинки</div>` },
+  input_text: { category: 'input', name: 'Поле ввода', icon: '⌨', defaultSize: { w: 320, h: 48 }, props: { placeholder: 'Введите ответ…' }, render: (el, ctx) => `<input class="meta-input" placeholder="${esc(el.props.placeholder || '')}" ${ctx && ctx.play ? '' : 'disabled'}>` },
+  compare: { category: 'logic', name: 'Сравнение ответа', icon: '≡', defaultSize: { w: 300, h: 140 }, props: { variants: [{ text: '', points: 0 }] }, render: (el) => `<div class="meta-compare">${(el.props.variants || []).map(x => `<div class="meta-cmp-row"><span>${esc(x.text || '…')}</span><b>+${Number(x.points)||0}</b></div>`).join('') || '<span class="meta-muted">пусто</span>'}</div>` }
 };
 
-const M = {
-  project: null,
-  mode: 'edit',
-  fullscreen: false,
-  selectedBlockId: null,
-  selectedElId: null,
-  drag: null,
-  dirty: false,
-  error: '',
-  _svg: null
-};
-
-function newProject(){
-  return {
-    id: null, title: '', description: '', avatar: '', published: false,
-    data: { schemaVersion: SCHEMA_VERSION, startBlockId: null, blocks: [], links: [] }
-  };
-}
-
-function findBlock(id){ return M.project.data.blocks.find(b => b.id === id) || null; }
-function findElement(blockId, elId){
-  const b = findBlock(blockId);
-  return b ? (b.elements.find(e => e.id === elId) || null) : null;
-}
-
-function findCompareForInput(inputId){
-  const link = M.project.data.links.find(l => l.kind === 'data' && l.from === inputId && l.to && l.to.startsWith('cmp:'));
-  if(!link) return null;
-  const [, blockId, cmpId] = link.to.split(':');
-  return findElement(blockId, cmpId);
-}
-function isInputConnected(inputId){ return !!findCompareForInput(inputId); }
-
+const M = { project: null, mode: 'edit', selectedBlockId: null, selectedElId: null, drag: null, dirty: false, _svg: null };
+const newProject = () => ({ id: null, title: '', description: '', avatar: '', published: false, data: { schemaVersion: 1, startBlockId: null, blocks: [], links: [] } });
+const findBlock = (id) => M.project.data.blocks.find(b => b.id === id) || null;
+const findElement = (bId, eId) => { const b = findBlock(bId); return b ? (b.elements.find(e => e.id === eId) || null) : null; };
+const findCompareForInput = (iId) => { const l = M.project.data.links.find(x => x.kind === 'data' && x.from === iId && x.to && x.to.startsWith('cmp:')); if(!l) return null; const [, bId, cId] = l.to.split(':'); return findElement(bId, cId); };
+const isInputConnected = (iId) => !!findCompareForInput(iId);
 const snap = v => Math.round(v / GRID) * GRID;
-function rectsOverlap(a, b){ return !(a.x + a.w <= b.x || b.x + b.w <= a.x || a.y + a.h <= b.y || b.y + b.h <= a.y); }
-function fitsInBlock(el){ return el.x >= 0 && el.y >= 0 && el.x + el.w <= BLOCK_W && el.y + el.h <= BLOCK_H; }
-function collides(block, el){ return block.elements.some(other => other.id !== el.id && rectsOverlap(el, other)); }
+const rectsOverlap = (a, b) => !(a.x + a.w <= b.x || b.x + b.w <= a.x || a.y + a.h <= b.y || b.y + b.h <= a.y);
+const fitsInBlock = (el) => el.x >= 0 && el.y >= 0 && el.x + el.w <= BLOCK_W && el.y + el.h <= BLOCK_H;
+const collides = (b, el) => b.elements.some(o => o.id !== el.id && rectsOverlap(el, o));
+const normAns = s => String(s || '').toLowerCase().replace(/ё/g, 'е').replace(/[^\p{L}\p{N}]/gu, '');
 
-async function uploadMetaImage(file){
-  if(!file) return '';
-  const ext = (file.name.split('.').pop() || 'png').toLowerCase();
-  const name = Date.now() + '-' + uid() + '.' + ext;
-  const { error } = await sb.storage.from(BUCKET).upload(name, file);
-  if(error) throw error;
-  return sb.storage.from(BUCKET).getPublicUrl(name).data.publicUrl;
-}
-
-async function loadProject(id){
-  const { data, error } = await sb.from('meta_projects').select('*').eq('id', id).maybeSingle();
-  if(error) throw error;
-  if(!data) return null;
-  return {
-    id: data.id, title: data.title || '', description: data.description || '', avatar: data.avatar || '', published: !!data.published,
-    data: Object.assign(newProject().data, data.data || {})
-  };
-}
-async function listMyProjects(){
-  const { data, error } = await sb.from('meta_projects').select('id, title, description, avatar, published, updated_at').eq('author_id', window.currentUser.id).order('updated_at', { ascending: false });
-  if(error) throw error;
-  return data || [];
-}
-async function listPublishedProjects(){
-  const { data, error } = await sb.from('meta_projects').select('id, title, description, avatar, author_id, created_at, profiles(login)').eq('published', true).order('created_at', { ascending: false });
-  if(error) throw error;
-  return data || [];
-}
+async function uploadMetaImage(file){ if(!file) return ''; const ext = (file.name.split('.').pop() || 'png').toLowerCase(); const name = Date.now() + '-' + uid() + '.' + ext; const { error } = await sb.storage.from(BUCKET).upload(name, file); if(error) throw error; return sb.storage.from(BUCKET).getPublicUrl(name).data.publicUrl; }
+async function loadProject(id){ const { data, error } = await sb.from('meta_projects').select('*').eq('id', id).maybeSingle(); if(error) throw error; if(!data) return null; return { id: data.id, title: data.title || '', description: data.description || '', avatar: data.avatar || '', published: !!data.published, data: Object.assign(newProject().data, data.data || {}) }; }
+async function listMyProjects(){ if(!window.currentUser) return []; const { data, error } = await sb.from('meta_projects').select('*').eq('author_id', window.currentUser.id).order('updated_at', { ascending: false }); if(error) throw error; return data || []; }
+async function listPublishedProjects(){ const { data, error } = await sb.from('meta_projects').select('*, profiles(login)').eq('published', true).order('created_at', { ascending: false }); if(error) throw error; return data || []; }
 async function saveProject(publish){
-  const { data: sess } = await sb.auth.getSession();
-  const user = sess && sess.session ? sess.session.user : null;
-  if(!user) throw new Error('Нужно войти в аккаунт');
+  if(!window.currentUser) throw new Error('Нужно войти в аккаунт');
   const row = { title: M.project.title || 'Без названия', description: M.project.description || '', avatar: M.project.avatar || '', data: M.project.data, published: !!publish, updated_at: new Date().toISOString() };
-  if(M.project.id){
-    const { error } = await sb.from('meta_projects').update(row).eq('id', M.project.id);
-    if(error) throw error;
-  } else {
-    row.author_id = user.id;
-    const { data, error } = await sb.from('meta_projects').insert(row).select().single();
-    if(error) throw error;
-    M.project.id = data.id;
-  }
-  M.project.published = !!publish;
-  M.dirty = false;
-  return M.project.id;
+  if(M.project.id){ const { error } = await sb.from('meta_projects').update(row).eq('id', M.project.id); if(error) throw error; }
+  else { row.author_id = window.currentUser.id; const { data, error } = await sb.from('meta_projects').insert(row).select().single(); if(error) throw error; M.project.id = data.id; }
+  M.project.published = !!publish; M.dirty = false; return M.project.id;
 }
-
-function exportJSON(){
-  const payload = { meta: { title: M.project.title, description: M.project.description, avatar: M.project.avatar }, data: M.project.data };
-  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = (M.project.title || 'meta-project') + '.json';
-  a.click();
-  URL.revokeObjectURL(a.href);
-}
-function importJSON(file){
-  return new Promise((resolve, reject) => {
-    const r = new FileReader();
-    r.onload = () => {
-      try {
-        const obj = JSON.parse(r.result);
-        if(!obj || !obj.data) throw new Error('Неверный файл');
-        M.project.title = (obj.meta && obj.meta.title) || M.project.title;
-        M.project.description = (obj.meta && obj.meta.description) || '';
-        M.project.avatar = (obj.meta && obj.meta.avatar) || '';
-        M.project.data = Object.assign(newProject().data, obj.data);
-        M.dirty = true;
-        resolve();
-      } catch(e){ reject(e); }
-    };
-    r.onerror = () => reject(new Error('Не удалось прочитать файл'));
-    r.readAsText(file);
-  });
-}
-
-window.META = window.META || {};
-window.META._M = M;
-window.META._types = ELEMENT_TYPES;
-window.META._util = { esc, uid, snap, rectsOverlap, fitsInBlock, collides, findBlock, findElement, findCompareForInput, isInputConnected, newProject, loadProject, listMyProjects, listPublishedProjects, saveProject, exportJSON, importJSON, uploadMetaImage, BLOCK_W, BLOCK_H, GRID };
 
 function injectStyles(){
   if($('meta-styles')) return;
-  const st = document.createElement('style');
-  st.id = 'meta-styles';
+  const st = document.createElement('style'); st.id = 'meta-styles';
   st.textContent = `
-  #metaPage{padding:24px;max-width:1400px;margin:0 auto}
+  #metaPage, #metaListPage, #metaPlayPage {padding:24px;max-width:1400px;margin:0 auto}
   .meta-top{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
-  .meta-top .btn{white-space:nowrap}
-  .meta-head{display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap;background:var(--white);color:var(--text);border-radius:16px;padding:20px;margin-bottom:16px}
-  .meta-head-fields{flex:1;min-width:260px}
-  .meta-head-preview{width:220px;flex-shrink:0}
-  .meta-card{background:var(--white);border:2px solid var(--card-border);border-radius:16px;padding:16px;display:flex;flex-direction:column;align-items:center;text-align:center}
-  .meta-card .test-icon{width:100%;height:110px;border-radius:12px;background:var(--yellow);display:flex;align-items:center;justify-content:center;font-size:46px;margin-bottom:10px;overflow:hidden}
+  .meta-head{display:flex;gap:20px;background:#fff;color:#1d1d1d;border-radius:16px;padding:20px;margin-bottom:16px}
+  .meta-head-fields{flex:1;} .meta-head-preview{width:220px;}
+  .meta-card{background:#fff;border:2px solid #eee;border-radius:16px;padding:16px;display:flex;flex-direction:column;align-items:center;text-align:center}
+  .meta-card .test-icon{width:100%;height:110px;border-radius:12px;background:#f4e238;display:flex;align-items:center;justify-content:center;font-size:46px;margin-bottom:10px;overflow:hidden}
   .meta-card .test-icon img{width:100%;height:100%;object-fit:cover}
-  .meta-card h3{font-size:16px;color:var(--red);margin-bottom:6px;word-break:break-word}
-  .meta-card .desc{font-size:13px;color:var(--muted);word-break:break-word}
-  .meta-msg{font-size:14px;margin-top:8px;min-height:18px;color:#fff}
-  .meta-msg.err{color:#ffd0d0}
-  .meta-msg.ok{color:#c9ffd8}
+  .meta-card h3{font-size:16px;color:#d0162c;margin-bottom:6px;}
   .meta-canvas-wrap{position:relative;background:#e8e8e8;border-radius:16px;overflow:hidden;height:640px;border:2px solid #ccc}
-  .meta-canvas-wrap.fs{position:fixed;inset:0;z-index:2000;border-radius:0;height:100vh}
   .meta-canvas{position:absolute;inset:0;overflow:auto;background:#f7f7f7;background-image:linear-gradient(#e0e0e0 1px,transparent 1px),linear-gradient(90deg,#e0e0e0 1px,transparent 1px);background-size:20px 20px}
   .meta-canvas-inner{position:relative;width:2000px;height:1600px}
-  .meta-block{position:absolute;background:#fff;border:3px solid #c0c0c0;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.08);cursor:pointer;overflow:hidden}
-  .meta-block.start{border-color:#2ea043}
-  .meta-block.end{border-color:var(--red)}
-  .meta-block.sel{border-color:var(--yellow);box-shadow:0 0 0 4px rgba(244,226,56,.4)}
-  .meta-block .mb-title{position:absolute;top:0;left:0;right:0;padding:4px 8px;background:rgba(0,0,0,.55);color:#fff;font-size:12px;font-weight:700;display:flex;justify-content:space-between;align-items:center;z-index:2;pointer-events:none}
+  .meta-block{position:absolute;background:#fff;border:3px solid #c0c0c0;border-radius:12px;cursor:pointer}
+  .meta-block.start{border-color:#2ea043} .meta-block.end{border-color:#d0162c} .meta-block.sel{border-color:#f4e238;box-shadow:0 0 0 4px rgba(244,226,56,.4)}
+  .meta-block .mb-title{position:absolute;top:0;left:0;right:0;padding:4px 8px;background:rgba(0,0,0,.55);color:#fff;font-size:12px;font-weight:700;display:flex;justify-content:space-between;pointer-events:none}
   .meta-block .mb-body{position:absolute;inset:28px 0 0 0;background:#fbfbfb;overflow:hidden}
-  .meta-block .mb-body-img{position:absolute;inset:0;background-size:cover;background-position:center;opacity:.35}
-  .meta-el{position:absolute;border:2px dashed #9bbad6;background:rgba(255,255,255,.85);border-radius:6px;padding:4px;font-size:13px;color:#222;cursor:move;user-select:none;overflow:hidden}
-  .meta-el.sel{border-color:var(--red);box-shadow:0 0 0 2px rgba(208,22,44,.25)}
-  .meta-el.bad{border-color:var(--red);background:#fff0f0}
-  .meta-el .me-id{position:absolute;top:2px;right:4px;font-size:10px;font-weight:700;background:#333;color:#fff;border-radius:4px;padding:0 4px;cursor:pointer;z-index:3}
-  .meta-el .me-id.ok{background:#2ea043}
-  .meta-el .me-body{margin-top:14px;pointer-events:none;word-break:break-word}
-  .meta-el .me-dot{position:absolute;right:-9px;top:50%;transform:translateY(-50%);width:14px;height:14px;border-radius:50%;background:var(--red);border:2px solid #fff;cursor:crosshair;z-index:4}
-  .meta-el .me-body input{width:100%}
-  .meta-text{font-size:16px;font-weight:700}
-  .meta-desc{font-size:13px;color:#555}
-  .meta-img{width:100%;height:100%;object-fit:cover;border-radius:4px}
-  .meta-img-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#ddd;color:#777;font-size:12px;border-radius:4px}
-  .meta-input{width:100%;padding:6px 8px;border:2px solid #ccc;border-radius:6px;font-family:inherit;font-size:14px;background:#fff}
-  .meta-compare{font-size:11px}
-  .meta-cmp-row{display:flex;justify-content:space-between;gap:6px;padding:2px 0;border-bottom:1px solid #eee}
-  .meta-muted{color:#999}
-  .meta-lines{position:absolute;inset:0;pointer-events:none;z-index:1}
-  .meta-lines svg{width:100%;height:100%}
-  .meta-link-line{stroke:#888;stroke-width:2;fill:none}
-  .meta-link-line.data{stroke:var(--red);stroke-dasharray:5 4}
-  .meta-toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;background:var(--white);color:var(--text);border-radius:14px;padding:10px 14px;margin-top:12px}
-  .meta-tb-group{display:flex;gap:6px;align-items:center;flex-wrap:wrap;padding:4px 8px;border-radius:10px;background:#f4f4f4}
-  .meta-tb-group b{font-size:12px;color:var(--muted);margin-right:4px}
-  .meta-tb-item{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 10px;border-radius:8px;background:#fff;border:2px solid #e2e2e2;cursor:grab;font-size:12px;font-weight:700;color:var(--text);user-select:none;min-width:64px}
-  .meta-tb-item:hover{border-color:var(--yellow)}
-  .meta-tb-item .ico{font-size:18px}
-  .meta-tb-item[data-cat="logic"]{background:#fff4f4;border-color:#f3c8c8}
-  .meta-tb-item[data-cat="input"]{background:#eef6ff;border-color:#c8ddf3}
-  .meta-pop{position:fixed;background:var(--white);color:var(--text);border:2px solid var(--yellow);border-radius:12px;padding:10px;z-index:3000;display:none;box-shadow:0 6px 24px rgba(0,0,0,.25);min-width:220px}
-  .meta-pop.open{display:block}
-  .meta-pop h4{font-size:13px;color:var(--red);margin-bottom:8px}
-  .meta-right{width:300px;flex-shrink:0;position:sticky;top:80px;align-self:flex-start;background:var(--white);color:var(--text);border-radius:16px;padding:16px}
-  .meta-right h3{font-size:15px;color:var(--red);margin-bottom:10px}
-  .meta-right .field{margin-bottom:10px}
-  .meta-right .field label{display:block;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:4px}
-  .meta-right .field input,.meta-right .field textarea,.meta-right .field select{width:100%;padding:8px 10px;border:2px solid #e2e2e2;border-radius:8px;font-family:inherit;font-size:14px;background:#fff;color:var(--text)}
-  .meta-right .meta-cmp-edit{display:flex;gap:6px;align-items:center;margin-bottom:6px}
-  .meta-right .meta-cmp-edit input[type=text]{flex:1;min-width:0}
-  .meta-right .meta-cmp-edit input[type=number]{width:70px}
-  .meta-right .meta-danger{background:#fff;color:var(--red);border:2px solid var(--red);border-radius:8px;padding:6px 10px;cursor:pointer;font-weight:700}
-  .meta-right .meta-danger:hover{background:var(--red);color:#fff}
-  .meta-right .meta-hint{font-size:11px;color:var(--muted);margin-top:4px}
-  .meta-empty{color:var(--muted);font-size:13px;font-style:italic}
-  .meta-editor-layout{display:flex;gap:16px;align-items:flex-start}
-  .meta-editor-main{flex:1;min-width:0}
-  .meta-errors{background:#fff4f4;border:2px solid #f3c8c8;border-radius:12px;padding:12px;margin-top:12px;color:#a81223;font-size:13px}
-  .meta-errors ul{margin:6px 0 0 18px}
-  .meta-errors li{margin-bottom:4px}
-  .meta-play{background:#111;border-radius:16px;overflow:hidden;padding:0;position:relative;height:640px}
-  .meta-play-inner{position:absolute;inset:0;background-size:cover;background-position:center;display:flex;align-items:stretch;justify-content:stretch}
-  .meta-play .meta-el{border:none;background:transparent;cursor:default}
-  .meta-play .meta-el .me-id,.meta-play .meta-el .me-dot{display:none}
-  .meta-play .meta-el .me-body{margin-top:0;pointer-events:auto}
-  .meta-play-result{position:absolute;inset:0;background:rgba(0,0,0,.75);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;gap:12px;z-index:5}
-  .meta-play-result h2{color:var(--yellow);font-size:28px}
-  .meta-play-result p{font-size:18px}
-  @media(max-width:960px){ .meta-editor-layout{flex-direction:column} .meta-right{width:100%;position:static} .meta-head{flex-direction:column} .meta-head-preview{width:100%} }
+  .meta-block .mb-body-img{position:absolute;inset:0;background-size:cover;opacity:.35}
+  .meta-el{position:absolute;border:2px dashed #9bbad6;background:rgba(255,255,255,.85);border-radius:6px;padding:4px;font-size:13px;cursor:move}
+  .meta-el.sel{border-color:#d0162c;box-shadow:0 0 0 2px rgba(208,22,44,.25)} .meta-el.bad{border-color:#d0162c;background:#fff0f0}
+  .meta-el .me-id{position:absolute;top:2px;right:4px;font-size:10px;background:#333;color:#fff;padding:0 4px;z-index:3}
+  .meta-el .me-id.ok{background:#2ea043} .meta-el .me-body{margin-top:14px;pointer-events:none;word-break:break-word}
+  .meta-el .me-dot{position:absolute;right:-9px;top:50%;transform:translateY(-50%);width:14px;height:14px;border-radius:50%;background:#d0162c;border:2px solid #fff;cursor:crosshair;z-index:4}
+  .meta-lines{position:absolute;inset:0;pointer-events:none;z-index:1} .meta-lines svg{width:100%;height:100%}
+  .meta-link-line{stroke:#888;stroke-width:2;fill:none} .meta-link-line.data{stroke:#d0162c;stroke-dasharray:5 4}
+  .meta-toolbar{display:flex;gap:8px;background:#fff;border-radius:14px;padding:10px 14px;margin-top:12px}
+  .meta-tb-group{display:flex;gap:6px;background:#f4f4f4;padding:4px 8px;border-radius:10px} .meta-tb-group b{font-size:12px;color:#6b6b6b;}
+  .meta-tb-item{display:flex;flex-direction:column;align-items:center;padding:6px 10px;background:#fff;border:2px solid #e2e2e2;cursor:grab;font-size:12px;font-weight:700;min-width:64px}
+  .meta-right{width:300px;flex-shrink:0;background:#fff;border-radius:16px;padding:16px}
+  .meta-right .field{margin-bottom:10px} .meta-right input,.meta-right textarea,.meta-right select{width:100%;padding:8px;border:2px solid #e2e2e2;border-radius:8px;}
+  .meta-editor-layout{display:flex;gap:16px;} .meta-editor-main{flex:1;min-width:0}
+  .meta-play{background:#111;position:relative;height:640px;display:none} .meta-play-inner{position:absolute;inset:0;background-size:cover}
+  .meta-play .meta-el{border:none;background:transparent;cursor:default} .meta-play .meta-el .me-id,.meta-play .meta-el .me-dot{display:none} .meta-play .meta-el .me-body{margin-top:0;pointer-events:auto}
+  .meta-play-result{position:absolute;inset:0;background:rgba(0,0,0,.75);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px}
   `;
   document.head.appendChild(st);
 }
-   
+
 function buildPage(){
   if($('metaPage')) return;
-  const div = document.createElement('div');
-  div.id = 'metaPage';
-  div.className = 'page';
-  div.innerHTML = `
-    <div class="meta-top">
-      <button class="btn btn-profile" id="metaBack">← Назад</button>
-      <h2 style="color:var(--yellow);margin:0;flex:1">Метаредактор</h2>
-      <button class="btn btn-profile" id="metaModeEdit">✏️ Редактор</button>
-      <button class="btn btn-profile" id="metaModeDesign">🎨 Оформление</button>
-      <button class="btn btn-profile" id="metaModePlay">▶ Предпросмотр</button>
-      <button class="btn btn-profile" id="metaFullscreen">⛶</button>
-    </div>
-    <div class="meta-head" id="metaHead">
-      <div class="meta-head-fields">
-        <div class="field"><label>Название</label><input id="metaTitle" maxlength="60" placeholder="Название проекта"></div>
-        <div class="field"><label>Описание</label><textarea id="metaDesc" rows="2" maxlength="160" placeholder="Коротко о проекте"></textarea></div>
-        <div class="field"><label>Картинка-превью</label><div class="img-row"><input type="file" id="metaAvaFile" accept="image/*"><img class="thumb" id="metaAvaPreview" style="display:none"></div></div>
-        <div class="meta-top" style="margin-top:8px">
-          <button class="btn btn-profile" id="metaSaveDraft">💾 Сохранить</button>
-          <button class="btn btn-create" id="metaPublish">🚀 Опубликовать</button>
-          <button class="btn btn-profile" id="metaExport">⬇ Экспорт JSON</button>
-          <button class="btn btn-profile" id="metaImportBtn">⬆ Импорт JSON</button>
-          <input type="file" id="metaImportFile" accept="application/json" style="display:none">
-        </div>
-        <div class="meta-msg" id="metaMsg"></div>
-      </div>
-      <div class="meta-head-preview">
-        <div class="meta-card">
-          <div class="test-icon" id="metaPvIcon">✨</div>
-          <h3 id="metaPvTitle">Название</h3>
-          <div class="desc" id="metaPvDesc">Описание</div>
-        </div>
-      </div>
-    </div>
-    <div class="meta-editor-layout">
-      <div class="meta-editor-main">
-        <div class="meta-canvas-wrap" id="metaCanvasWrap">
-          <div class="meta-canvas" id="metaCanvas">
-            <div class="meta-canvas-inner" id="metaCanvasInner"></div>
-          </div>
-        </div>
-        <div class="meta-toolbar" id="metaToolbar"></div>
-        <div id="metaErrors"></div>
-      </div>
-      <div class="meta-right" id="metaRight">
-        <div class="meta-empty">Выбери блок или элемент на полотне</div>
-      </div>
-    </div>
-    <div class="meta-pop" id="metaPop"></div>
+  const d = document.createElement('div'); d.id = 'metaPage'; d.className = 'page';
+  d.innerHTML = `
+    <div class="meta-top"><button class="btn btn-profile" id="metaBack">← Назад</button><h2 style="color:#f4e238;margin:0;flex:1">Метаредактор</h2>
+      <button class="btn btn-profile" id="metaModeEdit">✏️ Ред.</button><button class="btn btn-profile" id="metaModePlay">▶ Плей</button></div>
+    <div class="meta-head"><div class="meta-head-fields">
+      <div class="field"><label>Название</label><input id="metaTitle"></div>
+      <div class="field"><label>Описание</label><textarea id="metaDesc" rows="2"></textarea></div>
+      <div class="field"><label>Обложка</label><input type="file" id="metaAvaFile" accept="image/*"></div>
+      <div class="meta-top"><button class="btn btn-profile" id="metaSaveDraft">💾 Сохранить</button><button class="btn btn-create" id="metaPublish">🚀 Опубликовать</button></div>
+      <div id="metaMsg" style="color:#fff;font-size:14px;margin-top:8px"></div>
+    </div><div class="meta-head-preview"><div class="meta-card"><div class="test-icon" id="metaPvIcon">✨</div><h3 id="metaPvTitle">Название</h3><div id="metaPvDesc" style="font-size:13px;color:#6b6b6b">Описание</div></div></div></div>
+    <div class="meta-editor-layout"><div class="meta-editor-main">
+      <div class="meta-canvas-wrap" id="metaCanvasWrap"><div class="meta-canvas" id="metaCanvas"><div class="meta-canvas-inner" id="metaCanvasInner"></div></div><div class="meta-play" id="metaPlayBox"></div></div>
+      <div class="meta-toolbar" id="metaToolbar"></div><div id="metaErrors" style="margin-top:12px;color:#fff"></div>
+    </div><div class="meta-right" id="metaRight"></div></div>
   `;
-  document.body.appendChild(div);
+  document.body.appendChild(d);
 }
 
 function renderPreviewCard(){
-  const icon = $('metaPvIcon');
-  if(M.project.avatar) icon.innerHTML = '<img src="' + esc(M.project.avatar) + '">';
-  else icon.textContent = '✨';
-  $('metaPvTitle').textContent = M.project.title || 'Название';
-  $('metaPvDesc').textContent = M.project.description || 'Описание';
+  if(M.project.avatar) $('metaPvIcon').innerHTML = '<img src="' + esc(M.project.avatar) + '">'; else $('metaPvIcon').textContent = '✨';
+  $('metaPvTitle').textContent = M.project.title || 'Название'; $('metaPvDesc').textContent = M.project.description || 'Описание';
 }
 
 function renderToolbar(){
-  const tb = $('metaToolbar');
-  if(!tb) return;
-  tb.innerHTML = '';
-  const gBlock = document.createElement('div');
-  gBlock.className = 'meta-tb-group';
-  gBlock.innerHTML = '<b>Блоки</b>';
-  gBlock.appendChild(mkTbItem('block', '▭', 'Блок', 'block'));
-  gBlock.appendChild(mkTbItem('end', '🏁', 'Концовка', 'block'));
-  tb.appendChild(gBlock);
-  const gOut = document.createElement('div');
-  gOut.className = 'meta-tb-group';
-  gOut.innerHTML = '<b>Аутпут</b>';
-  ['text','desc','image'].forEach(t => gOut.appendChild(mkTbItem('el', ELEMENT_TYPES[t].icon, ELEMENT_TYPES[t].name, 'output', t)));
-  tb.appendChild(gOut);
-  const gIn = document.createElement('div');
-  gIn.className = 'meta-tb-group';
-  gIn.innerHTML = '<b>Инпут</b>';
-  gIn.appendChild(mkTbItem('el', ELEMENT_TYPES.input_text.icon, ELEMENT_TYPES.input_text.name, 'input', 'input_text'));
-  tb.appendChild(gIn);
-  const gLogic = document.createElement('div');
-  gLogic.className = 'meta-tb-group';
-  gLogic.innerHTML = '<b>Логика</b>';
-  gLogic.appendChild(mkTbItem('el', ELEMENT_TYPES.compare.icon, ELEMENT_TYPES.compare.name, 'logic', 'compare'));
-  tb.appendChild(gLogic);
-}
-
-function mkTbItem(kind, icon, label, cat, type){
-  const d = document.createElement('div');
-  d.className = 'meta-tb-item';
-  d.dataset.cat = cat || '';
-  d.dataset.kind = kind;
-  if(type) d.dataset.type = type;
-  d.innerHTML = '<span class="ico">' + esc(icon) + '</span><span>' + esc(label) + '</span>';
-  d.draggable = true;
-  d.addEventListener('dragstart', e => {
-    e.dataTransfer.effectAllowed = 'copy';
-    e.dataTransfer.setData('text/plain', JSON.stringify({ kind, type, cat }));
-    M.drag = { kind, type, cat };
-  });
-  return d;
+  const tb = $('metaToolbar'); tb.innerHTML = '';
+  const mk = (kind, icon, label, cat, type) => {
+    const d = document.createElement('div'); d.className = 'meta-tb-item'; d.dataset.kind = kind; d.dataset.type = type || ''; d.draggable = true;
+    d.innerHTML = '<span>' + icon + '</span><span>' + label + '</span>';
+    d.ondragstart = e => { e.dataTransfer.setData('text/plain', '1'); M.drag = { kind, type }; };
+    return d;
+  };
+  const g1 = document.createElement('div'); g1.className = 'meta-tb-group'; g1.innerHTML = '<b>Блоки</b>'; g1.appendChild(mk('block', '▭', 'Блок')); g1.appendChild(mk('block', '🏁', 'Конец', 'end')); tb.appendChild(g1);
+  const g2 = document.createElement('div'); g2.className = 'meta-tb-group'; g2.innerHTML = '<b>Элементы</b>';
+  ['text','desc','image','input_text','compare'].forEach(t => g2.appendChild(mk('el', ELEMENT_TYPES[t].icon, ELEMENT_TYPES[t].name, t)));
+  tb.appendChild(g2);
 }
 
 function renderCanvas(){
-  const inner = $('metaCanvasInner');
-  if(!inner) return;
-  inner.innerHTML = '';
-  const blocks = M.project.data.blocks;
-  if(blocks.length && !M.project.data.startBlockId) M.project.data.startBlockId = blocks[0].id;
-  
-  const svgWrap = document.createElement('div');
-  svgWrap.className = 'meta-lines';
-  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  svg.setAttribute('viewBox', '0 0 2000 1600');
-  svg.setAttribute('preserveAspectRatio', 'none');
-  svgWrap.appendChild(svg);
-  inner.appendChild(svgWrap);
-  M._svg = svg;
-
-  blocks.forEach(b => inner.appendChild(renderBlockOnCanvas(b)));
-  renderLinks(svg);
-
-  inner.ondragover = e => { if(M.drag && M.drag.kind === 'block') e.preventDefault(); };
-  inner.ondrop = e => {
-    if(!M.drag || M.drag.kind !== 'block') return;
-    e.preventDefault();
-    const r = inner.getBoundingClientRect();
-    const x = snap(e.clientX - r.left);
-    const y = snap(e.clientY - r.top);
-    addBlock(M.drag.type === 'end', x, y);
-    M.drag = null;
-  };
-  inner.addEventListener('click', e => {
-    if(e.target === inner || e.target === svgWrap || e.target === svg){
-      M.selectedBlockId = null; M.selectedElId = null;
-      renderCanvas(); renderRightPanel(); renderErrors();
-    }
-  });
-}
-
-function renderBlockOnCanvas(b){
-  const d = document.createElement('div');
-  d.className = 'meta-block' + (M.selectedBlockId === b.id ? ' sel' : '') + (M.project.data.startBlockId === b.id ? ' start' : '') + (b.end ? ' end' : '');
-  d.style.left = b.x + 'px'; d.style.top = b.y + 'px'; d.style.width = BLOCK_W + 'px'; d.style.height = BLOCK_H + 'px';
-  d.dataset.blockId = b.id;
-  const title = b.end ? '🏁 Концовка' : ('Блок ' + (b.title || ''));
-  d.innerHTML = '<div class="mb-title"><span>' + esc(title) + '</span><span>' + esc(b.id.slice(0,4)) + '</span></div>' +
-    '<div class="mb-body" id="mbb-' + b.id + '">' + (b.bg ? '<div class="mb-body-img" style="background-image:url(' + esc(b.bg) + ')"></div>' : '') + '</div>';
-
-  const body = d.querySelector('.mb-body');
-  b.elements.forEach(el => body.appendChild(renderElOnCanvas(b, el)));
-
-  const header = d.querySelector('.mb-title');
-  header.style.pointerEvents = 'auto'; header.style.cursor = 'move';
-  header.addEventListener('pointerdown', e => {
-    if(e.target.closest('.me-id')) return;
-    e.preventDefault();
-    const startX = e.clientX, startY = e.clientY, bx = b.x, by = b.y;
-    const move = ev => { b.x = snap(bx + (ev.clientX - startX)); b.y = snap(by + (ev.clientY - startY)); d.style.left = b.x + 'px'; d.style.top = b.y + 'px'; renderLinks(M._svg); };
-    const up = () => { window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', up); M.dirty = true; };
-    window.addEventListener('pointermove', move); window.addEventListener('pointerup', up);
-  });
-
-  d.addEventListener('mousedown', e => {
-    if(e.target.closest('.me-id') || e.target.closest('.meta-el') || e.button !== 0) return;
-    M.selectedBlockId = b.id; M.selectedElId = null;
-    renderCanvas(); renderRightPanel(); renderErrors();
-  });
-
-  body.addEventListener('dragover', e => { if(M.drag && M.drag.kind === 'el') e.preventDefault(); });
-  body.addEventListener('drop', e => {
-    if(!M.drag || M.drag.kind !== 'el') return;
-    e.preventDefault();
-    const r = body.getBoundingClientRect();
-    addElement(b.id, M.drag.type, M.drag.cat, e.clientX - r.left, e.clientY - r.top);
-    M.drag = null;
-  });
-  return d;
-}
-
-function renderElOnCanvas(b, el){
-  const d = document.createElement('div');
-  const connected = el.type === 'input_text' ? isInputConnected(el.id) : false;
-  const bad = el.type === 'input_text' && !connected;
-  d.className = 'meta-el' + (M.selectedElId === el.id ? ' sel' : '') + (bad ? ' bad' : '');
-  d.style.left = el.x + 'px'; d.style.top = el.y + 'px'; d.style.width = el.w + 'px'; d.style.height = el.h + 'px';
-  d.dataset.blockId = b.id; d.dataset.elId = el.id;
-
-  const def = ELEMENT_TYPES[el.type];
-  const idColor = connected ? ' ok' : '';
-  d.innerHTML = '<span class="me-id' + idColor + '" title="Клик — копировать id">' + esc(el.id.slice(0,4)) + '</span>' +
-    (el.type === 'input_text' ? '<span class="me-dot" title="Потяни к «Сравнению»"></span>' : '') +
-    '<div class="me-body">' + def.render(el, { play: false }) + '</div>';
-
-  d.querySelector('.me-id').addEventListener('click', e => {
-    e.stopPropagation();
-    if(navigator.clipboard) navigator.clipboard.writeText(el.id).then(() => {
-      const idEl = e.target; idEl.textContent = '✓';
-      setTimeout(() => { idEl.textContent = el.id.slice(0,4); }, 700);
+  const inner = $('metaCanvasInner'); inner.innerHTML = '';
+  const svgWrap = document.createElement('div'); svgWrap.className = 'meta-lines';
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); svg.setAttribute('viewBox', '0 0 2000 1600'); svgWrap.appendChild(svg); inner.appendChild(svgWrap); M._svg = svg;
+  M.project.data.blocks.forEach(b => {
+    const d = document.createElement('div'); d.className = 'meta-block' + (M.selectedBlockId === b.id ? ' sel' : '') + (M.project.data.startBlockId === b.id ? ' start' : '') + (b.end ? ' end' : '');
+    d.style.cssText = `left:${b.x}px;top:${b.y}px;width:${BLOCK_W}px;height:${BLOCK_H}px`;
+    d.innerHTML = `<div class="mb-title"><span>${b.end?'Конец':'Блок'} ${esc(b.title||'')}</span><span>${esc(b.id.slice(0,4))}</span></div><div class="mb-body" id="mbb-${b.id}">${b.bg?'<div class="mb-body-img" style="background-image:url('+esc(b.bg)+')"></div>':''}</div>`;
+    const body = d.querySelector('.mb-body');
+    b.elements.forEach(el => {
+      const ed = document.createElement('div'); ed.className = 'meta-el' + (M.selectedElId === el.id ? ' sel' : '') + (el.type === 'input_text' && !isInputConnected(el.id) ? ' bad' : '');
+      ed.style.cssText = `left:${el.x}px;top:${el.y}px;width:${el.w}px;height:${el.h}px`;
+      const con = el.type === 'input_text' && isInputConnected(el.id);
+      ed.innerHTML = `<span class="me-id ${con?'ok':''}">${esc(el.id.slice(0,4))}</span>${el.type==='input_text'?'<span class="me-dot"></span>':''}<div class="me-body">${ELEMENT_TYPES[el.type].render(el)}</div>`;
+      ed.querySelector('.me-id').onclick = e => { e.stopPropagation(); navigator.clipboard.writeText(el.id); };
+      ed.onmousedown = e => { if(e.target.closest('.me-id')||e.target.closest('.me-dot')) return; e.preventDefault(); M.selectedBlockId=b.id; M.selectedElId=el.id; renderCanvas(); renderRightPanel(); };
+      const dot = ed.querySelector('.me-dot'); if(dot) dot.onmousedown = e => startLink(e, el.id);
+      body.appendChild(ed);
     });
+    d.querySelector('.mb-title').onmousedown = e => { e.preventDefault(); M.selectedBlockId=b.id; M.selectedElId=null; renderCanvas(); renderRightPanel(); const sx=e.clientX,sy=e.clientY,bx=b.x,by=b.y; const mv=ev=>{b.x=snap(bx+ev.clientX-sx); b.y=snap(by+ev.clientY-sy); d.style.left=b.x+'px'; d.style.top=b.y+'px'; drawLinks();}; const up=()=>{window.removeEventListener('pointermove',mv);window.removeEventListener('pointerup',up);}; window.addEventListener('pointermove',mv); window.addEventListener('pointerup',up); };
+    body.ondragover = e => { if(M.drag && M.drag.kind === 'el') e.preventDefault(); };
+    body.ondrop = e => { if(!M.drag || M.drag.kind !== 'el') return; e.preventDefault(); const r=body.getBoundingClientRect(); addEl(b.id, M.drag.type, e.clientX-r.left, e.clientY-r.top); };
+    inner.appendChild(d);
   });
-
-  d.addEventListener('mousedown', e => {
-    if(e.target.closest('.me-id') || e.target.closest('.me-dot') || e.button !== 0) return;
-    e.preventDefault();
-    M.selectedBlockId = b.id; M.selectedElId = el.id;
-    renderRightPanel(); renderErrors();
-    d.classList.add('sel');
-    const startX = e.clientX, startY = e.clientY, ox = el.x, oy = el.y;
-    const move = ev => {
-      const nx = snap(ox + (ev.clientX - startX)), ny = snap(oy + (ev.clientY - startY));
-      el.x = nx; el.y = ny; d.style.left = nx + 'px'; d.style.top = ny + 'px';
-    };
-    const up = () => {
-      window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', up);
-      const test = { id: el.id, x: el.x, y: el.y, w: el.w, h: el.h };
-      if(!fitsInBlock(test) || collides(b, test)){ el.x = ox; el.y = oy; d.style.left = ox + 'px'; d.style.top = oy + 'px'; }
-      else { M.dirty = true; }
-      renderErrors(); renderRightPanel();
-    };
-    window.addEventListener('pointermove', move); window.addEventListener('pointerup', up);
-  });
-
-  const dot = d.querySelector('.me-dot');
-  if(dot) dot.addEventListener('pointerdown', e => {
-    e.preventDefault(); e.stopPropagation();
-    startDataLinkDrag(b.id, el.id, e);
-  });
-  return d;
+  inner.ondragover = e => { if(M.drag && M.drag.kind === 'block') e.preventDefault(); };
+  inner.ondrop = e => { if(!M.drag || M.drag.kind !== 'block') return; e.preventDefault(); const r=inner.getBoundingClientRect(); addBlock(M.drag.type==='end', e.clientX-r.left, e.clientY-r.top); };
+  drawLinks();
 }
 
-function startDataLinkDrag(fromBlockId, fromElId, e){
-  const svg = M._svg;
-  if(!svg) return;
-  const tempLine = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-  tempLine.setAttribute('stroke', '#d0162c'); tempLine.setAttribute('stroke-width', '2'); tempLine.setAttribute('stroke-dasharray', '5 4'); tempLine.setAttribute('fill', 'none');
-  svg.appendChild(tempLine);
-  const compares = [];
-  M.project.data.blocks.forEach(b => b.elements.forEach(el => {
-    if(el.type === 'compare'){
-      const elNode = document.querySelector('[data-el-id="' + el.id + '"] .me-id');
-      if(elNode){ const r = elNode.getBoundingClientRect(); compares.push({ blockId: b.id, elId: el.id, cx: r.left + r.width/2, cy: r.top + r.height/2 }); }
-    }
-  }));
-  const canvas = $('metaCanvasInner');
-  const fromNode = document.querySelector('[data-el-id="' + fromElId + '"] .me-dot');
-  if(!fromNode){ tempLine.remove(); return; }
-  const startRect = fromNode.getBoundingClientRect();
-  const move = ev => {
-    const r = canvas.getBoundingClientRect();
-    const x1 = startRect.left + startRect.width/2 - r.left;
-    const y1 = startRect.top + startRect.height/2 - r.top;
-    const x2 = ev.clientX - r.left;
-    const y2 = ev.clientY - r.top;
-    tempLine.setAttribute('d', 'M' + x1 + ',' + y1 + ' Q' + ((x1+x2)/2) + ',' + ((y1+y2)/2) + ' ' + x2 + ',' + y2);
-  };
-  const up = ev => {
-    window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', up);
-    tempLine.remove();
-    let best = null, bd = 80;
-    compares.forEach(c => { const d = Math.hypot(c.cx - ev.clientX, c.cy - ev.clientY); if(d < bd){ bd = d; best = c; } });
-    if(best){
-      M.project.data.links = M.project.data.links.filter(l => !(l.kind === 'data' && l.from === fromElId));
-      M.project.data.links.push({ id: uid(), kind: 'data', from: fromElId, to: 'cmp:' + best.blockId + ':' + best.elId });
-      M.dirty = true;
-      renderCanvas(); renderRightPanel(); renderErrors();
-    }
-  };
-  window.addEventListener('pointermove', move); window.addEventListener('pointerup', up);
-}
-
-function renderLinks(svg){
-  if(!svg) return;
-  while(svg.firstChild) svg.removeChild(svg.firstChild);
-  const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
-  const marker = document.createElementNS('http://www.w3.org/2000/svg', 'marker');
-  marker.setAttribute('id','meta-arrow'); marker.setAttribute('viewBox','0 0 10 10'); marker.setAttribute('refX','8'); marker.setAttribute('refY','5');
-  marker.setAttribute('markerWidth','8'); marker.setAttribute('markerHeight','8'); marker.setAttribute('orient','auto');
-  const poly = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
-  poly.setAttribute('points','0,0 10,5 0,10'); poly.setAttribute('fill','#888');
-  marker.appendChild(poly); defs.appendChild(marker); svg.appendChild(defs);
-
-  const inner = $('metaCanvasInner');
-  const innerRect = inner.getBoundingClientRect();
-
-  function blockCenter(b){ return { x: b.x + BLOCK_W, y: b.y + BLOCK_H/2 }; }
-  function blockLeft(b){ return { x: b.x, y: b.y + BLOCK_H/2 }; }
-  function elCenter(el){
-    const node = document.querySelector('[data-el-id="' + el.id + '"]');
-    if(!node) return null;
-    const r = node.getBoundingClientRect();
-    return { x: r.left - innerRect.left + r.width, y: r.top - innerRect.top + r.height/2 };
-  }
-  function cmpLeft(cmpEl){
-    const node = document.querySelector('[data-el-id="' + cmpEl.id + '"]');
-    if(!node) return null;
-    const r = node.getBoundingClientRect();
-    return { x: r.left - innerRect.left, y: r.top - innerRect.top + r.height/2 };
-  }
-
+function drawLinks(){
+  const svg = M._svg; while(svg.firstChild) svg.removeChild(svg.firstChild);
+  const defs = document.createElementNS('http://www.w3.org/2000/svg','defs'); defs.innerHTML = '<marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><polygon points="0,0 10,5 0,10" fill="#888"/></marker>'; svg.appendChild(defs);
   M.project.data.links.filter(l => l.kind === 'transition').forEach(l => {
-    const fb = findBlock(l.from), tb = findBlock(l.to);
-    if(!fb || !tb) return;
-    drawArrow(svg, blockCenter(fb), blockLeft(tb), 'meta-link-line');
-  });
-
-  M.project.data.links.filter(l => l.kind === 'data').forEach(l => {
-    const input = (() => { for(const bl of M.project.data.blocks){ const el = bl.elements.find(e => e.id === l.from); if(el) return el; } return null; })();
-    if(!input || !l.to || !l.to.startsWith('cmp:')) return;
-    const [, cmpBlockId, cmpId] = l.to.split(':');
-    const cmp = findElement(cmpBlockId, cmpId);
-    if(!cmp) return;
-    const a = elCenter(input), b = cmpLeft(cmp);
-    if(a && b) drawArrow(svg, a, b, 'meta-link-line data');
+    const fb = findBlock(l.from), tb = findBlock(l.to); if(!fb||!tb) return;
+    const p = document.createElementNS('http://www.w3.org/2000/svg','path'); p.setAttribute('d', `M${fb.x+BLOCK_W},${fb.y+BLOCK_H/2} C${(fb.x+BLOCK_W+tb.x)/2},${fb.y+BLOCK_H/2} ${(fb.x+BLOCK_W+tb.x)/2},${tb.y+BLOCK_H/2} ${tb.x},${tb.y+BLOCK_H/2}`); p.setAttribute('stroke','#888'); p.setAttribute('fill','none'); p.setAttribute('marker-end','url(#arr)'); svg.appendChild(p);
   });
 }
 
-function drawArrow(svg, a, b, cls){
-  const midX = (a.x + b.x) / 2;
-  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-  path.setAttribute('d', 'M' + a.x + ',' + a.y + ' C' + midX + ',' + a.y + ' ' + midX + ',' + b.y + ' ' + b.x + ',' + b.y);
-  path.setAttribute('class', cls);
-  path.setAttribute('marker-end', 'url(#meta-arrow)');
-  svg.appendChild(path);
+function startLink(e, iId){
+  e.preventDefault(); const svg = M._svg; const p = document.createElementNS('http://www.w3.org/2000/svg','path'); p.setAttribute('stroke','#d0162c'); p.setAttribute('fill','none'); svg.appendChild(p);
+  const mv = ev => { const r = $('metaCanvasInner').getBoundingClientRect(); p.setAttribute('d', `M${e.clientX-r.left},${e.clientY-r.top} L${ev.clientX-r.left},${ev.clientY-r.top}`); };
+  const up = ev => { window.removeEventListener('pointermove',mv); window.removeEventListener('pointerup',up); p.remove();
+    const els = document.elementsFromPoint(ev.clientX, ev.clientY);
+    const cmpNode = els.find(x => x.classList.contains('meta-el') && x.querySelector('.meta-compare'));
+    if(cmpNode){ const cId = cmpNode.querySelector('.me-id').textContent; 
+      const cmpEl = M.project.data.blocks.flatMap(b=>b.elements).find(x=>x.id.startsWith(cId)&&x.type==='compare'); 
+      if(cmpEl){ M.project.data.links = M.project.data.links.filter(l=>!(l.kind==='data'&&l.from===iId)); M.project.data.links.push({id:uid(),kind:'data',from:iId,to:'cmp:x:'+cmpEl.id}); renderCanvas(); renderRightPanel(); } } };
+  window.addEventListener('pointermove',mv); window.addEventListener('pointerup',up);
 }
 
 function addBlock(isEnd, x, y){
-  const id = uid();
-  const b = { id, x: x || 100, y: y || 100, title: '', bg: '', end: !!isEnd, elements: [] };
-  M.project.data.blocks.push(b);
-  if(!M.project.data.startBlockId) M.project.data.startBlockId = id;
-  M.selectedBlockId = id; M.selectedElId = null;
-  M.dirty = true;
-  renderCanvas(); renderRightPanel(); renderErrors();
+  const b = { id: uid(), x: Math.max(0,snap(x)), y: Math.max(0,snap(y)), title: '', bg: '', end: !!isEnd, elements: [] };
+  M.project.data.blocks.push(b); if(!M.project.data.startBlockId) M.project.data.startBlockId = b.id;
+  M.selectedBlockId = b.id; M.selectedElId = null; M.dirty = true; renderCanvas(); renderRightPanel();
 }
-
-function addElement(blockId, type, cat, px, py){
-  const b = findBlock(blockId);
-  if(!b) return;
-  const def = ELEMENT_TYPES[type];
-  if(!def) return;
-  const size = def.defaultSize || { w: 200, h: 40 };
-  let x = snap(px - size.w/2), y = snap(py - size.h/2);
-  if(x < 0) x = 0; if(y < 0) y = 0;
-  if(x + size.w > BLOCK_W) x = snap(BLOCK_W - size.w);
-  if(y + size.h > BLOCK_H) y = snap(BLOCK_H - size.h);
-  let attempt = { id: uid(), type, cat, x, y, w: size.w, h: size.h, props: JSON.parse(JSON.stringify(def.props || {})) };
-  if(collides(b, attempt)){
-    for(let ny = 0; ny + attempt.h <= BLOCK_H; ny += GRID){
-      for(let nx = 0; nx + attempt.w <= BLOCK_W; nx += GRID){
-        const t = Object.assign({}, attempt, { x: nx, y: ny });
-        if(!collides(b, t) && fitsInBlock(t)){ attempt.x = nx; attempt.y = ny; ny = BLOCK_H; break; }
-      }
-    }
-  }
-  b.elements.push(attempt);
-  M.selectedBlockId = blockId; M.selectedElId = attempt.id;
-  M.dirty = true;
-  renderCanvas(); renderRightPanel(); renderErrors();
+function addEl(bId, type, px, py){
+  const b = findBlock(bId); const def = ELEMENT_TYPES[type]; const sz = def.defaultSize;
+  const el = { id: uid(), type, x: Math.max(0, snap(px - sz.w/2)), y: Math.max(0, snap(py - sz.h/2)), w: sz.w, h: sz.h, props: JSON.parse(JSON.stringify(def.props)) };
+  b.elements.push(el); M.selectedBlockId = bId; M.selectedElId = el.id; M.dirty = true; renderCanvas(); renderRightPanel();
 }
 
 function renderRightPanel(){
-  const box = $('metaRight');
-  if(!box) return;
-  box.innerHTML = '';
+  const box = $('metaRight'); box.innerHTML = '';
   if(M.selectedElId){
-    const bl = M.project.data.blocks.find(x => x.elements.some(e => e.id === M.selectedElId));
-    const el = bl ? bl.elements.find(e => e.id === M.selectedElId) : null;
-    if(el && bl){ renderElPanel(box, bl, el); return; }
+    const b = M.project.data.blocks.find(x => x.elements.some(e => e.id === M.selectedElId));
+    const el = b.elements.find(e => e.id === M.selectedElId);
+    box.innerHTML = `<h3 style="color:#d0162c">${ELEMENT_TYPES[el.type].name}</h3><div class="field"><label>Содержимое / URL</label><textarea id="p-prop" rows="3">${esc(el.props.text||el.props.url||el.props.placeholder||'')}</textarea></div>`;
+    if(el.type==='compare') box.innerHTML += `<div class="field"><label>Очки за верный ответ</label><input type="number" id="p-pts" value="${el.props.variants[0].points||0}"></div>`;
+    box.innerHTML += `<button class="btn btn-danger" id="p-del" style="width:100%;margin-top:10px;background:#d0162c;color:#fff">Удалить</button>`;
+    if($('p-prop')) $('p-prop').oninput = e => { if(el.props.text!==undefined) el.props.text=e.target.value; else if(el.props.url!==undefined) el.props.url=e.target.value; else el.props.placeholder=e.target.value; M.dirty=true; renderCanvas(); };
+    if($('p-pts')) $('p-pts').oninput = e => { el.props.variants[0].points=Number(e.target.value); el.props.variants[0].text = 'правильно'; M.dirty=true; renderCanvas(); };
+    $('p-del').onclick = () => { b.elements = b.elements.filter(x => x.id !== el.id); M.project.data.links = M.project.data.links.filter(l=>l.from!==el.id); M.selectedElId=null; M.dirty=true; renderCanvas(); renderRightPanel(); };
+    return;
   }
   if(M.selectedBlockId){
     const b = findBlock(M.selectedBlockId);
-    if(b){ renderBlockPanel(box, b); return; }
+    box.innerHTML = `<h3 style="color:#d0162c">${b.end?'Конец':'Блок'}</h3><div class="field"><label>Название</label><input id="p-bt" value="${esc(b.title||'')}"></div>
+    <div class="field"><label>Переход к блоку</label><select id="p-link"><option value="">— нет —</option>${M.project.data.blocks.filter(x=>x.id!==b.id).map(x=>`<option value="${x.id}" ${M.project.data.links.some(l=>l.from===b.id&&l.to===x.id)?'selected':''}>${esc(x.title||x.id.slice(0,4))}</option>`).join('')}</select></div>
+    <div class="field"><label>Условие (очки)</label><div style="display:flex;gap:4px"><select id="p-op" style="width:50px"><option value="">—</option><option value=">">></option><option value="<"><</option><option value="=">=</option></select><input type="number" id="p-val" value="0" style="width:60px"></div></div>
+    <button class="btn btn-danger" id="p-bdel" style="width:100%;margin-top:10px;background:#d0162c;color:#fff">Удалить блок</button>`;
+    $('p-bt').oninput = e => { b.title=e.target.value; M.dirty=true; renderCanvas(); };
+    $('p-link').onchange = e => { M.project.data.links = M.project.data.links.filter(l=>l.from!==b.id); if(e.target.value) M.project.data.links.push({id:uid(),kind:'transition',from:b.id,to:e.target.value,condition:null}); M.dirty=true; renderCanvas(); };
+    $('p-bdel').onclick = () => { M.project.data.blocks = M.project.data.blocks.filter(x=>x.id!==b.id); M.project.data.links = M.project.data.links.filter(l=>l.from!==b.id&&l.to!==b.id); M.selectedBlockId=null; M.dirty=true; renderCanvas(); renderRightPanel(); };
+    return;
   }
-  box.innerHTML = '<div class="meta-empty">Выбери блок или элемент на полотне</div>';
-}
-
-function renderBlockPanel(box, b){
-  box.innerHTML = '<h3>' + (b.end ? '🏁 Концовка' : 'Блок') + '</h3>' +
-    '<div class="field"><label>Название (для тебя)</label><input id="mb-title" maxlength="40" value="' + esc(b.title || '') + '"></div>' +
-    '<div class="field"><label>Фон</label><div class="img-row"><input type="file" id="mb-bg-file" accept="image/*">' + (b.bg ? '<img class="thumb" src="' + esc(b.bg) + '">' : '') + '</div></div>' +
-    '<div class="field"><label>Исходящий переход</label>' + renderTransitionEditor(b) + '</div>' +
-    (M.project.data.startBlockId === b.id ? '<div class="meta-hint">Это стартовый блок.</div>' : '<button class="btn btn-profile" id="mb-set-start" style="width:100%;margin-top:6px">Сделать стартовым</button>') +
-    '<button class="meta-danger" id="mb-del" style="width:100%;margin-top:10px">Удалить блок</button>' +
-    '<div class="meta-hint">id: ' + esc(b.id) + '</div>';
-
-  $('mb-title').addEventListener('input', e => { b.title = e.target.value; M.dirty = true; renderCanvas(); });
-  $('mb-bg-file').addEventListener('change', async e => {
-    const f = e.target.files[0]; if(!f) return;
-    try { b.bg = await uploadMetaImage(f); M.dirty = true; renderCanvas(); renderRightPanel(); }
-    catch(err){ alert('Ошибка загрузки: ' + err.message); }
-  });
-  if($('mb-set-start')) $('mb-set-start').addEventListener('click', () => { M.project.data.startBlockId = b.id; M.dirty = true; renderCanvas(); renderRightPanel(); });
-  $('mb-del').addEventListener('click', () => {
-    if(!confirm('Удалить блок и все его элементы?')) return;
-    M.project.data.blocks = M.project.data.blocks.filter(x => x.id !== b.id);
-    M.project.data.links = M.project.data.links.filter(l => l.from !== b.id && l.to !== b.id);
-    if(M.project.data.startBlockId === b.id) M.project.data.startBlockId = M.project.data.blocks[0] ? M.project.data.blocks[0].id : null;
-    M.selectedBlockId = null; M.selectedElId = null; M.dirty = true;
-    renderCanvas(); renderRightPanel(); renderErrors();
-  });
-  bindTransitionEditor(b);
-}
-
-function renderTransitionEditor(b){
-  if(b.end) return '<div class="meta-hint">Концовка — переходов нет.</div>';
-  const outLinks = M.project.data.links.filter(l => l.kind === 'transition' && l.from === b.id);
-  let h = '';
-  outLinks.forEach(l => {
-    const target = findBlock(l.to);
-    h += '<div style="display:flex;gap:6px;align-items:center;margin-bottom:6px">' +
-      '<span style="font-size:12px">→ ' + esc(target ? (target.title || target.id.slice(0,4)) : '?') + '</span>' +
-      '<select class="tr-op" data-link="' + l.id + '" style="width:60px"><option value="">—</option>' +
-        ['=', '≠', '>', '<', '≥', '≤'].map(op => '<option value="' + op + '"' + (l.condition && l.condition.op === op ? ' selected' : '') + '>' + op + '</option>').join('') + '</select>' +
-      '<input type="number" class="tr-val" data-link="' + l.id + '" value="' + (l.condition ? l.condition.value : 0) + '" style="width:60px">' +
-      '<button class="meta-danger tr-del" data-link="' + l.id + '" style="padding:2px 6px">✕</button>' +
-    '</div>';
-  });
-  const others = M.project.data.blocks.filter(x => x.id !== b.id && !x.end);
-  h += '<select id="mb-newlink" style="width:100%;padding:6px;margin-top:4px;border:2px solid #e2e2e2;border-radius:6px"><option value="">+ переход к…</option>' + others.map(x => '<option value="' + x.id + '">' + esc(x.title || ('Блок ' + x.id.slice(0,4))) + '</option>').join('') + '</select>';
-  const ends = M.project.data.blocks.filter(x => x.id !== b.id && x.end);
-  if(ends.length){
-    h += '<select id="mb-newlink-end" style="width:100%;padding:6px;margin-top:4px;border:2px solid #e2e2e2;border-radius:6px"><option value="">+ переход к концовке…</option>' + ends.map(x => '<option value="' + x.id + '">' + esc(x.title || ('Концовка ' + x.id.slice(0,4))) + '</option>').join('') + '</select>';
-  }
-  return h;
-}
-
-function bindTransitionEditor(b){
-  document.querySelectorAll('.tr-op').forEach(s => s.addEventListener('change', e => {
-    const l = M.project.data.links.find(x => x.id === e.target.dataset.link); if(!l) return;
-    const op = e.target.value;
-    if(!op){ delete l.condition; } else { const cur = l.condition || { value: 0 }; l.condition = { op, value: Number(cur.value) || 0 }; }
-    M.dirty = true; renderCanvas();
-  }));
-  document.querySelectorAll('.tr-val').forEach(inp => inp.addEventListener('input', e => {
-    const l = M.project.data.links.find(x => x.id === e.target.dataset.link);
-    if(l && l.condition){ l.condition.value = Number(e.target.value) || 0; M.dirty = true; }
-  }));
-  document.querySelectorAll('.tr-del').forEach(btn => btn.addEventListener('click', e => {
-    M.project.data.links = M.project.data.links.filter(x => x.id !== e.target.dataset.link);
-    M.dirty = true; renderCanvas(); renderRightPanel();
-  }));
-  if($('mb-newlink')) $('mb-newlink').addEventListener('change', e => {
-    if(!e.target.value) return;
-    M.project.data.links.push({ id: uid(), kind: 'transition', from: b.id, to: e.target.value, condition: null });
-    M.dirty = true; renderCanvas(); renderRightPanel();
-  });
-  if($('mb-newlink-end')) $('mb-newlink-end').addEventListener('change', e => {
-    if(!e.target.value) return;
-    M.project.data.links.push({ id: uid(), kind: 'transition', from: b.id, to: e.target.value, condition: null });
-    M.dirty = true; renderCanvas(); renderRightPanel();
-  });
-}
-
-function renderElPanel(box, bl, el){
-  const def = ELEMENT_TYPES[el.type];
-  let h = '<h3>' + esc(def.name) + '</h3><div class="field"><label>id</label><input value="' + esc(el.id) + '" readonly></div>';
-  if(el.type === 'text' || el.type === 'desc'){
-    h += '<div class="field"><label>Содержимое</label><textarea id="me-text" rows="4">' + esc(el.props.text || '') + '</textarea></div>';
-  }
-  if(el.type === 'image'){
-    h += '<div class="field"><label>Картинка</label><div class="img-row"><input type="file" id="me-img-file" accept="image/*">' + (el.props.url ? '<img class="thumb" src="' + esc(el.props.url) + '">' : '') + '</div></div>';
-  }
-  if(el.type === 'input_text'){
-    h += '<div class="field"><label>Placeholder</label><input id="me-ph" value="' + esc(el.props.placeholder || '') + '"></div>';
-    const cmp = findCompareForInput(el.id);
-    h += '<div class="meta-hint">' + (cmp ? '✅ Подключён к сравнению' : '⚠️ Не подключён: потяни оранжевую точку к «Сравнению»') + '</div>';
-  }
-  if(el.type === 'compare'){
-    h += '<div class="field"><label>Варианты ответа</label><div id="me-variants">';
-    (el.props.variants || []).forEach((v, i) => {
-      h += '<div class="meta-cmp-edit"><input type="text" data-vi="' + i + '" class="mv-text" value="' + esc(v.text || '') + '" placeholder="эталон"><input type="number" data-vi="' + i + '" class="mv-pts" value="' + (Number(v.points) || 0) + '"><button class="meta-danger mv-del" data-vi="' + i + '" style="padding:0 6px">✕</button></div>';
-    });
-    h += '</div><button class="btn btn-profile" id="me-add-var" style="width:100%;margin-top:6px">+ Вариант</button></div>';
-    h += '<div class="field"><label>Подключённые инпуты</label><div>';
-    const inputs = M.project.data.links.filter(l => l.kind === 'data' && l.to === 'cmp:' + bl.id + ':' + el.id);
-    h += inputs.length ? inputs.map(l => '<div class="meta-hint">→ ' + esc(l.from.slice(0,6)) + '</div>').join('') : '<span class="meta-muted">нет</span>';
-    h += '</div></div>';
-  }
-  h += '<button class="meta-danger" id="me-del" style="width:100%;margin-top:12px">Удалить элемент</button>';
-  box.innerHTML = h;
-
-  if(el.type === 'text' || el.type === 'desc') $('me-text').addEventListener('input', e => { el.props.text = e.target.value; M.dirty = true; renderCanvas(); });
-  if(el.type === 'image'){
-    $('me-img-file').addEventListener('change', async e => {
-      const f = e.target.files[0]; if(!f) return;
-      try { el.props.url = await uploadMetaImage(f); M.dirty = true; renderCanvas(); renderRightPanel(); } catch(err){ alert(err.message); }
-    });
-  }
-  if(el.type === 'input_text') $('me-ph').addEventListener('input', e => { el.props.placeholder = e.target.value; M.dirty = true; renderCanvas(); });
-  if(el.type === 'compare'){
-    box.querySelectorAll('.mv-text').forEach(inp => inp.addEventListener('input', e => { el.props.variants[Number(e.target.dataset.vi)].text = e.target.value; M.dirty = true; renderCanvas(); }));
-    box.querySelectorAll('.mv-pts').forEach(inp => inp.addEventListener('input', e => { el.props.variants[Number(e.target.dataset.vi)].points = Number(e.target.value) || 0; M.dirty = true; renderCanvas(); }));
-    box.querySelectorAll('.mv-del').forEach(b => b.addEventListener('click', e => { el.props.variants.splice(Number(e.target.dataset.vi), 1); M.dirty = true; renderCanvas(); renderRightPanel(); }));
-    $('me-add-var').addEventListener('click', () => { el.props.variants = el.props.variants || []; el.props.variants.push({ text: '', points: 0 }); M.dirty = true; renderRightPanel(); renderCanvas(); });
-  }
-  $('me-del').addEventListener('click', () => {
-    if(!confirm('Удалить элемент?')) return;
-    bl.elements = bl.elements.filter(x => x.id !== el.id);
-    M.project.data.links = M.project.data.links.filter(l => l.from !== el.id && l.to !== ('cmp:' + bl.id + ':' + el.id));
-    M.selectedElId = null; M.dirty = true; renderCanvas(); renderRightPanel(); renderErrors();
-  });
-}
-
-function collectErrors(){
-  const errs = [], data = M.project.data;
-  if(!data.blocks.length) errs.push('Нет ни одного блока');
-  if(!data.startBlockId) errs.push('Не выбран стартовый блок');
-  data.blocks.forEach(b => {
-    if(!b.end && !data.links.filter(l => l.kind === 'transition' && l.from === b.id).length) errs.push('Блок «' + (b.title || b.id.slice(0,4)) + '» без исходящего перехода');
-    b.elements.forEach(el => {
-      if(el.type === 'input_text' && !isInputConnected(el.id)) errs.push('Инпут ' + el.id.slice(0,4) + ' не подключён к сравнению');
-      if(el.type === 'compare' && !data.links.some(l => l.kind === 'data' && l.to === 'cmp:' + b.id + ':' + el.id)) errs.push('Сравнение ' + el.id.slice(0,4) + ' не подключено ни к одному инпуту');
-    });
-  });
-  return errs;
-}
-
-function renderErrors(){
-  const box = $('metaErrors');
-  if(!box) return;
-  const errs = collectErrors();
-  if(!errs.length){ box.innerHTML = ''; return; }
-  box.innerHTML = '<div class="meta-errors"><b>Проблемы (' + errs.length + '):</b><ul>' + errs.map(e => '<li>' + esc(e) + '</li>').join('') + '</ul></div>';
+  box.innerHTML = '<div style="color:#999;font-size:13px">Выбери блок или элемент</div>';
 }
 
 function loadToUI(){
-  $('metaTitle').value = M.project.title || '';
-  $('metaDesc').value = M.project.description || '';
-  const p = $('metaAvaPreview');
-  if(M.project.avatar){ p.src = M.project.avatar; p.style.display = 'block'; } else { p.style.display = 'none'; p.removeAttribute('src'); }
+  $('metaTitle').value = M.project.title || ''; $('metaDesc').value = M.project.description || '';
   renderPreviewCard();
 }
-
-let headerBound = false;
-function bindHeaderOnce(){
-  if(headerBound) return;
-  headerBound = true;
-  $('metaTitle').addEventListener('input', e => { M.project.title = e.target.value; M.dirty = true; renderPreviewCard(); });
-  $('metaDesc').addEventListener('input', e => { M.project.description = e.target.value; M.dirty = true; renderPreviewCard(); });
-  $('metaAvaFile').addEventListener('change', async e => {
-    const f = e.target.files[0]; if(!f) return;
-    try { M.project.avatar = await uploadMetaImage(f); M.dirty = true; const p = $('metaAvaPreview'); p.src = M.project.avatar; p.style.display = 'block'; renderPreviewCard(); } catch(err){ alert(err.message); }
-  });
-  $('metaSaveDraft').addEventListener('click', async () => {
-    const m = $('metaMsg'); m.className = 'meta-msg'; m.textContent = 'Сохраняем…';
-    try { await saveProject(M.project.published); m.classList.add('ok'); m.textContent = 'Черновик сохранён'; } catch(err){ m.classList.add('err'); m.textContent = 'Ошибка: ' + err.message; }
-  });
-  $('metaPublish').addEventListener('click', async () => {
-    const m = $('metaMsg'); m.className = 'meta-msg'; const errs = collectErrors();
-    if(!M.project.title.trim()){ m.classList.add('err'); m.textContent = 'Введите название'; return; }
-    if(errs.length){ m.classList.add('err'); m.textContent = 'Исправьте ошибки (' + errs.length + ') перед публикацией'; return; }
-    m.textContent = 'Публикуем…';
-    try { await saveProject(true); m.classList.add('ok'); m.textContent = 'Опубликовано!'; } catch(err){ m.classList.add('err'); m.textContent = 'Ошибка: ' + err.message; }
-  });
-  $('metaExport').addEventListener('click', exportJSON);
-  $('metaImportBtn').addEventListener('click', () => $('metaImportFile').click());
-  $('metaImportFile').addEventListener('change', async e => {
-    const f = e.target.files[0]; if(!f) return;
-    try { await importJSON(f); M.selectedBlockId = null; M.selectedElId = null; loadToUI(); renderCanvas(); renderRightPanel(); renderErrors(); $('metaMsg').className = 'meta-msg ok'; $('metaMsg').textContent = 'Импортировано'; }
-    catch(err){ $('metaMsg').className = 'meta-msg err'; $('metaMsg').textContent = 'Ошибка импорта: ' + err.message; }
-    e.target.value = '';
-  });
-  $('metaBack').addEventListener('click', () => { location.hash = ''; });
-  $('metaFullscreen').addEventListener('click', () => { M.fullscreen = !M.fullscreen; $('metaCanvasWrap').classList.toggle('fs', M.fullscreen); $('metaFullscreen').textContent = M.fullscreen ? '✕' : '⛶'; });
-  $('metaModeEdit').addEventListener('click', () => setMode('edit'));
-  $('metaModeDesign').addEventListener('click', () => setMode('design'));
-  $('metaModePlay').addEventListener('click', () => setMode('play'));
+function bindHeader(){
+  $('metaTitle').oninput = e => { M.project.title = e.target.value; renderPreviewCard(); };
+  $('metaDesc').oninput = e => { M.project.description = e.target.value; renderPreviewCard(); };
+  $('metaAvaFile').onchange = async e => { const f=e.target.files[0]; if(f){ M.project.avatar = await uploadMetaImage(f); renderPreviewCard(); } };
+  $('metaSaveDraft').onclick = async () => { $('metaMsg').textContent='Сохраняем...'; await saveProject(M.project.published); $('metaMsg').textContent='Сохранено!'; };
+  $('metaPublish').onclick = async () => { $('metaMsg').textContent='Публикуем...'; await saveProject(true); $('metaMsg').textContent='Опубликовано!'; };
+  $('metaBack').onclick = () => location.hash = '#/meta';
+  $('metaModeEdit').onclick = () => { $('metaCanvas').style.display='block'; $('metaPlayBox').style.display='none'; $('metaModeEdit').style.background='#f4e238'; $('metaModePlay').style.background=''; renderCanvas(); };
+  $('metaModePlay').onclick = () => { $('metaCanvas').style.display='none'; $('metaPlayBox').style.display='block'; $('metaModeEdit').style.background=''; $('metaModePlay').style.background='#f4e238'; startPlay(); };
 }
-
-function setMode(mode){
-  M.mode = mode;
-  ['metaModeEdit','metaModeDesign','metaModePlay'].forEach(id => $(id).style.background = '');
-  if(mode === 'edit') $('metaModeEdit').style.background = 'var(--yellow)';
-  if(mode === 'design') $('metaModeDesign').style.background = 'var(--yellow)';
-  if(mode === 'play') $('metaModePlay').style.background = 'var(--yellow)';
-  if(mode === 'play') startPlayPreview(); else { stopPlayPreview(); renderCanvas(); renderRightPanel(); renderErrors(); }
-}
-
-function startPlayPreview(){ if(window.META._startPlay) window.META._startPlay(); }
-function stopPlayPreview(){ if(window.META._stopPlay) window.META._stopPlay(); }
 
 function openProjectPage(id){
-  injectStyles();
-  buildPage();
-  if(!currentUser){
-    alert('Войдите в аккаунт, чтобы открыть метаредактор');
-    location.hash = '';
-    return;
-  }
-  if(id){
-    loadProject(id).then(p => {
-      if(!p){ alert('Проект не найден'); location.hash = '#/meta'; return; }
-      M.project = p;
-      finishOpen();
-    }).catch(err => { alert('Ошибка: ' + err.message); location.hash = ''; });
-  } else {
-    M.project = newProject();
-    finishOpen();
-  }
+  injectStyles(); buildPage();
+  if(!window.currentUser){ alert('Войдите в аккаунт!'); location.hash=''; return; }
+  if(id){ loadProject(id).then(p=>{ M.project = p||newProject(); window.showPage('metaPage'); loadToUI(); renderToolbar(); renderCanvas(); renderRightPanel(); bindHeader(); $('metaModeEdit').click(); }); }
+  else { M.project = newProject(); window.showPage('metaPage'); loadToUI(); renderToolbar(); renderCanvas(); renderRightPanel(); bindHeader(); $('metaModeEdit').click(); }
 }
-function finishOpen(){
-  M.selectedBlockId = null; M.selectedElId = null;
-  window.showPage('metaPage');
-  loadToUI(); renderToolbar(); renderCanvas(); renderRightPanel(); renderErrors(); setMode('edit'); bindHeaderOnce();
-}
-
 function openProjectsPage(){
   injectStyles();
-  if(!$('metaListPage')){
-    const div = document.createElement('div');
-    div.id = 'metaListPage'; div.className = 'page';
-    div.innerHTML = '<h2 style="color:var(--yellow);margin-bottom:20px">Метаредактор: мои проекты</h2><button class="btn btn-create" id="metaNewBtn" style="margin-bottom:16px">+ Создать проект</button><div class="grid" id="metaProjectsGrid"></div>';
-    document.body.appendChild(div);
-    $('metaNewBtn').addEventListener('click', () => { location.hash = '#/meta/new'; });
-  }
-  window.showPage('metaListPage');
-  const grid = $('metaProjectsGrid');
-  grid.innerHTML = '<p style="color:rgba(255,255,255,.8)">Загрузка…</p>';
-  if(!currentUser){ grid.innerHTML = '<p style="color:rgba(255,255,255,.8)">Войдите, чтобы видеть свои проекты</p>'; return; }
-  listMyProjects().then(list => {
-    grid.innerHTML = '';
-    if(!list.length){ grid.innerHTML = '<p style="color:rgba(255,255,255,.8)">Пока нет проектов. Создайте первый!</p>'; return; }
-    list.forEach(p => {
-      const card = document.createElement('div');
-      card.className = 'meta-card';
-      card.innerHTML = '<div class="test-icon">' + (p.avatar ? '<img src="' + esc(p.avatar) + '">' : '✨') + '</div>' +
-        '<h3>' + esc(p.title || 'Без названия') + '</h3><div class="desc">' + (p.published ? '✅ опубликован' : '📝 черновик') + '</div>' +
-        '<div style="display:flex;gap:6px;margin-top:10px;width:100%"><button class="btn btn-create" style="flex:1" data-act="edit">Открыть</button>' +
-        (p.published ? '<button class="btn btn-profile" style="flex:0 0 auto" data-act="play">▶</button>' : '') + '</div>';
-      card.querySelector('[data-act="edit"]').addEventListener('click', e => { e.stopPropagation(); location.hash = '#/meta/edit/' + p.id; });
-      if(p.published) card.querySelector('[data-act="play"]').addEventListener('click', e => { e.stopPropagation(); location.hash = '#/meta/play/' + p.id; });
-      grid.appendChild(card);
-    });
-  }).catch(err => { grid.innerHTML = '<p style="color:#fff">Ошибка: ' + esc(err.message) + '</p>'; });
+  if(!$('metaListPage')){ const d=document.createElement('div'); d.id='metaListPage'; d.className='page'; d.innerHTML='<h2 style="color:#f4e238">Мои проекты</h2><button class="btn btn-create" id="mNew" style="margin:10px 0">+ Создать</button><div class="grid" id="mGrid"></div>'; document.body.appendChild(d); $('mNew').onclick=()=>location.hash='#/meta/new'; }
+  window.showPage('metaListPage'); const g = $('mGrid'); g.innerHTML='Загрузка...';
+  listMyProjects().then(list => { g.innerHTML = list.length ? '' : 'Пусто'; list.forEach(p => { const c=document.createElement('div'); c.className='meta-card'; c.innerHTML=`<div class="test-icon">${p.avatar?'<img src="'+esc(p.avatar)+'">':'✨'}</div><h3>${esc(p.title)}</h3><button class="btn btn-create" style="margin-top:10px">Открыть</button>`; c.onclick=()=>location.hash='#/meta/edit/'+p.id; g.appendChild(c); }); });
 }
 
-function normAns(s){ return String(s || '').toLowerCase().replace(/ё/g, 'е').replace(/[^\p{L}\p{N}]/gu, ''); }
-
-const P = { project: null, blockId: null, score: 0, answers: {}, over: false, container: null };
-
-window.META._startPlay = function(){
-  const wrap = $('metaCanvasWrap'), canvas = $('metaCanvas');
-  if(!M.project) return;
-  const errs = collectErrors();
-  if(errs.length){ alert('Нельзя запустить: ' + errs.length + ' проблем. Исправьте их сначала.'); return; }
-  canvas.style.display = 'none';
-  let play = $('metaPlayBox');
-  if(!play){ play = document.createElement('div'); play.id = 'metaPlayBox'; play.className = 'meta-play'; play.style.cssText = 'position:absolute;inset:0;'; wrap.appendChild(play); }
-  play.style.display = 'block';
-  P.project = JSON.parse(JSON.stringify(M.project)); P.blockId = M.project.data.startBlockId; P.score = 0; P.answers = {}; P.over = false; P.container = play;
-  renderPlayBlock();
-};
-window.META._stopPlay = function(){
-  const play = $('metaPlayBox'); if(play) play.style.display = 'none';
-  const canvas = $('metaCanvas'); if(canvas) canvas.style.display = '';
-  P.project = null;
-};
-
-function renderPlayBlock(){
-  const box = P.container; if(!box) return;
-  box.innerHTML = '';
-  if(P.over) return;
-  const data = P.project.data, b = data.blocks.find(x => x.id === P.blockId);
-  if(!b){ showPlayEnd('Конец', 'Блок не найден'); return; }
-  const inner = document.createElement('div'); inner.className = 'meta-play-inner';
-  if(b.bg) inner.style.backgroundImage = 'url(' + b.bg + ')';
-  inner.style.position = 'absolute'; inner.style.inset = '0';
-  const cw = box.clientWidth || 800, ch = box.clientHeight || 600;
-  const scale = Math.min(cw / BLOCK_W, ch / BLOCK_H);
-  const offX = (cw - BLOCK_W * scale) / 2, offY = (ch - BLOCK_H * scale) / 2;
-  const stage = document.createElement('div');
-  stage.style.cssText = 'position:absolute;width:' + BLOCK_W + 'px;height:' + BLOCK_H + 'px;left:' + offX + 'px;top:' + offY + 'px;transform:scale(' + scale + ');transform-origin:top left';
+let P = { project: null, blockId: null, score: 0, answers: {}, container: null };
+function startPlay(){
+  P.project = JSON.parse(JSON.stringify(M.project)); P.blockId = M.project.data.startBlockId; P.score = 0; P.answers = {}; P.container = $('metaPlayBox'); renderPlay();
+}
+function renderPlay(){
+  const box = P.container; box.innerHTML = '';
+  const b = P.project.data.blocks.find(x => x.id === P.blockId); if(!b) return;
+  const inner = document.createElement('div'); inner.className='meta-play-inner'; if(b.bg) inner.style.backgroundImage='url('+b.bg+')';
+  const stage = document.createElement('div'); stage.style.cssText='position:absolute;inset:0;';
   b.elements.forEach(el => {
-    const def = ELEMENT_TYPES[el.type];
-    const node = document.createElement('div');
-    node.className = 'meta-el';
-    node.style.cssText = 'left:' + el.x + 'px;top:' + el.y + 'px;width:' + el.w + 'px;height:' + el.h + 'px;';
-    node.innerHTML = '<div class="me-body">' + def.render(el, { play: true }) + '</div>';
-    if(el.type === 'input_text'){
-      const inp = node.querySelector('input');
-      if(inp){ inp.value = P.answers[el.id] || ''; inp.addEventListener('input', () => { P.answers[el.id] = inp.value; }); }
-    }
-    stage.appendChild(node);
+    const ed = document.createElement('div'); ed.className='meta-el'; ed.style.cssText=`left:${el.x}px;top:${el.y}px;width:${el.w}px;height:${el.h}px`;
+    ed.innerHTML = `<div class="me-body">${ELEMENT_TYPES[el.type].render(el, {play:true})}</div>`;
+    if(el.type==='input_text'){ const inp = ed.querySelector('input'); inp.value = P.answers[el.id]||''; inp.oninput = () => P.answers[el.id]=inp.value; }
+    stage.appendChild(ed);
   });
   inner.appendChild(stage);
-  const btn = document.createElement('button'); btn.className = 'btn btn-create'; btn.textContent = 'Далее →';
-  btn.style.cssText = 'position:absolute;right:20px;bottom:20px;z-index:10;font-size:18px;padding:12px 28px';
-  btn.addEventListener('click', () => onNext(b));
+  const btn = document.createElement('button'); btn.className='btn btn-create'; btn.textContent='Далее'; btn.style.cssText='position:absolute;right:20px;bottom:20px;z-index:10;font-size:18px';
+  btn.onclick = () => nextPlay(b);
   box.appendChild(inner); box.appendChild(btn);
 }
-
-function onNext(b){
-  const data = P.project.data;
-  let addScore = 0;
-  b.elements.forEach(el => {
-    if(el.type !== 'input_text') return;
-    const cmp = (() => {
-      const link = data.links.find(l => l.kind === 'data' && l.from === el.id); if(!link) return null;
-      const [, cbid, cid] = link.to.split(':'); const cb = data.blocks.find(x => x.id === cbid);
-      return cb ? cb.elements.find(e => e.id === cid) : null;
-    })();
-    if(!cmp) return;
-    const val = normAns(P.answers[el.id] || ''); if(!val) return;
-    (cmp.props.variants || []).forEach(v => { if(normAns(v.text) === val) addScore += Number(v.points) || 0; });
-  });
-  P.score += addScore;
-  const outs = data.links.filter(l => l.kind === 'transition' && l.from === b.id);
-  if(!outs.length){
-    const end = data.blocks.find(x => x.end);
-    if(end){ P.blockId = end.id; renderPlayBlock(); return; }
-    showPlayEnd('Конец', 'Очков: ' + P.score); return;
-  }
-  let chosen = null;
-  for(const l of outs){ if(!l.condition){ if(!chosen) chosen = l; continue; } if(testCond(l.condition, P.score)){ chosen = l; break; } }
-  if(!chosen) chosen = outs[0];
-  const target = data.blocks.find(x => x.id === chosen.to);
-  if(!target){ showPlayEnd('Конец', 'Очков: ' + P.score); return; }
-  if(target.end){ showPlayEnd(target.title || 'Финал', 'Вы набрали: ' + P.score + ' очков'); return; }
-  P.blockId = target.id; renderPlayBlock();
-}
-function testCond(cond, score){
-  if(!cond) return true;
-  const v = Number(cond.value) || 0;
-  switch(cond.op){ case '=': return score === v; case '≠': return score !== v; case '>': return score > v; case '<': return score < v; case '≥': return score >= v; case '≤': return score <= v; default: return true; }
-}
-function showPlayEnd(title, sub){
-  P.over = true; const box = P.container; if(!box) return; box.innerHTML = '';
-  const d = document.createElement('div'); d.className = 'meta-play-result';
-  d.innerHTML = '<h2>' + esc(title) + '</h2><p>' + esc(sub) + '</p><button class="btn btn-create" id="playRestart">Пройти заново</button><button class="btn btn-profile" id="playExit">Выйти из предпросмотра</button>';
-  box.appendChild(d);
-  $('playRestart').addEventListener('click', () => { P.blockId = P.project.data.startBlockId; P.score = 0; P.answers = {}; P.over = false; renderPlayBlock(); });
-  $('playExit').addEventListener('click', () => { window.META._stopPlay(); setMode('edit'); });
+function nextPlay(b){
+  b.elements.forEach(el => { if(el.type==='input_text'){ const cmp = findCompareForInput(el.id); if(cmp){ const val=normAns(P.answers[el.id]); cmp.props.variants.forEach(v=>{ if(normAns(v.text)===val) P.score+=Number(v.points)||0; }); } } });
+  const link = P.project.data.links.find(l => l.kind==='transition' && l.from===b.id);
+  if(!link){ box.innerHTML = '<div class="meta-play-result"><h2>Конец</h2><p>Очки: '+P.score+'</p></div>'; return; }
+  P.blockId = link.to; renderPlay();
 }
 
-async function openPlayPage(projectId){
+async function openPlayPage(id){
   injectStyles();
-  if(!$('metaPlayPage')){
-    const div = document.createElement('div'); div.id = 'metaPlayPage'; div.className = 'page';
-    div.innerHTML = '<div style="max-width:1000px;margin:0 auto"><div id="metaPlayHeader" style="text-align:center;color:#fff;margin-bottom:16px"></div><div id="metaPlayArea" style="position:relative;height:640px;background:#111;border-radius:16px;overflow:hidden"></div><div id="metaPlayFooter" style="text-align:center;margin-top:16px"></div></div>';
-    document.body.appendChild(div);
-  }
-  window.showPage('metaPlayPage');
-  $('metaPlayArea').innerHTML = '<p style="color:#fff;padding:24px">Загрузка…</p>';
-  try {
-    const p = await loadProject(projectId);
-    if(!p){ alert('Проект не найден'); location.hash = ''; return; }
-    P.project = p; P.blockId = p.data.startBlockId; P.score = 0; P.answers = {}; P.over = false; P.container = $('metaPlayArea');
-    $('metaPlayHeader').innerHTML = '<h2 style="color:var(--yellow);font-size:28px">' + esc(p.title) + '</h2>' + (p.description ? '<p style="opacity:.85;margin-top:6px">' + esc(p.description) + '</p>' : '');
-    renderPlayBlock();
-    $('metaPlayFooter').innerHTML = '<button class="btn btn-profile" onclick="goHome()">На главную</button>';
-  } catch(err){ $('metaPlayArea').innerHTML = '<p style="color:#fff;padding:24px">Ошибка: ' + esc(err.message) + '</p>'; }
+  if(!$('metaPlayPage')){ const d=document.createElement('div'); d.id='metaPlayPage'; d.className='page'; d.innerHTML='<div style="max-width:1000px;margin:0 auto;padding:20px"><h2 id="mPTitle" style="color:#f4e238;text-align:center"></h2><div id="mPArea" style="position:relative;height:640px;background:#111;border-radius:16px;overflow:hidden"></div></div>'; document.body.appendChild(d); }
+  window.showPage('metaPlayPage'); $('mPArea').innerHTML = 'Загрузка...';
+  loadProject(id).then(p => { if(!p) return; $('mPTitle').textContent = p.title; P = { project: p, blockId: p.data.startBlockId, score: 0, answers: {}, container: $('mPArea') }; renderPlay(); });
 }
 
 window.metaRoute = function(h){
@@ -1032,8 +288,7 @@ window.metaRoute = function(h){
 (function(){
   let busy = false;
   const tryInject = async () => {
-    if(busy) return;
-    const grid = $('testGrid'); if(!grid) return;
+    if(busy) return; const grid = $('testGrid'); if(!grid) return;
     if(location.hash && location.hash !== '#/' && location.hash !== '') return;
     if(!grid.querySelectorAll('.card').length) return;
     if(grid.querySelector('.meta-card-home')) return;
@@ -1043,10 +298,8 @@ window.metaRoute = function(h){
       if(!list.length){ busy = false; return; }
       list.forEach(p => {
         const card = document.createElement('div'); card.className = 'card meta-card-home';
-        const icon = p.avatar ? '<img src="' + esc(p.avatar) + '">' : '✨';
-        const author = p.profiles ? p.profiles.login : '???';
-        card.innerHTML = '<div class="test-icon">' + icon + '</div><h3>' + esc(p.title) + '</h3>' + (p.description ? '<div class="desc">' + esc(p.description) + '</div>' : '') + '<div class="author">от ' + esc(author) + '</div>';
-        card.addEventListener('click', () => { location.hash = '#/meta/play/' + p.id; });
+        card.innerHTML = '<div class="test-icon">'+(p.avatar?'<img src="'+esc(p.avatar)+'">':'✨')+'</div><h3>'+esc(p.title)+'</h3><div class="author">от '+(p.profiles?esc(p.profiles.login):'???')+'</div>';
+        card.onclick = () => { location.hash = '#/meta/play/' + p.id; };
         grid.appendChild(card);
       });
     } catch(_){}
@@ -1057,36 +310,10 @@ window.metaRoute = function(h){
 })();
 
 (function(){
-  const addBtn = () => {
-    const nav = document.getElementById('navBox'); if(!nav) return;
-    if(nav.querySelector('.meta-nav-btn')) return;
-    const btn = document.createElement('a'); btn.href = '#/meta'; btn.className = 'btn btn-nav meta-nav-btn'; btn.textContent = 'Метаредактор';
-    nav.insertBefore(btn, nav.firstChild);
-  };
-  const tryOverride = () => {
-    if(window.renderNav && !window.renderNav._metaWrapped){
-      const orig = window.renderNav;
-      window.renderNav = function(){ orig.apply(this, arguments); addBtn(); };
-      window.renderNav._metaWrapped = true;
-    }
-  };
+  const addBtn = () => { const nav = document.getElementById('navBox'); if(!nav||nav.querySelector('.meta-nav-btn')) return; const btn=document.createElement('a'); btn.href='#/meta'; btn.className='btn btn-nav meta-nav-btn'; btn.textContent='Метаредактор'; nav.insertBefore(btn, nav.firstChild); };
+  const tryOverride = () => { if(window.renderNav && !window.renderNav._w){ const o=window.renderNav; window.renderNav=function(){o.apply(this,arguments); addBtn();}; window.renderNav._w=true; } };
   if(typeof renderNav === 'function') tryOverride();
-  const t = setInterval(() => { tryOverride(); if(document.getElementById('navBox')) { addBtn(); clearInterval(t); } }, 200);
-  setTimeout(addBtn, 1000);
-// --- Синхронизация пользователя ---
-(async function syncUser(){
-  try {
-    const { data } = await sb.auth.getSession();
-    if (data && data.session && data.session.user) {
-      window.currentUser = data.session.user;
-    }
-  } catch(e) {}
-  sb.auth.onAuthStateChange((event, session) => {
-    if (session && session.user) {
-      window.currentUser = session.user;
-    } else {
-      window.currentUser = null;
-    }
-  });
+  setInterval(() => { tryOverride(); if(document.getElementById('navBox')) { addBtn(); } }, 500);
 })();
+
 })();
