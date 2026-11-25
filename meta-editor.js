@@ -1513,7 +1513,9 @@ window.metaRoute = function(h){
     const grid = $('testGrid');
     if(!grid) return;
     if(location.hash && location.hash !== '#/' && location.hash !== '') return;
-    if(!grid.querySelectorAll('.card').length) return;
+        if(!grid.querySelectorAll('.card').length) return;
+    const u = await waitForUser();
+    if(!u) { busy = false; return; }
     if(grid.querySelector('.meta-card-home')) return; // уже добавили
     busy = true;
     try {
