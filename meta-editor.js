@@ -1214,7 +1214,8 @@ async function openProjectsPage(){
   window.showPage('metaListPage');
   const grid = $('metaProjectsGrid');
   grid.innerHTML = '<p style="color:rgba(255,255,255,.8)">Загрузка…</p>';
-  if(!window.currentUser){ grid.innerHTML = '<p style="color:rgba(255,255,255,.8)">Войдите, чтобы видеть свои проекты</p>'; return; }
+    const user = await waitForUser();
+  if(!user){ grid.innerHTML = '<p style="color:rgba(255,255,255,.8)">Войдите, чтобы видеть свои проекты</p>'; return; }
   try {
     const list = await listMyProjects();
     grid.innerHTML = '';
