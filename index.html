@@ -351,6 +351,119 @@
   .ach b{display:block;color:var(--red);font-size:16px}
   .ach span{color:var(--muted);font-size:14px}
   .ach span i{font-style:normal;font-weight:800;color:var(--red);font-size:18px}
+
+  /* ===== Этап 3 ===== */
+  .bounds-tick{position:absolute;top:2px;bottom:2px;width:2px;background:rgba(0,0,0,.22);z-index:1;pointer-events:none}
+  .bounds-handle{z-index:2}
+  .qe-type{padding:6px 8px;border:2px solid #e2e2e2;border-radius:8px;font-family:inherit;font-size:13px;font-weight:700;background:#fff;color:var(--text)}
+  .modal .qe select,.qe select{font-family:inherit}
+  .sw-side{font-size:18px;flex-shrink:0}
+  .cd-row{display:flex;gap:6px;align-items:center;margin-bottom:6px}
+  .cd-row .cd-n{width:22px;text-align:center;font-weight:800;color:var(--muted);flex-shrink:0}
+  .cd-row input[type=text]{flex:1;min-width:0;padding:8px 10px;border:2px solid #e2e2e2;border-radius:10px;font-family:inherit;font-size:14px;background:#fff;color:var(--text)}
+  .cd-row select{max-width:150px;padding:8px;border:2px solid #e2e2e2;border-radius:10px;font-family:inherit;font-size:13px;background:#fff;color:var(--text)}
+  .qe select.cd-mode{width:100%;padding:10px;border:2px solid #e2e2e2;border-radius:10px;font-size:14px;background:#fff;color:var(--text)}
+
+  /* выбор вида теста и наработки */
+  #kindPage,#draftsPage{padding:40px 24px;max-width:960px;margin:0 auto}
+  .kind-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px;margin-bottom:24px}
+  .kind-card{background:var(--white);color:var(--text);border:3px solid var(--yellow);border-radius:20px;padding:24px 18px;text-align:center;cursor:pointer;transition:transform .15s}
+  .kind-card:hover{transform:translateY(-4px)}
+  .kind-card .kind-ico{font-size:54px;margin-bottom:8px}
+  .kind-card h3{color:var(--red);font-size:22px;margin-bottom:6px}
+  .kind-card p{color:var(--muted);font-size:14px}
+  .kind-card.soon{opacity:.55;cursor:default}
+  .kind-card.soon:hover{transform:none}
+
+  /* свайп */
+  .swipe-row{display:flex;gap:10px}
+  .sw-btn{flex:1;padding:16px 10px;border:2px solid #e2e2e2;border-radius:14px;background:#fff;font-size:17px;font-weight:800;cursor:pointer;color:var(--text);transition:all .15s}
+  .sw-btn:hover,.sw-btn.hot{border-color:var(--yellow);background:#fffdf0}
+  .sw-btn.selected{border-color:var(--red);background:#fff3f4;color:var(--red)}
+  .swipe-tip{color:var(--muted);font-size:13px;margin:10px 0}
+  .question-block{user-select:none}
+
+  /* карточки */
+  .cd-slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:12px}
+  .cd-slots.order{grid-template-columns:repeat(auto-fill,minmax(110px,1fr))}
+  .cd-zone{border:2px dashed #d0d0d0;border-radius:12px;min-height:84px;background:#fafafa;cursor:pointer}
+  .cd-zone-h{font-size:13px;font-weight:800;color:var(--red);padding:6px 10px 0}
+  .cd-zone-body{padding:6px;display:flex;flex-direction:column;gap:6px}
+  .cd-pool{display:flex;flex-wrap:wrap;gap:8px;min-height:52px;padding:10px;border-radius:12px;background:#fff8d6;border:2px solid var(--card-border)}
+  .cd-card{background:#fff;border:2px solid #e2e2e2;border-radius:10px;padding:8px 12px;font-weight:700;font-size:15px;cursor:pointer;color:var(--text)}
+  .cd-card:hover{border-color:var(--yellow)}
+  .cd-card.sel{border-color:var(--red);background:#fff3f4;color:var(--red)}
+
+  /* перечисление */
+  .en-count{margin:10px 0 6px;font-weight:800;color:var(--red);font-size:14px}
+  .en-list,.ch-found{display:flex;flex-wrap:wrap;gap:6px}
+  .en-chip{padding:5px 12px;border-radius:16px;background:#ececec;color:#999;font-weight:700;font-size:14px}
+  .en-chip.ok{background:#d8f6df;color:#157a34}
+  .en-chip.miss{background:#fde0e0;color:#b4232f}
+  .shake{animation:shake .3s}
+  @keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+  /* тирлист: редактор */
+  .tier-row-ed{display:flex;gap:8px;align-items:stretch;margin-bottom:8px}
+  .tier-label-ed{width:86px;border-radius:10px;display:flex;align-items:center;justify-content:center;padding:4px;flex-shrink:0}
+  .tier-label-ed input{width:100%;background:transparent;border:none;text-align:center;font-weight:800;font-size:20px;color:#222;font-family:inherit;min-width:0}
+  .tier-label-ed input:focus{outline:2px solid rgba(0,0,0,.3);border-radius:6px}
+  .tier-empty{flex:1;border:2px dashed #d8d8d8;border-radius:10px;display:flex;align-items:center;padding:0 12px;color:#aaa;font-size:13px;min-height:48px}
+  .tr-color{width:44px;height:auto;padding:0;border:2px solid #ddd;border-radius:10px;background:#fff;cursor:pointer;flex-shrink:0}
+  .tier-item-ed{display:flex;gap:10px;align-items:flex-start;background:#fafafa;border-radius:12px;padding:10px;margin-bottom:10px}
+  .tier-item-ed .ti-prev{width:84px;height:84px;object-fit:cover;border-radius:10px;background:#eee;flex-shrink:0}
+  .ti-fields{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
+  .ti-fields input[type=text]{padding:8px 10px;border:2px solid #e2e2e2;border-radius:10px;font-family:inherit;font-size:14px;background:#fff;color:var(--text)}
+
+  /* тирлист: прохождение */
+  #quizContent[data-kind="tier"] .quiz-col,#quizContent[data-kind="challenge"] .quiz-col{max-width:none}
+  .tier-board{border:3px solid #222;border-radius:12px;overflow:hidden;background:#111}
+  .tier-row{display:flex;border-bottom:3px solid #222;min-height:84px}
+  .tier-row:last-child{border-bottom:none}
+  .tier-label{width:78px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:24px;color:#222;padding:4px;text-align:center;word-break:break-word}
+  .tier-drop{flex:1;display:flex;flex-wrap:wrap;gap:6px;padding:6px;background:#2b2b2b;align-content:flex-start;min-height:80px;cursor:pointer}
+  .tier-pool-title{color:var(--yellow);font-weight:800;margin:16px 0 8px}
+  .tier-pool{display:flex;flex-wrap:wrap;gap:6px;padding:10px;border-radius:12px;background:var(--white);min-height:90px}
+  .tier-item{width:72px;cursor:pointer;border:3px solid transparent;border-radius:8px;background:#fff;text-align:center;overflow:hidden}
+  .tier-item img{display:block;width:100%;height:66px;object-fit:cover;background:#eee}
+  .tier-item small{display:block;font-size:11px;font-weight:700;color:var(--text);padding:2px;line-height:1.1;word-break:break-word}
+  .tier-item.sel{border-color:var(--red);box-shadow:0 0 0 2px var(--yellow)}
+  .tier-final .tier-item{cursor:default}
+  #qrExtra{margin:16px 0;text-align:left}
+
+  /* челлендж: редактор */
+  .ch-map-editor{background:#fafafa;border:2px solid #eee;border-radius:12px;padding:8px;margin:8px 0;max-height:520px;overflow:auto}
+  .ch-map-editor:empty{display:none}
+  .ch-map-editor svg{cursor:crosshair}
+  .ch-word{display:flex;gap:6px;align-items:center;margin-bottom:6px}
+  .ch-word input{flex:1;min-width:0;padding:9px 10px;border:2px solid #e2e2e2;border-radius:10px;font-family:inherit;font-size:14px;background:#fff;color:var(--text)}
+  .chw-bind{font-size:14px;white-space:nowrap}
+  .chw-bind.on{background:#ff9f1c;color:#fff}
+  .cc-bulkbox textarea{width:100%;padding:10px;border:2px solid #e2e2e2;border-radius:10px;font-family:inherit;font-size:14px;margin-top:8px;background:#fff;color:var(--text)}
+
+  /* челлендж: прохождение */
+  .ch-wrap{display:flex;gap:16px;align-items:flex-start}
+  .ch-left{flex:1;min-width:0}
+  .ch-right{width:300px;flex-shrink:0}
+  .ch-inputrow{display:flex;gap:10px;align-items:center;margin-bottom:12px}
+  .ch-timer{background:var(--yellow);color:var(--red);font-weight:800;font-size:20px;padding:8px 14px;border-radius:12px;min-width:78px;text-align:center}
+  .ch-timer.low{background:var(--red);color:#fff}
+  .ch-map{background:var(--white);border-radius:14px;padding:8px}
+  .ch-map svg,.ch-map img{display:block;width:100%;height:auto}
+  .ch-total{color:var(--yellow);font-weight:800;font-size:18px;margin-bottom:10px}
+  .ch-cat{background:var(--white);color:var(--text);border-radius:12px;padding:10px 12px;margin-bottom:10px}
+  .ch-cat-h{display:flex;justify-content:space-between;margin-bottom:6px}
+  .ch-cat-h b{color:var(--red)}
+  .ch-cat-h span{font-weight:800;color:var(--muted)}
+  .ch-hintbox{background:rgba(255,255,255,.14);border-radius:12px;padding:8px 12px;margin-bottom:10px;color:#fff}
+  .ch-hintbox:empty{display:none}
+  .ch-hint-h{font-weight:800;color:var(--yellow);margin-bottom:4px}
+  .ch-hint{font-size:15px;font-weight:700}
+  .ch-hint small{opacity:.8;font-weight:600}
+  .ch-btns{display:flex;gap:8px;flex-wrap:wrap}
+  .ch-btns .btn{flex:1}
+  .ch-summary{max-width:560px;margin:0 auto}
+  @media(max-width:860px){.ch-wrap{flex-direction:column}.ch-right{width:100%}}
 </style>
 </head>
 <body>
@@ -415,17 +528,41 @@
         </div>
         <div class="hint-small" id="tagCount"></div>
       </div>
-      <div class="editor-step">
+      <div class="editor-step" id="stQuiz1">
         <h3>Вопросы</h3>
         <div id="edQuestions"></div>
         <button class="add-btn" id="edAddQ">+ Добавить вопрос</button>
       </div>
-      <div class="editor-step">
+      <div class="editor-step" id="stQuiz2">
         <h3>Результаты</h3>
         <div id="edResults"></div>
         <button class="add-btn" id="edAddR" style="margin-bottom:16px">+ Добавить результат</button>
         <div id="edBounds"></div>
       </div>
+      <div class="editor-step" id="edTierStep" style="display:none">
+        <h3>Тирлист</h3>
+        <p class="hint-small">Строки доски: слева буква, цвет меняется кликом по цветному квадрату. Игрок расставит картинки по строкам.</p>
+        <div id="tierRows"></div>
+        <button class="add-btn" id="tierAddRow" style="margin-bottom:20px">+ Добавить строку</button>
+        <h3>Картинки</h3>
+        <div id="tierItems"></div>
+        <button class="add-btn" id="tierAddItem">+ Добавить картинку</button>
+      </div>
+      <div class="editor-step" id="edChStep" style="display:none">
+        <h3>Челлендж</h3>
+        <label class="btn btn-secondary" style="display:inline-block;cursor:pointer">🖼 Загрузить картинку или SVG<input type="file" id="chFile" accept="image/*,.svg" style="display:none"></label>
+        <button class="add-btn" id="chClearMap" style="display:none;width:auto;margin-left:8px">✖ Убрать</button>
+        <div class="hint-small" id="chMapHint"></div>
+        <div class="ch-map-editor" id="chMapBox"></div>
+        <div class="msg" id="chMsg"></div>
+        <div style="display:flex;gap:12px;margin:12px 0;flex-wrap:wrap">
+          <label style="flex:1;min-width:180px">Подсказок игроку<input type="number" id="chHints" min="0" max="10" value="3" style="width:100%;padding:10px;border:2px solid #e2e2e2;border-radius:10px"></label>
+          <label style="flex:1;min-width:180px">Таймер, минут (0 — без таймера)<input type="number" id="chTime" min="0" max="180" value="0" style="width:100%;padding:10px;border:2px solid #e2e2e2;border-radius:10px"></label>
+        </div>
+        <div id="chCats"></div>
+        <button class="add-btn" id="chAddCat">+ Добавить категорию</button>
+      </div>
+      <button class="btn btn-secondary" id="draftBtn" style="width:100%;margin-bottom:12px;font-size:16px;padding:14px">💾 Сохранить наработку</button>
       <button class="btn btn-create" id="publishBtn" style="font-size:18px;padding:16px;width:100%">Опубликовать тест</button>
       <div class="msg" id="pubMsg" style="color:#fff"></div>
     </div>
@@ -498,6 +635,7 @@
           <img class="res-img" id="qrImg" src="" alt="Результат">
           <h2 id="qrTitle"></h2>
           <p id="qrDesc"></p>
+          <div id="qrExtra"></div>
           <div class="result-actions">
             <button class="btn btn-profile" id="toStatsBtn">📊 Моя статистика</button>
             <button class="btn btn-settings" id="retryBtn">🔄 Пройти ещё раз</button>
@@ -687,6 +825,15 @@
   </div>
 </div>
 
+<div id="kindPage" class="page">
+  <h2 style="color:var(--yellow);margin-bottom:20px">Что создаём?</h2>
+  <div class="kind-grid" id="kindGrid"></div>
+</div>
+<div id="draftsPage" class="page">
+  <button class="btn btn-secondary" id="draftsBack" style="margin-bottom:16px">← Назад</button>
+  <h2 style="color:var(--yellow);margin-bottom:20px" id="draftsTitle"></h2>
+  <div class="kind-grid" id="draftsGrid"></div>
+</div>
 <footer>Печенеги онлайн — пока что сайт для друзей 💛</footer>
 
 <!-- Модалка входа/регистрации -->
@@ -801,11 +948,19 @@
     if(h.startsWith('#/result/')){ openStatsPage(h.slice(9)); return; }
     if(h.startsWith('#/user/')){ openProfilePage(h.slice(7)); return; }
     if(h.startsWith('#/stats/')){ openTestStats(h.slice(8)); return; }
-    if(h === '#/create' || h.startsWith('#/edit/')){
+    if(h.startsWith('#/create') || h.startsWith('#/edit/')){
       if(!currentUser){ openAuth('Сначала войдите, чтобы создавать тесты!'); goHome(); return; }
-      const key = h === '#/create' ? 'new' : h.slice(7);
+      let spec;
+      const mm = h.match(/^#\/create\/(\w+)(?:\/(new|draft\/([\w-]+)))?$/);
+      if(h === '#/create'){ testEditorKey = null; openKindPage(); return; }
+      if(h.startsWith('#/edit/')) spec = { mode: 'edit', id: h.slice(7) };
+      else if(mm && !mm[2]){ testEditorKey = null; openDraftsPage(mm[1]); return; }
+      else if(mm && mm[2] === 'new') spec = { mode: 'new', kind: mm[1] };
+      else if(mm) spec = { mode: 'draft', kind: mm[1], id: mm[3] };
+      else { openKindPage(); return; }
+      const key = spec.mode + ':' + (spec.id || spec.kind);
       if(testEditorKey === key && document.getElementById('createPage').style.display === 'block') return;
-      openEditor(key === 'new' ? null : key); return;
+      openEditor(spec); return;
     }
     testEditorKey = null;
     openMainPage();
@@ -927,21 +1082,141 @@
   let edBounds = [];    // границы в процентах, длина = results-1
   let boundsRefs = { fills: [], handles: [], labels: [] };
 
+  // ===================================================================
+  //        ЭТАП 3. Вспомогательные функции и редактор вопросов
+  // ===================================================================
+  const QTYPES = [
+    { v: 'normal', name: 'Обычный' },
+    { v: 'swipe', name: 'Свайп (два варианта)' },
+    { v: 'cards', name: 'Карточки' },
+    { v: 'enum', name: 'Перечисление' }
+  ];
+  function normAns(s){ return String(s || '').toLowerCase().replace(/ё/g, 'е').replace(/[^\p{L}\p{N}]/gu, ''); }
+  function parseVariants(line){ return String(line).split('|').map(x => x.trim()).filter(Boolean); }
+  function parseWordLines(text){
+    return String(text).split(/\r?\n/).map(parseVariants).filter(v => v.length).map(v => ({ text: v[0], alts: v.slice(1) }));
+  }
+  function shuf(a){ a = a.slice(); for(let i = a.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+
+  // вопрос редактора -> строка для БД
+  function editorToRow(q){
+    const t = q.type;
+    if(t === 'choice' || t === 'input' || t === 'swipe'){
+      const answers = (q.answers || []).filter(a => String(a.text).trim()).map(a => ({ text: a.text.trim(), points: Number(a.points) || 0 }));
+      return { type: t, options: answers, config: {} };
+    }
+    if(t === 'cards'){
+      const cfg = q.cfg || {};
+      const slots = (cfg.slots || []).map(x => String(x).trim()).filter(Boolean);
+      const cards = (q.cards || []).filter(c => String(c.text).trim()).map(c => ({ text: c.text.trim(), slot: Number(c.slot) || 0 }));
+      return { type: 'cards', options: cards, config: { mode: cfg.mode === 'match' ? 'match' : 'order', points: Math.max(0, Number(cfg.points) || 0), slots: cfg.mode === 'match' ? slots : [] } };
+    }
+    if(t === 'enum'){
+      return { type: 'enum', options: parseWordLines(q.words || ''), config: { points: Math.max(0, Number((q.cfg || {}).points) || 0) } };
+    }
+    return { type: t, options: [], config: {} };
+  }
+  // строка БД -> вопрос редактора
+  function rowToEditor(r){
+    const type = r.type || 'choice', cfg = r.config || {};
+    const q = { id: r.id, text: r.question_text || '', desc: r.question_desc || '', comment: r.after_comment || '', type,
+                imageUrl: r.image_url || '', answers: [], cards: [], words: '', cfg: {} };
+    if(type === 'cards'){
+      q.cards = (r.options || []).map(o => ({ text: o.text, slot: Number(o.slot) || 0 }));
+      q.cfg = { mode: cfg.mode === 'match' ? 'match' : 'order', points: cfg.points === undefined ? 1 : cfg.points, slots: cfg.slots || [] };
+    } else if(type === 'enum'){
+      q.words = (r.options || []).map(o => [o.text].concat(o.alts || []).join(' | ')).join('\n');
+      q.cfg = { points: cfg.points === undefined ? 1 : cfg.points };
+    } else {
+      q.answers = (r.options || []).map(o => ({ text: o.text, points: Number(o.points) || 0 }));
+    }
+    return q;
+  }
+  function ensureQDefaults(q){
+    q.answers = q.answers || []; q.cards = q.cards || []; q.words = q.words || ''; q.cfg = q.cfg || {};
+    if(q.type === 'swipe'){
+      q.answers = [q.answers[0] || { text: '', points: 0 }, q.answers[1] || { text: '', points: 0 }];
+    } else if(q.type === 'choice' || q.type === 'input'){
+      if(q.answers.length < (q.type === 'choice' ? 2 : 1)) while(q.answers.length < (q.type === 'choice' ? 2 : 1)) q.answers.push({ text: '', points: 0 });
+    } else if(q.type === 'cards'){
+      if(!q.cfg.mode) q.cfg.mode = 'order';
+      if(q.cfg.points === undefined) q.cfg.points = 1;
+      q.cfg.slots = q.cfg.slots || [];
+      while(q.cards.length < 2) q.cards.push({ text: '', slot: 0 });
+    } else if(q.type === 'enum'){
+      if(q.cfg.points === undefined) q.cfg.points = 1;
+    }
+    return q;
+  }
+
+  // возможные очки за вопрос и сумма по тесту
+  function rowValues(r){
+    const o = r.options || [], cfg = r.config || {};
+    if(r.type === 'choice' || r.type === 'swipe') return [...new Set(o.map(x => Number(x.points) || 0))];
+    if(r.type === 'input') return [...new Set([0].concat(o.map(x => Number(x.points) || 0)))];
+    if(r.type === 'cards' || r.type === 'enum'){
+      const p = Number(cfg.points) || 0, n = o.length;
+      return Array.from({ length: n + 1 }, (_, i) => i * p);
+    }
+    return [0];
+  }
+  function rowMax(r){ const v = rowValues(r); return v.length ? Math.max(0, ...v) : 0; }
+  function maxScoreOf(rows){ return rows.reduce((m, r) => m + rowMax(r), 0); }
+  function possibleSums(rows){
+    let sums = new Set([0]), max = 0;
+    for(const r of rows){
+      const vals = rowValues(r);
+      max += Math.max(0, ...vals);
+      if(max > 4000) return null;
+      const next = new Set();
+      sums.forEach(a => vals.forEach(v => next.add(a + v)));
+      sums = next;
+    }
+    return { sums: [...sums].sort((a, b) => a - b), max };
+  }
+  function divisionPercents(rows){
+    const ps = possibleSums(rows);
+    if(!ps || ps.max <= 0) return null;
+    const map = new Map();
+    ps.sums.forEach(sm => { const p = Math.round(sm / ps.max * 100); if(p < 100) map.set(p, sm); });
+    return { pct: [...map.keys()].sort((a, b) => a - b), pts: map, max: ps.max, count: ps.sums.length };
+  }
+
   function syncEditorFromDOM(){
+    if(edKind !== 'quiz') return;
     edQuestions = [];
     document.querySelectorAll('#edQuestions .qe').forEach(b => {
-      edQuestions.push({
+      const type = b.dataset.type;
+      const q = {
         id: b.dataset.id || null,
         text: b.querySelector('.qe-text').value,
         desc: b.querySelector('.qe-desc').value,
         comment: b.querySelector('.qe-comment').value,
-        type: b.dataset.type,
+        type,
         imageUrl: b.dataset.img || '',
-        answers: Array.from(b.querySelectorAll('.ans-row')).map(row => ({
+        answers: [], cards: [], words: '', cfg: {}
+      };
+      if(type === 'choice' || type === 'input' || type === 'swipe'){
+        q.answers = Array.from(b.querySelectorAll('.ans-row')).map(row => ({
           text: row.querySelector('.ans-text').value,
           points: Math.max(0, Number(row.querySelector('.ans-points').value) || 0)
-        }))
-      });
+        }));
+      } else if(type === 'cards'){
+        const mode = b.querySelector('.cd-mode').value;
+        q.cfg = {
+          mode,
+          points: Math.max(0, Number(b.querySelector('.cd-points').value) || 0),
+          slots: mode === 'match' ? b.querySelector('.cd-slots').value.split(/\r?\n/).map(x => x.trim()).filter(Boolean) : []
+        };
+        q.cards = Array.from(b.querySelectorAll('.cd-row')).map(row => {
+          const sel = row.querySelector('.cd-slot');
+          return { text: row.querySelector('.cd-text').value, slot: sel ? Number(sel.value) || 0 : 0 };
+        });
+      } else if(type === 'enum'){
+        q.words = b.querySelector('.en-words').value;
+        q.cfg = { points: Math.max(0, Number(b.querySelector('.en-points').value) || 0) };
+      }
+      edQuestions.push(q);
     });
     edResults = [];
     document.querySelectorAll('#edResults .re').forEach(b => {
@@ -960,23 +1235,77 @@
       '<input type="number" class="ans-points" min="0" max="999" value="' + (a ? a.points : 0) + '" title="Очки за выбор">' +
       '<button class="icon-btn ans-del">✕</button></div>';
   }
+  function swipeRowHTML(side, a){
+    return '<div class="ans-row"><span class="sw-side">' + (side === 0 ? '⬅️' : '➡️') + '</span>' +
+      '<input type="text" class="ans-text" placeholder="' + (side === 0 ? 'Левый вариант, например, Нет' : 'Правый вариант, например, Да') + '" maxlength="60" value="' + escapeHtml(a ? a.text : '') + '">' +
+      '<input type="number" class="ans-points" min="0" max="999" value="' + (a ? a.points : 0) + '" title="Очки за этот выбор"></div>';
+  }
+  function cardRowHTML(c, i, mode, slots){
+    let sel = '';
+    if(mode === 'match'){
+      sel = '<select class="cd-slot" title="В какую ячейку относится">' +
+        slots.map((s, si) => '<option value="' + si + '"' + (Number(c.slot) === si ? ' selected' : '') + '>' + escapeHtml(s) + '</option>').join('') + '</select>';
+    }
+    return '<div class="cd-row"><span class="cd-n">' + (i + 1) + '</span>' +
+      '<input type="text" class="cd-text" maxlength="60" placeholder="Текст карточки" value="' + escapeHtml(c.text || '') + '">' + sel +
+      '<button class="icon-btn cd-del">✕</button></div>';
+  }
+
+  function questionBodyHTML(q){
+    if(q.type === 'swipe'){
+      return '<p class="hint-small" style="margin-bottom:8px">Игрок увидит карточку с вопросом и два варианта: влево и вправо (можно свайпом или кнопками).</p>' +
+        swipeRowHTML(0, q.answers[0]) + swipeRowHTML(1, q.answers[1]);
+    }
+    if(q.type === 'cards'){
+      const cfg = q.cfg, slots = (cfg.slots || []).filter(s => String(s).trim());
+      let h = '<div class="field"><label>Что делает игрок</label><select class="cd-mode">' +
+        '<option value="order"' + (cfg.mode === 'order' ? ' selected' : '') + '>Расставляет карточки по порядку (в ячейки 1, 2, 3…)</option>' +
+        '<option value="match"' + (cfg.mode === 'match' ? ' selected' : '') + '>Раскладывает каждую карточку в подходящую ячейку</option></select></div>' +
+        '<div class="field"><label>Очки за каждую верно поставленную карточку</label><input type="number" class="cd-points" min="0" max="99" value="' + (cfg.points || 0) + '"></div>';
+      if(cfg.mode === 'match'){
+        h += '<div class="field"><label>Ячейки (по одной в строке)</label><textarea class="cd-slots" rows="3" placeholder="Млекопитающие&#10;Птицы">' + escapeHtml((cfg.slots || []).join('\n')) + '</textarea>' +
+             '<div class="hint-small">После изменения ячеек нажмите в любое другое место: списки у карточек обновятся.</div></div>';
+      } else {
+        h += '<p class="hint-small" style="margin-bottom:8px">Впишите карточки в ПРАВИЛЬНОМ порядке: первая карточка будет в ячейке 1 и так далее. Игроку они покажутся перемешанными.</p>';
+      }
+      h += '<div class="cd-list">' + q.cards.map((c, i) => cardRowHTML(c, i, cfg.mode, slots)).join('') + '</div>' +
+           '<button class="add-btn cd-add" style="margin-top:6px">+ Карточка</button>';
+      return h;
+    }
+    if(q.type === 'enum'){
+      return '<div class="field"><label>Правильные слова: по одному в строке. Варианты написания через | (например, земля | планета земля)</label>' +
+        '<textarea class="en-words" rows="6" placeholder="меркурий&#10;венера&#10;земля | планета земля">' + escapeHtml(q.words || '') + '</textarea></div>' +
+        '<div class="field"><label>Очки за каждое найденное слово</label><input type="number" class="en-points" min="0" max="99" value="' + ((q.cfg || {}).points || 0) + '"></div>' +
+        '<p class="hint-small">Игрок вводит слова в поле: найденные появляются списком, а ненайденные остаются скрытыми.</p>';
+    }
+    // обычный
+    let ansHtml = '';
+    q.answers.forEach(a => ansHtml += answerRowHTML(q.type, a));
+    return '<div class="type-tabs">' +
+        '<div class="tab qe-tc' + (q.type === 'choice' ? ' active' : '') + '">Выбрать ответ</div>' +
+        '<div class="tab qe-ti' + (q.type === 'input' ? ' active' : '') + '">Вписать ответ</div>' +
+      '</div>' +
+      '<div class="qe-answers">' + ansHtml + '</div>' +
+      '<button class="add-btn qe-add" style="margin-top:6px">+ Добавить вариант</button>';
+  }
 
   function renderQuestions(){
     const box = document.getElementById('edQuestions');
     box.innerHTML = '';
     if(edQuestions.length === 0) box.innerHTML = '<p style="color:var(--muted);font-size:14px;margin-bottom:12px">Пока нет вопросов.</p>';
     edQuestions.forEach((q, i) => {
+      ensureQDefaults(q);
       const div = document.createElement('div');
       div.className = 'qe';
       div.dataset.type = q.type;
       div.dataset.id = q.id || '';
       div.dataset.img = q.imageUrl || '';
-      let ansHtml = '';
-      (q.answers && q.answers.length ? q.answers : [{text:'',points:0},{text:'',points:0}]).forEach(a => ansHtml += answerRowHTML(q.type, a));
+      const sv = (q.type === 'choice' || q.type === 'input') ? 'normal' : q.type;
       div.innerHTML =
-        '<div class="qe-head"><strong>Вопрос ' + (i+1) + '</strong>' +
-        '<span style="display:flex;gap:6px;align-items:center"><span class="tag qe-tag">' + (q.type === 'choice' ? 'выбрать' : 'вписать') + '</span>' +
-        '<button class="icon-btn qe-del">🗑</button></span></div>' +
+        '<div class="qe-head"><strong>Вопрос ' + (i + 1) + '</strong>' +
+        '<span style="display:flex;gap:6px;align-items:center"><select class="qe-type" title="Тип вопроса">' +
+          QTYPES.map(t => '<option value="' + t.v + '"' + (t.v === sv ? ' selected' : '') + '>' + t.name + '</option>').join('') +
+        '</select><button class="icon-btn qe-del">🗑</button></span></div>' +
         '<div class="field"><label>Текст вопроса</label><input class="qe-text" maxlength="120" value="' + escapeHtml(q.text) + '" placeholder="например, Что ты любишь есть?"></div>' +
         '<div class="field"><label>Описание вопроса</label><input class="qe-desc" maxlength="150" value="' + escapeHtml(q.desc || '') + '" placeholder="необязательно"></div>' +
         '<div class="field"><label>Комментарий после прохождения</label><input class="qe-comment" maxlength="150" value="' + escapeHtml(q.comment || '') + '" placeholder="увидит только прошедший тест"></div>' +
@@ -984,18 +1313,17 @@
           '<input type="file" class="qe-img" accept="image/*">' +
           (q.imageUrl ? '<img class="thumb qe-preview" src="' + q.imageUrl + '">' : '<img class="thumb qe-preview" style="display:none">') +
         '</div></div>' +
-        '<div class="type-tabs">' +
-          '<div class="tab qe-tc' + (q.type === 'choice' ? ' active' : '') + '">Выбрать ответ</div>' +
-          '<div class="tab qe-ti' + (q.type === 'input' ? ' active' : '') + '">Вписать ответ</div>' +
-        '</div>' +
-        '<div class="qe-answers">' + ansHtml + '</div>' +
-        '<button class="add-btn qe-add" style="margin-top:6px">+ Добавить вариант</button>';
+        '<div class="qe-body">' + questionBodyHTML(q) + '</div>';
       box.appendChild(div);
 
-      div.querySelector('.qe-del').onclick = () => { if(confirm('Удалить вопрос?')){ syncEditorFromDOM(); edQuestions.splice(i, 1); renderQuestions(); } };
-      div.querySelector('.qe-add').onclick = () => { div.querySelector('.qe-answers').insertAdjacentHTML('beforeend', answerRowHTML(div.dataset.type, null)); bindAnswerRows(div); };
-      div.querySelector('.qe-tc').onclick = () => switchQType(div, i, 'choice');
-      div.querySelector('.qe-ti').onclick = () => switchQType(div, i, 'input');
+      div.querySelector('.qe-del').onclick = () => { if(confirm('Удалить вопрос?')){ syncEditorFromDOM(); edQuestions.splice(i, 1); renderQuestions(); renderBounds(); } };
+      div.querySelector('.qe-type').onchange = e => {
+        syncEditorFromDOM();
+        const nq = edQuestions[i], v = e.target.value;
+        nq.type = v === 'normal' ? (nq.type === 'input' ? 'input' : 'choice') : v;
+        ensureQDefaults(nq);
+        renderQuestions(); renderBounds();
+      };
       div.querySelector('.qe-img').addEventListener('change', e => {
         const f = e.target.files[0];
         if(!f) return;
@@ -1003,18 +1331,40 @@
         r.onload = ev => { const p = div.querySelector('.qe-preview'); p.src = ev.target.result; p.style.display = 'block'; };
         r.readAsDataURL(f);
       });
-      bindAnswerRows(div);
+      bindQuestionBody(div, i);
     });
   }
+
+  function bindQuestionBody(div, i){
+    const type = div.dataset.type;
+    if(type === 'choice' || type === 'input'){
+      div.querySelector('.qe-add').onclick = () => { div.querySelector('.qe-answers').insertAdjacentHTML('beforeend', answerRowHTML(div.dataset.type, null)); bindAnswerRows(div); };
+      div.querySelector('.qe-tc').onclick = () => switchQType(div, i, 'choice');
+      div.querySelector('.qe-ti').onclick = () => switchQType(div, i, 'input');
+      bindAnswerRows(div);
+    } else if(type === 'cards'){
+      const rerender = () => { syncEditorFromDOM(); renderQuestions(); renderBounds(); };
+      div.querySelector('.cd-mode').onchange = rerender;
+      const slots = div.querySelector('.cd-slots');
+      if(slots) slots.onchange = rerender;
+      div.querySelector('.cd-add').onclick = () => { syncEditorFromDOM(); edQuestions[i].cards.push({ text: '', slot: 0 }); renderQuestions(); renderBounds(); };
+      div.querySelectorAll('.cd-del').forEach((b, bi) => b.onclick = () => {
+        syncEditorFromDOM();
+        if(edQuestions[i].cards.length <= 2){ alert('Нужно минимум 2 карточки'); return; }
+        edQuestions[i].cards.splice(bi, 1); renderQuestions(); renderBounds();
+      });
+    }
+  }
   function bindAnswerRows(block){
-    block.querySelectorAll('.ans-del').forEach(b => b.onclick = () => b.closest('.ans-row').remove());
+    block.querySelectorAll('.ans-del').forEach(b => b.onclick = () => { b.closest('.ans-row').remove(); scheduleBounds(); });
   }
   function switchQType(block, i, type){
     syncEditorFromDOM();
     edQuestions[i].type = type;
-    if(type === 'input' && edQuestions[i].answers.length < 1) edQuestions[i].answers.push({text:'', points:0});
-    renderQuestions();
+    ensureQDefaults(edQuestions[i]);
+    renderQuestions(); renderBounds();
   }
+
 
   function renderResults(){
     const box = document.getElementById('edResults');
@@ -1046,13 +1396,55 @@
     });
   }
 
+  // ===================================================================
+  //   ЭТАП 3. Ползунок результатов: передвигается только по делениям
+  //   (деление = возможная сумма очков в тесте)
+  // ===================================================================
+  let boundsDiv = null;   // {pct:[...], pts:Map(pct->очки), max, count} или null, если делений нет
+  let boundsGrid = [];    // сетка допустимых процентов для ползунка
+  let boundsTimer = null;
+
+  function scheduleBounds(){
+    clearTimeout(boundsTimer);
+    boundsTimer = setTimeout(() => {
+      if(edKind !== 'quiz') return;
+      syncEditorFromDOM();
+      renderBounds();
+    }, 450);
+  }
+  (function(){
+    const q = document.getElementById('edQuestions');
+    q.addEventListener('input', scheduleBounds);
+    q.addEventListener('change', scheduleBounds);
+  })();
+
+  function nearestIndex(D, p){
+    let best = 0, bd = Infinity;
+    for(let i = 0; i < D.length; i++){ const d = Math.abs(D[i] - p); if(d < bd){ bd = d; best = i; } }
+    return best;
+  }
+
   function normalizeBounds(){
-    const n = edResults.length;
-    if(n < 2){ edBounds = []; return; }
-    if(edBounds.length !== n - 1){
-      edBounds = [];
-      for(let i = 1; i < n; i++) edBounds.push(Math.round(100 * i / n));
+    const n = edResults.length, m = n - 1;
+    if(m < 1){ edBounds = []; boundsGrid = []; boundsDiv = null; return; }
+    boundsDiv = divisionPercents(edQuestions.map(editorToRow));
+    let D = boundsDiv && boundsDiv.pct.length >= m ? boundsDiv.pct : null;
+    if(!D){ D = Array.from({ length: 99 }, (_, i) => i + 1); boundsDiv = null; }
+    boundsGrid = D;
+    const start = edBounds.length === m ? edBounds : Array.from({ length: m }, (_, i) => Math.round(100 * (i + 1) / n));
+    const idx = start.map(b => nearestIndex(D, b));
+    for(let i = 1; i < m; i++) if(idx[i] <= idx[i - 1]) idx[i] = idx[i - 1] + 1;
+    for(let i = m - 1; i >= 0; i--){
+      const cap = D.length - (m - i);
+      if(idx[i] > cap) idx[i] = cap;
+      if(i < m - 1 && idx[i] >= idx[i + 1]) idx[i] = idx[i + 1] - 1;
     }
+    edBounds = idx.map(i => D[i]);
+  }
+
+  function boundLabel(p){
+    if(boundsDiv && boundsDiv.pts.has(p)) return boundsDiv.pts.get(p) + ' очк. (' + p + '%)';
+    return p + '%';
   }
 
   function renderBounds(){
@@ -1074,6 +1466,14 @@
       track.appendChild(f);
       boundsRefs.fills.push(f);
     }
+    if(boundsDiv && boundsDiv.pct.length <= 100){
+      boundsDiv.pct.forEach(p => {
+        const t = document.createElement('div');
+        t.className = 'bounds-tick';
+        t.style.left = 'calc(' + p + '% - 1px)';
+        track.appendChild(t);
+      });
+    }
     for(let i = 0; i < n - 1; i++){
       const h = document.createElement('div');
       h.className = 'bounds-handle';
@@ -1093,6 +1493,13 @@
     }
     box.appendChild(track);
     box.appendChild(labels);
+    const info = document.createElement('p');
+    info.className = 'hint-small';
+    info.style.marginTop = '8px';
+    info.textContent = boundsDiv
+      ? 'Ползунок встаёт только на деления: возможных сумм очков в тесте ' + boundsDiv.count + ', максимум ' + boundsDiv.max + '.'
+      : 'Деления появятся, когда в вопросах будут очки (и хватит вариантов суммы для всех результатов). Пока шаг равен 1%.';
+    box.appendChild(info);
     paintBounds();
   }
 
@@ -1104,7 +1511,8 @@
       const to = i < n - 1 ? edBounds[i] : 100;
       boundsRefs.fills[i].style.left = prev + '%';
       boundsRefs.fills[i].style.width = (to - prev) + '%';
-      boundsRefs.labels[i].textContent = 'до ' + to + '% — ' + (edResults[i].title || ('Результат ' + (i + 1)));
+      const lab = i < n - 1 ? 'до ' + boundLabel(to) : 'выше';
+      boundsRefs.labels[i].textContent = lab + ' — ' + (edResults[i].title || ('Результат ' + (i + 1)));
       prev = to;
     }
     edBounds.forEach((b, i) => { boundsRefs.handles[i].style.left = 'calc(' + b + '% - 11px)'; });
@@ -1114,13 +1522,16 @@
     e.preventDefault();
     const i = Number(e.currentTarget.dataset.bi);
     const track = e.currentTarget.parentElement;
+    const D = boundsGrid, m = edBounds.length;
     const move = ev => {
       const r = track.getBoundingClientRect();
-      let p = (ev.clientX - r.left) / r.width * 100;
-      const lo = i > 0 ? edBounds[i - 1] + 3 : 3;
-      const hi = i < edBounds.length - 1 ? edBounds[i + 1] - 3 : 97;
-      p = Math.max(lo, Math.min(hi, p));
-      edBounds[i] = Math.round(p);
+      const p = (ev.clientX - r.left) / r.width * 100;
+      const lo = i > 0 ? D.indexOf(edBounds[i - 1]) + 1 : 0;
+      const hi = i < m - 1 ? D.indexOf(edBounds[i + 1]) - 1 : D.length - 1;
+      if(hi < lo) return;
+      let best = lo, bd = Infinity;
+      for(let k = lo; k <= hi; k++){ const d = Math.abs(D[k] - p); if(d < bd){ bd = d; best = k; } }
+      edBounds[i] = D[best];
       paintBounds();
     };
     const up = () => {
@@ -1130,6 +1541,7 @@
     window.addEventListener('pointermove', move);
     window.addEventListener('pointerup', up);
   }
+
 
   document.getElementById('edAddQ').onclick = () => {
     syncEditorFromDOM();
@@ -1198,7 +1610,27 @@
     if(data){ savedTags = [...new Set([...newTags, ...data.map(r => r.name)])]; renderTagPickers(); }
   }
 
-  let editTestId = null, testEditorKey = null, editOrig = { q: [], r: [] };
+  let editTestId = null, testEditorKey = null, editOrig = { q: [], r: [] }, draftId = null;
+  let edKind = 'quiz';
+  let tierCfg = { tiers: [] }, tierItems = [];
+  let chState = null, chBind = null;
+
+  const KINDS = {
+    quiz: { name: 'Квиз', ico: '❓', desc: 'Вопросы, очки и результаты. Классический тест.' },
+    tier: { name: 'Тирлист', ico: '🏅', desc: 'Игрок расставляет картинки по рангам S, A, B…' },
+    challenge: { name: 'Челлендж', ico: '🗺️', desc: 'Назови все слова: страны на карте, герои, планеты…' }
+  };
+  const KIND_RESULT = { tier: 'Тирлист составлен', challenge: 'Челлендж пройден' };
+  function defaultTiers(){
+    return [{ label: 'S', color: '#ff7f7f' }, { label: 'A', color: '#ffbf7f' }, { label: 'B', color: '#ffdf7f' },
+            { label: 'C', color: '#ffff7f' }, { label: 'D', color: '#bfff7f' }];
+  }
+  function newChState(){
+    return { svgUrl: '', svgType: '', svgText: '', svgFile: null, imgPreview: '', hints: 3, timeLimit: 0, cats: [] };
+  }
+  function kindResultRow(existing){
+    return [{ id: existing ? existing.id : null, title: KIND_RESULT[edKind] || 'Готово', desc: '', imageUrl: '' }];
+  }
 
   function resetEditorFields(){
     edQuestions = []; edResults = []; edBounds = []; pvImageUrl = '';
@@ -1211,40 +1643,99 @@
     const m = document.getElementById('pubMsg');
     m.textContent = ''; m.className = 'msg';
     editOrig = { q: [], r: [] };
+    tierCfg = { tiers: defaultTiers() }; tierItems = [];
+    chState = newChState(); chBind = null;
   }
 
-  async function openEditor(editId){
+  function applyKindUI(){
+    const q = edKind === 'quiz';
+    gid('stQuiz1').style.display = q ? '' : 'none';
+    gid('stQuiz2').style.display = q ? '' : 'none';
+    gid('edTierStep').style.display = edKind === 'tier' ? '' : 'none';
+    gid('edChStep').style.display = edKind === 'challenge' ? '' : 'none';
+    gid('edPageTitle').textContent = (editTestId ? 'Редактирование: ' : 'Создание: ') + (KINDS[edKind] ? KINDS[edKind].name : 'тест');
+    gid('publishBtn').textContent = editTestId ? 'Сохранить изменения' : 'Опубликовать тест';
+    gid('draftBtn').style.display = editTestId ? 'none' : 'block';
+  }
+
+  function applyDraftData(d){
+    gid('edDesc').value = d.desc || '';
+    pvImageUrl = d.cover || '';
+    if(pvImageUrl){ const p = gid('edAvaPreview'); p.src = pvImageUrl; p.style.display = 'block'; }
+    edGenres = d.genres || []; edTags = d.tags || [];
+    edQuestions = (d.questions || []).map(ensureQDefaults);
+    edResults = d.results || [];
+    edBounds = d.bounds || [];
+    if(d.tier){
+      tierCfg = { tiers: (d.tier.tiers && d.tier.tiers.length) ? d.tier.tiers : defaultTiers() };
+      tierItems = (d.tier.items || []).map(x => Object.assign({}, x, { file: null, preview: '' }));
+    }
+    if(d.ch) chState = Object.assign(newChState(), d.ch, { svgFile: null, svgText: '', imgPreview: '' });
+    if(edKind !== 'quiz' && !edResults.length) edResults = kindResultRow(null);
+  }
+
+  async function openEditor(spec){
+    spec = spec || { mode: 'new', kind: 'quiz' };
     showPage('createPage');
-    testEditorKey = editId || 'new';
-    editTestId = editId || null;
+    const myKey = spec.mode + ':' + (spec.id || spec.kind);
+    testEditorKey = myKey;
+    editTestId = spec.mode === 'edit' ? spec.id : null;
+    draftId = spec.mode === 'draft' ? spec.id : null;
     resetEditorFields();
-    document.getElementById('edPageTitle').textContent = editId ? 'Редактирование теста' : 'Создание теста';
-    document.getElementById('publishBtn').textContent = editId ? 'Сохранить изменения' : 'Опубликовать тест';
+    edKind = spec.kind || 'quiz';
+    if(edKind !== 'quiz') edResults = kindResultRow(null);
+    applyKindUI();
     renderTagPickers(); loadSavedTags();
-    if(editId){
-      const { data: t } = await sb.from('tests').select('*').eq('id', editId).maybeSingle();
+
+    if(spec.mode === 'edit'){
+      const { data: t } = await sb.from('tests').select('*').eq('id', spec.id).maybeSingle();
       if(!t || !currentUser || t.author_id !== currentUser.id){ alert('Этот тест нельзя редактировать'); testEditorKey = null; goHome(); return; }
-      const { data: qs } = await sb.from('test_questions').select('*').eq('test_id', editId).order('id');
-      const { data: rs } = await sb.from('test_results').select('*').eq('test_id', editId).order('min_points', { ascending: true });
-      if(testEditorKey !== editId) return;
+      const { data: qs } = await sb.from('test_questions').select('*').eq('test_id', spec.id).order('id');
+      const { data: rs } = await sb.from('test_results').select('*').eq('test_id', spec.id).order('min_points', { ascending: true });
+      if(testEditorKey !== myKey) return;
+      edKind = t.kind || 'quiz';
       document.getElementById('edTitle').value = t.title || '';
       document.getElementById('edDesc').value = t.description || '';
       pvImageUrl = (t.avatar && t.avatar.startsWith('http')) ? t.avatar : '';
       if(pvImageUrl){ const p = document.getElementById('edAvaPreview'); p.src = pvImageUrl; p.style.display = 'block'; }
-      edQuestions = (qs || []).map(q => ({
-        id: q.id, text: q.question_text || '', desc: q.question_desc || '', comment: q.after_comment || '',
-        type: q.type || 'choice', imageUrl: q.image_url || '',
-        answers: (q.options || []).map(o => ({ text: o.text, points: Number(o.points) || 0 }))
-      }));
-      edResults = (rs || []).map(r => ({ id: r.id, title: r.title || '', desc: r.description || '', imageUrl: r.image_url || '' }));
-      edBounds = (rs || []).slice(0, -1).map(r => Number(r.min_points) || 0);
       const tg = t.tags || [];
       edGenres = tg.filter(x => GENRES.includes(x)).slice(0, 2);
       edTags = tg.filter(x => !GENRES.includes(x)).slice(0, 2);
-      editOrig = { q: edQuestions.map(q => q.id), r: edResults.map(r => r.id) };
+      const cfg = t.config || {};
+      if(edKind === 'quiz'){
+        edQuestions = (qs || []).map(rowToEditor);
+        edResults = (rs || []).map(r => ({ id: r.id, title: r.title || '', desc: r.description || '', imageUrl: r.image_url || '' }));
+        edBounds = (rs || []).slice(0, -1).map(r => Number(r.min_points) || 0);
+      } else {
+        edResults = kindResultRow(rs && rs[0]);
+        if(edKind === 'tier'){
+          tierCfg = { tiers: (cfg.tiers && cfg.tiers.length) ? cfg.tiers : defaultTiers() };
+          tierItems = (qs || []).map(q => ({ id: q.id, name: q.question_text || '', desc: q.question_desc || '', imageUrl: q.image_url || '', file: null, preview: '' }));
+        } else {
+          chState = Object.assign(newChState(), { svgUrl: cfg.svg || '', svgType: cfg.svgType || '', hints: cfg.hints === undefined ? 3 : cfg.hints, timeLimit: cfg.timeLimit || 0 });
+          chState.cats = (qs || []).map(q => ({
+            id: q.id, name: q.question_text || '',
+            words: (q.options || []).map(o => ({ text: [o.text].concat(o.alts || []).join(' | '), regions: o.regions || [] }))
+          }));
+          if(chState.svgUrl && chState.svgType === 'svg') await loadChSvgText();
+        }
+      }
+      editOrig = { q: (qs || []).map(q => q.id), r: (rs || []).map(r => r.id) };
+    } else if(spec.mode === 'draft'){
+      const { data: dr } = await sb.from('test_drafts').select('*').eq('id', spec.id).maybeSingle();
+      if(!dr || dr.user_id !== currentUser.id){ alert('Наработка не найдена'); testEditorKey = null; location.hash = '#/create'; return; }
+      if(testEditorKey !== myKey) return;
+      edKind = dr.kind || 'quiz';
+      document.getElementById('edTitle').value = dr.title || '';
+      applyDraftData(dr.data || {});
+      if(edKind === 'challenge' && chState.svgUrl && chState.svgType === 'svg') await loadChSvgText();
     }
+    if(testEditorKey !== myKey) return;
+    applyKindUI();
     renderQuestions(); renderResults(); renderBounds(); updatePreview(); renderTagPickers();
+    renderTierEditor(); renderChEditor();
   }
+
 
   function updatePreview(){
     const t = document.getElementById('edTitle').value.trim();
@@ -1271,40 +1762,528 @@
     r.readAsDataURL(f);
   });
 
-  document.getElementById('publishBtn').onclick = async () => {
-    const m = document.getElementById('pubMsg');
-    m.className = 'msg';
-    syncEditorFromDOM();
-    normalizeBounds();
-    const title = document.getElementById('edTitle').value.trim();
-    const desc = document.getElementById('edDesc').value.trim();
-    if(title.length < 3){ m.classList.add('err'); m.textContent = 'Введите название теста'; return; }
-    if(edQuestions.length === 0){ m.classList.add('err'); m.textContent = 'Добавьте хотя бы 1 вопрос'; return; }
-    if(edResults.length < 2){ m.classList.add('err'); m.textContent = 'Нужно минимум 2 результата'; return; }
+  // ===================================================================
+  //   ЭТАП 3. Выбор вида теста, наработки, редакторы Тирлиста и Челленджа
+  // ===================================================================
+  function openKindPage(){
+    showPage('kindPage');
+    const g = gid('kindGrid');
+    g.innerHTML = '';
+    Object.keys(KINDS).forEach(k => {
+      const d = document.createElement('div');
+      d.className = 'kind-card';
+      d.innerHTML = '<div class="kind-ico">' + KINDS[k].ico + '</div><h3>' + KINDS[k].name + '</h3><p>' + KINDS[k].desc + '</p>';
+      d.onclick = () => location.hash = '#/create/' + k;
+      g.appendChild(d);
+    });
+    const soon = document.createElement('div');
+    soon.className = 'kind-card soon';
+    soon.innerHTML = '<div class="kind-ico">✨</div><h3>Скоро</h3><p>Новые виды тестов появятся позже</p>';
+    g.appendChild(soon);
+  }
+  gid('draftsBack').onclick = () => location.hash = '#/create';
+
+  async function openDraftsPage(kind){
+    showPage('draftsPage');
+    gid('draftsTitle').textContent = KINDS[kind].name + ': новый тест или наработка';
+    const g = gid('draftsGrid');
+    g.innerHTML = '';
+    const nw = document.createElement('div');
+    nw.className = 'card';
+    nw.innerHTML = '<div class="test-icon">＋</div><h3>Создать новый</h3><div class="desc">Начать с чистого листа</div>';
+    nw.onclick = () => location.hash = '#/create/' + kind + '/new';
+    g.appendChild(nw);
+    const { data, error } = await sb.from('test_drafts').select('id, title, updated_at')
+      .eq('kind', kind).eq('user_id', currentUser.id).order('updated_at', { ascending: false });
+    if(error){
+      const p = document.createElement('p');
+      p.style.cssText = 'color:rgba(255,255,255,.85);grid-column:1/-1';
+      p.textContent = 'Наработки заработают после выполнения stage3.sql в Supabase.';
+      g.appendChild(p);
+      return;
+    }
+    (data || []).forEach(d => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = '<div class="test-icon">💾</div><h3>' + escapeHtml(d.title || 'Без названия') + '</h3>' +
+        '<div class="desc">Сохранено ' + fmtDate(d.updated_at) + '</div>' +
+        '<div class="card-actions"><button class="btn btn-create dr-open">Продолжить</button><button class="btn btn-danger dr-del" title="Удалить">🗑</button></div>';
+      card.onclick = () => location.hash = '#/create/' + kind + '/draft/' + d.id;
+      card.querySelector('.dr-del').onclick = async e => {
+        e.stopPropagation();
+        if(!confirm('Удалить наработку «' + (d.title || 'Без названия') + '»?')) return;
+        const { error: e2 } = await sb.from('test_drafts').delete().eq('id', d.id);
+        if(e2) alert('Ошибка: ' + e2.message); else card.remove();
+      };
+      g.appendChild(card);
+    });
+  }
+
+  // ---------- Тирлист: редактор ----------
+  const TIER_COLORS = ['#ff7f7f', '#ffbf7f', '#ffdf7f', '#ffff7f', '#bfff7f', '#7fffbf', '#7fdfff', '#bf9fff', '#ff9fdf'];
+  function renderTierEditor(){
+    if(edKind !== 'tier') return;
+    const rows = gid('tierRows');
+    rows.innerHTML = '';
+    tierCfg.tiers.forEach((t, i) => {
+      const d = document.createElement('div');
+      d.className = 'tier-row-ed';
+      const lab = document.createElement('div');
+      lab.className = 'tier-label-ed';
+      lab.style.background = t.color;
+      const inp = document.createElement('input');
+      inp.className = 'tr-label'; inp.maxLength = 10; inp.value = t.label; inp.title = 'Буква или название строки';
+      inp.oninput = () => { t.label = inp.value; };
+      lab.appendChild(inp);
+      const empty = document.createElement('div');
+      empty.className = 'tier-empty'; empty.textContent = 'сюда игрок будет класть картинки';
+      const col = document.createElement('input');
+      col.type = 'color'; col.className = 'tr-color'; col.value = t.color; col.title = 'Цвет ячейки с буквой';
+      col.oninput = () => { t.color = col.value; lab.style.background = col.value; };
+      const del = document.createElement('button');
+      del.className = 'icon-btn'; del.textContent = '✕'; del.title = 'Удалить строку';
+      del.onclick = () => {
+        if(tierCfg.tiers.length <= 2){ alert('Нужно минимум 2 строки'); return; }
+        tierCfg.tiers.splice(i, 1); renderTierEditor();
+      };
+      d.append(lab, empty, col, del);
+      rows.appendChild(d);
+    });
+    const box = gid('tierItems');
+    box.innerHTML = '';
+    if(!tierItems.length) box.innerHTML = '<p class="hint-small">Пока нет картинок. Добавьте минимум 2.</p>';
+    tierItems.forEach((it, i) => {
+      const d = document.createElement('div');
+      d.className = 'tier-item-ed';
+      const img = document.createElement('img');
+      img.className = 'ti-prev';
+      const src = it.preview || it.imageUrl;
+      if(src) img.src = src; else img.style.visibility = 'hidden';
+      const right = document.createElement('div');
+      right.className = 'ti-fields';
+      const file = document.createElement('input');
+      file.type = 'file'; file.accept = 'image/*';
+      file.onchange = () => {
+        const f = file.files[0]; if(!f) return;
+        it.file = f;
+        const r = new FileReader();
+        r.onload = ev => { it.preview = ev.target.result; img.src = it.preview; img.style.visibility = 'visible'; };
+        r.readAsDataURL(f);
+      };
+      const name = document.createElement('input');
+      name.type = 'text'; name.maxLength = 40; name.placeholder = 'Название'; name.value = it.name;
+      name.oninput = () => { it.name = name.value; };
+      const desc = document.createElement('input');
+      desc.type = 'text'; desc.maxLength = 120; desc.placeholder = 'Описание (необязательно)'; desc.value = it.desc || '';
+      desc.oninput = () => { it.desc = desc.value; };
+      const del = document.createElement('button');
+      del.className = 'icon-btn'; del.textContent = '🗑'; del.title = 'Удалить картинку';
+      del.onclick = () => { tierItems.splice(i, 1); renderTierEditor(); };
+      right.append(file, name, desc);
+      d.append(img, right, del);
+      box.appendChild(d);
+    });
+  }
+  gid('tierAddRow').onclick = () => {
+    const used = new Set(tierCfg.tiers.map(t => t.label));
+    const next = 'SABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').find(x => !used.has(x)) || '?';
+    tierCfg.tiers.push({ label: next, color: TIER_COLORS[tierCfg.tiers.length % TIER_COLORS.length] });
+    renderTierEditor();
+  };
+  gid('tierAddItem').onclick = () => {
+    tierItems.push({ id: null, name: '', desc: '', imageUrl: '', file: null, preview: '' });
+    renderTierEditor();
+  };
+
+  // ---------- Челлендж: SVG-утилиты ----------
+  const SHAPE_SEL = 'path,polygon,polyline,circle,ellipse,rect,line';
+  function sanitizeSvg(text){
+    try {
+      const doc = new DOMParser().parseFromString(text, 'image/svg+xml');
+      if(doc.querySelector('parsererror')) return null;
+      const svg = doc.documentElement;
+      if(!svg || svg.tagName.toLowerCase() !== 'svg') return null;
+      svg.querySelectorAll('script,foreignObject,iframe,object,embed').forEach(e => e.remove());
+      [svg].concat(Array.from(svg.querySelectorAll('*'))).forEach(el => {
+        Array.from(el.attributes).forEach(a => {
+          const n = a.name.toLowerCase(), v = a.value.trim().toLowerCase();
+          if(n.startsWith('on')) el.removeAttribute(a.name);
+          else if((n === 'href' || n === 'xlink:href') && (v.startsWith('javascript:') || v.startsWith('data:text'))) el.removeAttribute(a.name);
+        });
+      });
+      svg.querySelectorAll('style').forEach(st => { st.textContent = st.textContent.replace(/@import[^;]*;?/gi, ''); });
+      if(!svg.getAttribute('viewBox')){
+        const w = parseFloat(svg.getAttribute('width')), h = parseFloat(svg.getAttribute('height'));
+        if(w > 0 && h > 0) svg.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
+      }
+      svg.removeAttribute('width'); svg.removeAttribute('height');
+      svg.setAttribute('style', 'width:100%;height:auto;display:block');
+      return new XMLSerializer().serializeToString(svg);
+    } catch(e){ return null; }
+  }
+  function svgShapes(svg){
+    return Array.from(svg.querySelectorAll(SHAPE_SEL)).filter(e => !e.closest('defs,clipPath,mask,symbol,marker,pattern'));
+  }
+  function uniqueId(svg, el){
+    return !!el.id && svg.querySelectorAll('[id="' + CSS.escape(el.id) + '"]').length === 1;
+  }
+  function regionOf(svg, target){
+    const shapes = svgShapes(svg);
+    const el = target && target.closest ? target.closest(SHAPE_SEL) : null;
+    if(!el || !shapes.includes(el)) return null;
+    let p = el.parentElement;
+    while(p && p !== svg){
+      if(p.tagName.toLowerCase() === 'g' && uniqueId(svg, p)){
+        const cnt = p.querySelectorAll(SHAPE_SEL).length;
+        if(cnt > 1 && cnt <= shapes.length * 0.5) return 'id:' + p.id;
+      }
+      p = p.parentElement;
+    }
+    return uniqueId(svg, el) ? 'id:' + el.id : 'i:' + shapes.indexOf(el);
+  }
+  function resolveRegion(svg, key){
+    if(String(key).startsWith('id:')) return svg.querySelector('[id="' + CSS.escape(key.slice(3)) + '"]');
+    if(String(key).startsWith('i:')) return svgShapes(svg)[Number(key.slice(2))] || null;
+    return null;
+  }
+  function shapesIn(el){ return el.matches && el.matches(SHAPE_SEL) ? [el] : Array.from(el.querySelectorAll(SHAPE_SEL)); }
+  function paintRegion(svg, key, color){
+    const el = resolveRegion(svg, key);
+    if(!el) return;
+    shapesIn(el).forEach(s => {
+      if(!('of' in s.dataset)) s.dataset.of = s.getAttribute('style') || '';
+      s.style.setProperty('fill', color, 'important');
+    });
+  }
+  function clearPaint(svg){
+    svg.querySelectorAll('[data-of]').forEach(s => {
+      const o = s.dataset.of;
+      if(o) s.setAttribute('style', o); else s.removeAttribute('style');
+      delete s.dataset.of;
+    });
+  }
+  async function loadChSvgText(){
+    try {
+      const r = await fetch(chState.svgUrl);
+      chState.svgText = sanitizeSvg(await r.text()) || '';
+    } catch(e){ chState.svgText = ''; }
+  }
+
+  // ---------- Челлендж: редактор ----------
+  function renderChEditor(){
+    if(edKind !== 'challenge') return;
+    gid('chHints').value = chState.hints;
+    gid('chTime').value = chState.timeLimit;
+    renderChMap(); renderChCats();
+  }
+  function renderChMap(){
+    const box = gid('chMapBox');
+    box.innerHTML = '';
+    const hint = gid('chMapHint');
+    if(chState.svgType === 'svg' && chState.svgText){
+      box.innerHTML = chState.svgText;
+      hint.textContent = 'Нажмите 🎯 у слова, затем кликайте по областям карты: они подсветятся. Повторный клик по области убирает её.';
+      repaintChMap();
+    } else if(chState.svgType === 'img' && (chState.imgPreview || chState.svgUrl)){
+      const im = document.createElement('img');
+      im.src = chState.imgPreview || chState.svgUrl; im.style.maxWidth = '100%';
+      box.appendChild(im);
+      hint.textContent = 'Обычная картинка: подсветка областей недоступна, для неё нужен SVG-файл.';
+    } else {
+      hint.textContent = 'Картинка необязательна. Без неё игрок увидит только поле ввода и категории.';
+    }
+    gid('chClearMap').style.display = (chState.svgText || chState.imgPreview || chState.svgUrl) ? '' : 'none';
+  }
+  function repaintChMap(){
+    const svg = gid('chMapBox').querySelector('svg');
+    if(!svg) return;
+    clearPaint(svg);
+    chState.cats.forEach((c, ci) => c.words.forEach((w, wi) => {
+      if(!(chBind && chBind.ci === ci && chBind.wi === wi)) (w.regions || []).forEach(k => paintRegion(svg, k, '#7cc4ff'));
+    }));
+    if(chBind){
+      const c = chState.cats[chBind.ci], w = c && c.words[chBind.wi];
+      if(w) (w.regions || []).forEach(k => paintRegion(svg, k, '#ff9f1c'));
+    }
+  }
+  gid('chMapBox').addEventListener('click', e => {
+    const svg = gid('chMapBox').querySelector('svg');
+    if(!svg) return;
+    const msg = gid('chMsg');
+    if(!chBind){ msg.textContent = 'Сначала нажмите 🎯 у нужного слова.'; return; }
+    const key = regionOf(svg, e.target);
+    if(!key) return;
+    const w = chState.cats[chBind.ci].words[chBind.wi];
+    w.regions = w.regions || [];
+    const k = w.regions.indexOf(key);
+    if(k >= 0) w.regions.splice(k, 1); else w.regions.push(key);
+    msg.textContent = '';
+    repaintChMap(); renderChCats();
+  });
+  gid('chFile').addEventListener('change', async e => {
+    const f = e.target.files[0], msg = gid('chMsg');
+    msg.textContent = '';
+    if(!f) return;
+    const isSvg = f.type === 'image/svg+xml' || /\.svg$/i.test(f.name);
+    if(isSvg){
+      const clean = sanitizeSvg(await f.text());
+      if(!clean){ msg.textContent = 'Не удалось прочитать SVG-файл'; e.target.value = ''; return; }
+      chState.svgType = 'svg'; chState.svgText = clean; chState.svgFile = f; chState.svgUrl = ''; chState.imgPreview = '';
+    } else {
+      chState.svgType = 'img'; chState.svgText = ''; chState.svgFile = f; chState.svgUrl = '';
+      chState.imgPreview = await new Promise(res => { const r = new FileReader(); r.onload = ev => res(ev.target.result); r.readAsDataURL(f); });
+    }
+    chState.cats.forEach(c => c.words.forEach(w => { w.regions = []; }));
+    chBind = null;
+    renderChEditor();
+  });
+  gid('chClearMap').onclick = () => {
+    chState.svgType = ''; chState.svgText = ''; chState.svgFile = null; chState.svgUrl = ''; chState.imgPreview = '';
+    chState.cats.forEach(c => c.words.forEach(w => { w.regions = []; }));
+    chBind = null; gid('chFile').value = '';
+    renderChEditor();
+  };
+  gid('chAddCat').onclick = () => {
+    chState.cats.push({ id: null, name: '', words: [{ text: '', regions: [] }] });
+    renderChCats();
+  };
+  function renderChCats(){
+    const box = gid('chCats');
+    box.innerHTML = '';
+    if(!chState.cats.length) box.innerHTML = '<p class="hint-small">Пока нет категорий. Например, «Южная Америка» и «Северная Америка».</p>';
+    const canBind = chState.svgType === 'svg' && !!chState.svgText;
+    chState.cats.forEach((c, ci) => {
+      const d = document.createElement('div');
+      d.className = 'qe';
+      d.innerHTML = '<div class="qe-head"><strong>Категория ' + (ci + 1) + '</strong><button class="icon-btn cc-del">🗑</button></div>' +
+        '<div class="field"><label>Название (игрок видит его при прохождении)</label><input class="cc-name" maxlength="40" placeholder="например, Южная Америка"></div>' +
+        '<div class="field"><label>Слова. Варианты написания через | (первый показывается в подсказке)</label><div class="cc-words"></div></div>' +
+        '<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="add-btn cc-add">+ Слово</button><button class="add-btn cc-bulk">📋 Списком</button></div>' +
+        '<div class="cc-bulkbox" style="display:none"><textarea rows="5" placeholder="по слову в строке, например:&#10;Бразилия | Brasil&#10;Аргентина"></textarea><button class="btn btn-create cc-bulk-ok" style="margin-top:6px;width:auto;padding:8px 18px;font-size:14px">Добавить</button></div>';
+      const name = d.querySelector('.cc-name');
+      name.value = c.name; name.oninput = () => { c.name = name.value; };
+      d.querySelector('.cc-del').onclick = () => {
+        if(!confirm('Удалить категорию?')) return;
+        if(chBind && chBind.ci === ci) chBind = null;
+        chState.cats.splice(ci, 1); chBind = null; renderChCats(); repaintChMap();
+      };
+      const wbox = d.querySelector('.cc-words');
+      c.words.forEach((w, wi) => {
+        const row = document.createElement('div');
+        row.className = 'ch-word';
+        const inp = document.createElement('input');
+        inp.type = 'text'; inp.className = 'chw-text'; inp.maxLength = 120; inp.placeholder = 'Бразилия | Brasil | Brazil'; inp.value = w.text;
+        inp.oninput = () => { w.text = inp.value; };
+        row.appendChild(inp);
+        if(canBind){
+          const b = document.createElement('button');
+          b.className = 'icon-btn chw-bind' + (chBind && chBind.ci === ci && chBind.wi === wi ? ' on' : '');
+          b.title = 'Привязать слово к областям карты';
+          b.innerHTML = '🎯 <span>' + (w.regions || []).length + '</span>';
+          b.onclick = () => {
+            chBind = (chBind && chBind.ci === ci && chBind.wi === wi) ? null : { ci, wi };
+            gid('chMsg').textContent = chBind ? 'Кликайте по областям карты для слова «' + (parseVariants(w.text)[0] || '…') + '».' : '';
+            renderChCats(); repaintChMap();
+          };
+          row.appendChild(b);
+        }
+        const del = document.createElement('button');
+        del.className = 'icon-btn'; del.textContent = '✕';
+        del.onclick = () => {
+          if(c.words.length <= 1){ alert('В категории должно остаться хотя бы одно слово'); return; }
+          c.words.splice(wi, 1); chBind = null; renderChCats(); repaintChMap();
+        };
+        row.appendChild(del);
+        wbox.appendChild(row);
+      });
+      d.querySelector('.cc-add').onclick = () => { c.words.push({ text: '', regions: [] }); renderChCats(); };
+      const bulkBox = d.querySelector('.cc-bulkbox');
+      d.querySelector('.cc-bulk').onclick = () => { bulkBox.style.display = bulkBox.style.display === 'none' ? 'block' : 'none'; };
+      d.querySelector('.cc-bulk-ok').onclick = () => {
+        const lines = bulkBox.querySelector('textarea').value.split(/\r?\n/).map(x => x.trim()).filter(Boolean);
+        if(!lines.length) return;
+        c.words = c.words.filter(w => w.text.trim()).concat(lines.map(t => ({ text: t, regions: [] })));
+        renderChCats();
+      };
+      box.appendChild(d);
+    });
+  }
+
+
+  // ===================================================================
+  //        ЭТАП 3. Сбор данных, наработки и публикация
+  // ===================================================================
+  function readKindFormToState(){
+    if(edKind === 'challenge'){
+      chState.hints = Math.max(0, Math.min(10, Math.round(Number(gid('chHints').value) || 0)));
+      chState.timeLimit = Math.max(0, Math.min(180, Math.round(Number(gid('chTime').value) || 0)));
+    }
+  }
+
+  function collectQuiz(qRows){
+    if(edQuestions.length === 0) return 'Добавьте хотя бы 1 вопрос';
+    if(edResults.length < 2) return 'Нужно минимум 2 результата';
+    const blocks = document.querySelectorAll('#edQuestions .qe');
     for(let i = 0; i < edQuestions.length; i++){
-      if(edQuestions[i].text.trim().length < 3){ m.classList.add('err'); m.textContent = 'Заполните текст вопроса ' + (i + 1); return; }
-      const valid = edQuestions[i].answers.filter(a => a.text.trim());
-      if(valid.length < (edQuestions[i].type === 'choice' ? 2 : 1)){ m.classList.add('err'); m.textContent = 'Заполните ответы в вопросе ' + (i + 1); return; }
-      edQuestions[i].answers = valid;
+      const q = edQuestions[i], n = i + 1;
+      if(q.text.trim().length < 3) return 'Заполните текст вопроса ' + n;
+      const row = editorToRow(q);
+      if(q.type === 'choice' && row.options.length < 2) return 'Заполните минимум 2 ответа в вопросе ' + n;
+      if(q.type === 'input' && row.options.length < 1) return 'Заполните ответ в вопросе ' + n;
+      if(q.type === 'swipe' && row.options.length < 2) return 'Заполните оба варианта свайпа в вопросе ' + n;
+      if(q.type === 'cards'){
+        if(row.options.length < 2) return 'Нужно минимум 2 карточки в вопросе ' + n;
+        if(row.config.mode === 'match'){
+          if(row.config.slots.length < 2) return 'Нужно минимум 2 ячейки в вопросе ' + n;
+          row.options.forEach(c => { if(c.slot >= row.config.slots.length) c.slot = 0; });
+        }
+      }
+      if(q.type === 'enum' && row.options.length < 2) return 'Впишите минимум 2 слова в вопросе ' + n;
+      const out = { question_text: q.text.trim(), question_desc: q.desc.trim(), after_comment: q.comment.trim(),
+                    image_url: q.imageUrl, type: row.type, options: row.options };
+      if(row.type === 'cards' || row.type === 'enum') out.config = row.config;
+      const fileEl = blocks[i] && blocks[i].querySelector('.qe-img');
+      qRows.push({ id: q.id, row: out, file: fileEl ? fileEl.files[0] : null });
     }
     for(let i = 0; i < edResults.length; i++){
-      if(edResults[i].title.trim().length < 2){ m.classList.add('err'); m.textContent = 'Заполните название результата ' + (i + 1); return; }
+      if(edResults[i].title.trim().length < 2) return 'Заполните название результата ' + (i + 1);
     }
+    return '';
+  }
+
+  function collectTier(qRows){
+    if(tierCfg.tiers.length < 2) return 'Нужно минимум 2 строки на доске';
+    for(let i = 0; i < tierCfg.tiers.length; i++) if(!String(tierCfg.tiers[i].label).trim()) return 'Заполните букву в строке доски ' + (i + 1);
+    if(tierItems.length < 2) return 'Добавьте минимум 2 картинки для расстановки';
+    for(let i = 0; i < tierItems.length; i++){
+      const it = tierItems[i];
+      if(!it.name.trim()) return 'Заполните название у картинки ' + (i + 1);
+      if(!it.imageUrl && !it.file) return 'Добавьте изображение у картинки ' + (i + 1);
+    }
+    tierItems.forEach(it => qRows.push({
+      id: it.id, file: it.file,
+      row: { question_text: it.name.trim(), question_desc: (it.desc || '').trim(), after_comment: '', image_url: it.imageUrl || '', type: 'item', options: [] }
+    }));
+    return '';
+  }
+
+  function collectChallenge(qRows){
+    if(!chState.cats.length) return 'Добавьте хотя бы одну категорию';
+    let total = 0;
+    for(let i = 0; i < chState.cats.length; i++){
+      const c = chState.cats[i];
+      if(c.name.trim().length < 2) return 'Заполните название категории ' + (i + 1);
+      const words = c.words.map(w => ({ v: parseVariants(w.text), regions: w.regions || [] })).filter(w => w.v.length);
+      if(!words.length) return 'В категории «' + c.name.trim() + '» нет слов';
+      total += words.length;
+      qRows.push({
+        id: c.id, file: null,
+        row: { question_text: c.name.trim(), question_desc: '', after_comment: '', image_url: '', type: 'category',
+               options: words.map(w => ({ text: w.v[0], alts: w.v.slice(1), regions: w.regions })) }
+      });
+    }
+    if(total < 2) return 'Нужно минимум 2 слова во всех категориях';
+    return '';
+  }
+
+  function kindConfig(){
+    if(edKind === 'tier') return { tiers: tierCfg.tiers.map(t => ({ label: String(t.label).trim() || '?', color: t.color })) };
+    if(edKind === 'challenge') return { svg: chState.svgUrl || '', svgType: chState.svgType || '', hints: chState.hints, timeLimit: chState.timeLimit };
+    return null;
+  }
+
+  // загрузить выбранные, но ещё не загруженные картинки (нужно для наработок)
+  async function uploadPendingImages(){
+    const avaFile = gid('edAvaFile').files[0];
+    if(avaFile && pvImageUrl.startsWith('data:')){
+      pvImageUrl = await uploadImage(avaFile);
+      gid('edAvaFile').value = '';
+      gid('edAvaPreview').src = pvImageUrl;
+    }
+    if(edKind === 'quiz'){
+      for(const b of document.querySelectorAll('#edQuestions .qe, #edResults .re')){
+        const inp = b.querySelector('.qe-img, .re-img');
+        const f = inp && inp.files[0];
+        if(f){
+          const url = await uploadImage(f);
+          b.dataset.img = url; inp.value = '';
+          const pv = b.querySelector('.thumb'); if(pv){ pv.src = url; pv.style.display = 'block'; }
+        }
+      }
+    }
+    if(edKind === 'tier'){
+      for(const it of tierItems) if(it.file){ it.imageUrl = await uploadImage(it.file); it.file = null; }
+    }
+    if(edKind === 'challenge' && chState.svgFile){
+      chState.svgUrl = await uploadImage(chState.svgFile);
+      chState.svgFile = null;
+    }
+  }
+
+  gid('draftBtn').onclick = async () => {
+    const m = gid('pubMsg'); m.className = 'msg'; m.textContent = 'Сохраняем наработку...';
+    try {
+      await uploadPendingImages();
+      syncEditorFromDOM(); readKindFormToState();
+      const data = {
+        desc: gid('edDesc').value, cover: pvImageUrl.startsWith('http') ? pvImageUrl : '',
+        genres: edGenres, tags: edTags, questions: edQuestions, results: edResults, bounds: edBounds,
+        tier: { tiers: tierCfg.tiers, items: tierItems.map(it => ({ id: it.id || null, name: it.name, desc: it.desc, imageUrl: it.imageUrl })) },
+        ch: { svgUrl: chState.svgUrl, svgType: chState.svgType, hints: chState.hints, timeLimit: chState.timeLimit, cats: chState.cats }
+      };
+      const row = { user_id: currentUser.id, kind: edKind, title: gid('edTitle').value.trim(), data, updated_at: new Date().toISOString() };
+      if(draftId){
+        const { error } = await sb.from('test_drafts').update(row).eq('id', draftId);
+        if(error) throw error;
+      } else {
+        const { data: d, error } = await sb.from('test_drafts').insert(row).select().single();
+        if(error) throw error;
+        draftId = d.id;
+        testEditorKey = 'draft:' + draftId;
+        history.replaceState(null, '', '#/create/' + edKind + '/draft/' + draftId);
+      }
+      m.classList.add('ok');
+      m.textContent = 'Наработка сохранена (' + new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }) + '). Вернуться к ней можно из раздела «Создать».';
+    } catch(err){
+      m.classList.add('err');
+      m.textContent = 'Не удалось сохранить наработку: ' + err.message + (/test_drafts/.test(err.message) ? ' (выполните stage3.sql в Supabase)' : '');
+    }
+  };
+
+  gid('publishBtn').onclick = async () => {
+    const m = gid('pubMsg');
+    m.className = 'msg';
+    const fail = t => { m.classList.add('err'); m.textContent = t; };
+    syncEditorFromDOM(); readKindFormToState();
+    if(edKind === 'quiz') normalizeBounds();
+    const title = gid('edTitle').value.trim();
+    const desc = gid('edDesc').value.trim();
+    if(title.length < 3){ fail('Введите название теста'); return; }
+    const qRows = [];
+    const err0 = edKind === 'quiz' ? collectQuiz(qRows) : (edKind === 'tier' ? collectTier(qRows) : collectChallenge(qRows));
+    if(err0){ fail(err0); return; }
+
     m.textContent = editTestId ? 'Сохраняем...' : 'Публикация...';
     try {
       let ava = pvImageUrl;
-      const avaFile = document.getElementById('edAvaFile').files[0];
+      const avaFile = gid('edAvaFile').files[0];
       if(avaFile && ava.startsWith('data:')) ava = await uploadImage(avaFile);
       if(!ava) ava = '🦸';
+      if(edKind === 'challenge' && chState.svgFile){ chState.svgUrl = await uploadImage(chState.svgFile); chState.svgFile = null; }
       const tags = [...edGenres, ...edTags];
+      const base = { title, description: desc, avatar: ava };
+      if(edKind !== 'quiz'){ base.kind = edKind; base.config = kindConfig(); }
+      const needSql = e => new Error('Не хватает колонок в базе (' + e.message + '). Выполните stage3.sql в Supabase.');
       let testId = editTestId, warn = 0;
       if(editTestId){
-        let { error } = await sb.from('tests').update({ title, description: desc, avatar: ava, tags }).eq('id', editTestId);
-        if(error && /tags/.test(error.message)) ({ error } = await sb.from('tests').update({ title, description: desc, avatar: ava }).eq('id', editTestId));
+        let { error } = await sb.from('tests').update({ ...base, tags }).eq('id', editTestId);
+        if(error && /tags/.test(error.message)) ({ error } = await sb.from('tests').update(base).eq('id', editTestId));
+        if(error && /kind|config/.test(error.message)) throw needSql(error);
         if(error) throw error;
       } else {
-        let ins = await sb.from('tests').insert({ title, description: desc, avatar: ava, author_id: currentUser.id, tags }).select().single();
-        if(ins.error && /tags/.test(ins.error.message)) ins = await sb.from('tests').insert({ title, description: desc, avatar: ava, author_id: currentUser.id }).select().single();
+        let ins = await sb.from('tests').insert({ ...base, author_id: currentUser.id, tags }).select().single();
+        if(ins.error && /tags/.test(ins.error.message)) ins = await sb.from('tests').insert({ ...base, author_id: currentUser.id }).select().single();
+        if(ins.error && /kind|config/.test(ins.error.message)) throw needSql(ins.error);
         if(ins.error) throw ins.error;
         testId = ins.data.id;
       }
@@ -1313,12 +2292,15 @@
       }
 
       const keepR = new Set();
+      const reBlocks = document.querySelectorAll('#edResults .re');
       for(let i = 0; i < edResults.length; i++){
-        const file = document.querySelectorAll('#edResults .re')[i].querySelector('.re-img').files[0];
         let img = edResults[i].imageUrl;
-        if(file) img = await uploadImage(file);
+        if(edKind === 'quiz'){
+          const file = reBlocks[i] && reBlocks[i].querySelector('.re-img').files[0];
+          if(file) img = await uploadImage(file);
+        }
         const minP = i < edResults.length - 1 ? edBounds[i] : 100;
-        const row = { title: edResults[i].title.trim(), description: edResults[i].desc.trim(), image_url: img, min_points: minP };
+        const row = { title: edResults[i].title.trim(), description: (edResults[i].desc || '').trim(), image_url: img || '', min_points: minP };
         if(edResults[i].id){
           const { error } = await sb.from('test_results').update(row).eq('id', edResults[i].id);
           if(error) throw error;
@@ -1329,20 +2311,16 @@
         }
       }
       const keepQ = new Set();
-      for(let i = 0; i < edQuestions.length; i++){
-        const q = edQuestions[i];
-        const file = document.querySelectorAll('#edQuestions .qe')[i].querySelector('.qe-img').files[0];
-        let img = q.imageUrl;
-        if(file) img = await uploadImage(file);
-        const row = { question_text: q.text.trim(), question_desc: q.desc.trim(), after_comment: q.comment.trim(),
-                      image_url: img, type: q.type, options: q.answers };
-        if(q.id){
-          const { error } = await sb.from('test_questions').update(row).eq('id', q.id);
-          if(error) throw error;
-          keepQ.add(String(q.id));
+      for(const qr of qRows){
+        const row = Object.assign({}, qr.row);
+        if(qr.file) row.image_url = await uploadImage(qr.file);
+        if(qr.id){
+          const { error } = await sb.from('test_questions').update(row).eq('id', qr.id);
+          if(error) throw (/config|type/.test(error.message) ? needSql(error) : error);
+          keepQ.add(String(qr.id));
         } else {
           const { error } = await sb.from('test_questions').insert({ test_id: testId, ...row });
-          if(error) throw error;
+          if(error) throw (/config|type/.test(error.message) ? needSql(error) : error);
         }
       }
       if(editTestId){
@@ -1353,37 +2331,46 @@
           if(!keepQ.has(String(id))){ const { error } = await sb.from('test_questions').delete().eq('id', id); if(error) warn++; }
         }
       }
+      if(draftId){ try { await sb.from('test_drafts').delete().eq('id', draftId); } catch(_){} draftId = null; }
       m.classList.add('ok');
       m.textContent = (editTestId ? 'Изменения сохранены!' : 'Тест опубликован!') + (warn ? ' (не удалось удалить элементов: ' + warn + ')' : '');
       testEditorKey = null;
       setTimeout(() => location.hash = '#/test/' + testId, warn ? 2500 : 700);
     } catch(err){
-      m.classList.add('err'); m.textContent = 'Ошибка: ' + err.message;
+      fail('Ошибка: ' + err.message);
     }
   };
+
 
   // ================= ПРОХОЖДЕНИЕ ТЕСТА =================
   let tkTest = null, tkQuestions = [], tkResults = [], tkAnswers = {}, lastHistoryId = null;
 
+  let tkKind = 'quiz', tkCfg = {};
+
   async function openTestPage(id, skipIntro){
     showPage('takeTestPage');
+    stopChallengeTimer();
     gid('testIntro').style.display = 'none';
     gid('quizContent').style.display = 'none';
     gid('quizResultView').style.display = 'none';
     gid('submitQuizBtn').style.display = 'none';
     gid('tkQuestions').innerHTML = '';
     const base = 'id, title, description, avatar, author_id, profiles(login, avatar)';
-    let r = await sb.from('tests').select(base + ', tags').eq('id', id).single();
+    let r = await sb.from('tests').select(base + ', tags, kind, config').eq('id', id).single();
+    if(r.error) r = await sb.from('tests').select(base + ', tags').eq('id', id).single();
     if(r.error) r = await sb.from('tests').select(base).eq('id', id).single();
     const test = r.data;
     if(!test){ goHome(); return; }
     const { data: questions } = await sb.from('test_questions').select('*').eq('test_id', id).order('id');
     const { data: results } = await sb.from('test_results').select('*').eq('test_id', id).order('min_points', { ascending: true });
     tkTest = test; tkAnswers = {}; lastHistoryId = null;
+    tkKind = test.kind || 'quiz'; tkCfg = test.config || {};
+    gid('quizContent').dataset.kind = tkKind;
     const cover = (test.avatar && test.avatar.startsWith('http')) ? test.avatar : DEFAULT_AVA + encodeURIComponent(test.title);
     const authorName = test.profiles ? test.profiles.login : 'Неизвестный';
     const authorAva = getAvatarUrl(test.profiles ? test.profiles.avatar : '', authorName);
-    const ready = questions && questions.length && results && results.length;
+    const qn = questions ? questions.length : 0;
+    const ready = !!(results && results.length) && (tkKind === 'tier' ? qn >= 2 : qn >= 1);
 
     // шапка прохождения
     gid('tkTitle').textContent = test.title;
@@ -1400,7 +2387,8 @@
     const inA = gid('inAuthor');
     inA.innerHTML = '<img src="' + escapeHtml(authorAva) + '"><span>' + escapeHtml(authorName) + '</span>';
     inA.onclick = () => location.hash = '#/user/' + test.author_id;
-    gid('inTags').innerHTML = (test.tags || []).map(t => '<span class="tag">' + escapeHtml(t) + '</span>').join('');
+    gid('inTags').innerHTML = (tkKind !== 'quiz' && KINDS[tkKind] ? '<span class="tag">' + KINDS[tkKind].name + '</span>' : '') +
+      (test.tags || []).map(t => '<span class="tag">' + escapeHtml(t) + '</span>').join('');
     gid('tkStatsBtn').onclick = () => location.hash = '#/stats/' + test.id;
     const tkEd = gid('tkEditBtn');
     tkEd.style.display = (currentUser && test.author_id === currentUser.id) ? 'inline-block' : 'none';
@@ -1416,11 +2404,14 @@
       gid('testIntro').style.display = 'none';
       gid('quizContent').style.display = 'block';
       window.scrollTo(0, 0);
-      renderQuizQuestions();
+      if(tkKind === 'tier') startTierPlay();
+      else if(tkKind === 'challenge') startChallengePlay();
+      else renderQuizQuestions();
     };
     startBtn.onclick = startQuiz;
     if(skipIntro) startQuiz(); else gid('testIntro').style.display = 'block';
   }
+
 
   async function loadSimilar(test){
     const box = gid('similarList');
@@ -1441,13 +2432,39 @@
     });
   }
 
-  let tkIndex = 0;
+  // ===================================================================
+  //        ЭТАП 3. Прохождение: типы вопросов, Тирлист, Челлендж
+  // ===================================================================
+  let tkIndex = 0, swipeKey = null;
+  document.addEventListener('keydown', e => {
+    if(!swipeKey) return;
+    const t = e.target;
+    if(t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA')) return;
+    swipeKey(e);
+  });
+
+  // поиск слова среди ещё не найденных (общая логика для перечисления и челленджа)
+  function findMatches(typed, items, force){
+    const v = normAns(typed);
+    if(!v) return [];
+    const hits = [];
+    let longer = false;
+    items.forEach(it => it.variants.forEach(x => {
+      const n = normAns(x);
+      if(n === v) hits.push(it); else if(n.startsWith(v)) longer = true;
+    }));
+    if(!hits.length || (longer && !force)) return [];
+    return [...new Set(hits)];
+  }
+
   function renderQuizQuestions(){ tkIndex = 0; showQuestion(); }
 
   function showQuestion(){
     const box = document.getElementById('tkQuestions');
     const total = tkQuestions.length, idx = tkIndex, q = tkQuestions[idx];
     const isLast = idx === total - 1;
+    const type = q.type || 'choice';
+    swipeKey = null;
     box.innerHTML = '';
     const prog = document.createElement('div');
     prog.className = 'quiz-progress';
@@ -1464,18 +2481,24 @@
     const body = document.createElement('div');
     const goNext = () => { if(!isLast){ tkIndex = idx + 1; showQuestion(); } else checkComplete(); };
     let nextBtn = null;
+    const changed = () => { if(nextBtn) nextBtn.disabled = !tkAnswers[q.id]; checkComplete(); };
 
-    if(q.type === 'input'){
+    if(type === 'input'){
       const inp = document.createElement('input');
       inp.className = 'answer-input'; inp.placeholder = 'Впишите ответ...'; inp.maxLength = 80;
       inp.value = tkAnswers[q.id] ? tkAnswers[q.id].value : '';
       inp.oninput = () => {
         if(inp.value.trim()) tkAnswers[q.id] = { type: 'input', value: inp.value.trim() }; else delete tkAnswers[q.id];
-        if(nextBtn) nextBtn.disabled = !inp.value.trim();
-        checkComplete();
+        changed();
       };
       inp.onkeydown = e => { if(e.key === 'Enter' && inp.value.trim() && !isLast) goNext(); };
       body.appendChild(inp);
+    } else if(type === 'swipe'){
+      buildSwipe(q, div, body, isLast, goNext, idx);
+    } else if(type === 'cards'){
+      buildCards(q, body, changed);
+    } else if(type === 'enum'){
+      buildEnum(q, body, changed);
     } else {
       (q.options || []).forEach(opt => {
         const btn = document.createElement('button');
@@ -1502,7 +2525,7 @@
       back.onclick = () => { tkIndex = idx - 1; showQuestion(); };
       nav.appendChild(back);
     }
-    if(q.type === 'input' && !isLast){
+    if((type === 'input' || type === 'cards' || type === 'enum') && !isLast){
       nextBtn = document.createElement('button');
       nextBtn.className = 'btn btn-create'; nextBtn.textContent = 'Далее →';
       nextBtn.disabled = !tkAnswers[q.id];
@@ -1512,35 +2535,190 @@
     if(nav.children.length) box.appendChild(nav);
     checkComplete();
   }
+
   function checkComplete(){
     const ready = Object.keys(tkAnswers).length === tkQuestions.length && tkIndex === tkQuestions.length - 1;
     document.getElementById('submitQuizBtn').style.display = ready ? 'block' : 'none';
   }
 
-  function maxScoreOf(questions){
-    let m = 0;
-    questions.forEach(q => {
-      let best = 0;
-      (q.options || []).forEach(o => { best = Math.max(best, Number(o.points) || 0); });
-      m += best;
+  // ---- свайп ----
+  function buildSwipe(q, div, body, isLast, goNext, idx){
+    const opts = (q.options || []).slice(0, 2);
+    const L = opts[0] || { text: '—', points: 0 }, R = opts[1] || { text: '—', points: 0 };
+    const cur = tkAnswers[q.id];
+    body.innerHTML = '<div class="swipe-row"><button class="sw-btn sw-l"></button><button class="sw-btn sw-r"></button></div>' +
+      '<div class="swipe-tip">Потяните карточку влево или вправо, нажмите кнопку или стрелки ← →</div>';
+    const bl = body.querySelector('.sw-l'), br = body.querySelector('.sw-r');
+    bl.textContent = '← ' + L.text; br.textContent = R.text + ' →';
+    if(cur && cur.text === L.text) bl.classList.add('selected');
+    if(cur && cur.text === R.text) br.classList.add('selected');
+    let locked = false;
+    const pick = side => {
+      if(locked) return;
+      const o = side < 0 ? L : R;
+      tkAnswers[q.id] = { type: 'swipe', text: o.text, points: Number(o.points) || 0, given: o.text };
+      bl.classList.toggle('selected', side < 0); br.classList.toggle('selected', side > 0);
+      div.style.transition = 'transform .22s, opacity .22s';
+      div.style.transform = 'translateX(' + (side * 140) + 'px) rotate(' + (side * 8) + 'deg)';
+      div.style.opacity = '.35';
+      if(!isLast){ locked = true; setTimeout(() => { if(tkIndex === idx) goNext(); }, 230); }
+      else {
+        checkComplete();
+        setTimeout(() => { div.style.transform = ''; div.style.opacity = ''; }, 260);
+      }
+    };
+    bl.onclick = () => pick(-1); br.onclick = () => pick(1);
+    swipeKey = e => { if(e.key === 'ArrowLeft'){ e.preventDefault(); pick(-1); } else if(e.key === 'ArrowRight'){ e.preventDefault(); pick(1); } };
+    let sx = null, dx = 0;
+    div.style.touchAction = 'pan-y';
+    div.addEventListener('pointerdown', e => {
+      if(e.target.closest('button')) return;
+      sx = e.clientX; dx = 0;
+      try { div.setPointerCapture(e.pointerId); } catch(_){}
+      div.style.transition = 'none';
     });
-    return m;
+    div.addEventListener('pointermove', e => {
+      if(sx === null) return;
+      dx = e.clientX - sx;
+      div.style.transform = 'translateX(' + dx + 'px) rotate(' + (dx / 25) + 'deg)';
+      bl.classList.toggle('hot', dx < -40); br.classList.toggle('hot', dx > 40);
+    });
+    const end = () => {
+      if(sx === null) return;
+      sx = null;
+      bl.classList.remove('hot'); br.classList.remove('hot');
+      if(Math.abs(dx) > 90) pick(dx > 0 ? 1 : -1);
+      else { div.style.transition = 'transform .2s'; div.style.transform = ''; }
+    };
+    div.addEventListener('pointerup', end);
+    div.addEventListener('pointercancel', end);
   }
 
+  // ---- карточки ----
+  function buildCards(q, body, onChange){
+    const cfg = q.config || {}, mode = cfg.mode === 'match' ? 'match' : 'order';
+    const cards = (q.options || []).map((o, i) => ({ i, text: o.text, slot: Number(o.slot) || 0 }));
+    const slotNames = mode === 'match' ? (cfg.slots || []) : cards.map((_, i) => String(i + 1));
+    const saved = tkAnswers[q.id];
+    const place = saved && saved.place ? Object.assign({}, saved.place) : {};
+    const order = saved && saved.order ? saved.order : shuf(cards.map(c => c.i));
+    let sel = null;
+    const commit = () => {
+      if(cards.every(c => place[c.i] !== undefined)){
+        let ok = 0;
+        cards.forEach(c => { if(place[c.i] === (mode === 'match' ? c.slot : c.i)) ok++; });
+        tkAnswers[q.id] = { type: 'cards', place: Object.assign({}, place), order, points: ok * (Number(cfg.points) || 0), given: 'верно ' + ok + ' из ' + cards.length };
+      } else delete tkAnswers[q.id];
+      onChange();
+    };
+    const put = (ci, si) => {
+      if(mode === 'order'){
+        const occ = cards.find(c => c.i !== ci && place[c.i] === si);
+        if(occ) delete place[occ.i];
+      }
+      if(si === null) delete place[ci]; else place[ci] = si;
+      sel = null;
+      render(); commit();
+    };
+    const render = () => {
+      body.innerHTML = '';
+      const tip = document.createElement('div');
+      tip.className = 'swipe-tip';
+      tip.textContent = mode === 'order' ? 'Расставьте карточки по порядку: нажмите карточку, затем ячейку (или перетащите).' : 'Разложите карточки по ячейкам: нажмите карточку, затем ячейку (или перетащите).';
+      body.appendChild(tip);
+      const grid = document.createElement('div');
+      grid.className = 'cd-slots' + (mode === 'order' ? ' order' : '');
+      slotNames.forEach((name, si) => {
+        const z = document.createElement('div');
+        z.className = 'cd-zone';
+        z.innerHTML = '<div class="cd-zone-h">' + escapeHtml(name) + '</div><div class="cd-zone-body"></div>';
+        const zb = z.querySelector('.cd-zone-body');
+        cards.filter(c => place[c.i] === si).forEach(c => zb.appendChild(cardEl(c)));
+        z.onclick = () => { if(sel !== null) put(sel, si); };
+        z.ondragover = e => e.preventDefault();
+        z.ondrop = e => { e.preventDefault(); const ci = Number(e.dataTransfer.getData('text/plain')); if(!isNaN(ci)) put(ci, si); };
+        grid.appendChild(z);
+      });
+      body.appendChild(grid);
+      const pool = document.createElement('div');
+      pool.className = 'cd-pool';
+      order.filter(ci => place[ci] === undefined).forEach(ci => pool.appendChild(cardEl(cards[ci])));
+      if(!pool.children.length) pool.innerHTML = '<span class="swipe-tip">Все карточки расставлены. Можно переставлять.</span>';
+      pool.onclick = () => { if(sel !== null) put(sel, null); };
+      pool.ondragover = e => e.preventDefault();
+      pool.ondrop = e => { e.preventDefault(); const ci = Number(e.dataTransfer.getData('text/plain')); if(!isNaN(ci)) put(ci, null); };
+      body.appendChild(pool);
+    };
+    const cardEl = c => {
+      const d = document.createElement('div');
+      d.className = 'cd-card' + (sel === c.i ? ' sel' : '');
+      d.textContent = c.text;
+      d.draggable = true;
+      d.ondragstart = e => { e.dataTransfer.setData('text/plain', String(c.i)); };
+      d.onclick = e => { e.stopPropagation(); sel = (sel === c.i) ? null : c.i; render(); };
+      return d;
+    };
+    render();
+  }
+
+  // ---- перечисление ----
+  function buildEnum(q, body, onChange){
+    const words = (q.options || []).map((o, i) => ({ i, text: o.text, variants: [o.text].concat(o.alts || []) }));
+    const per = Number((q.config || {}).points) || 0;
+    const saved = tkAnswers[q.id];
+    const found = new Set(saved && saved.found ? saved.found : []);
+    const save = () => {
+      const f = [...found].sort((a, b) => a - b);
+      tkAnswers[q.id] = { type: 'enum', found: f, points: f.length * per,
+        given: f.length + ' из ' + words.length + (f.length ? ': ' + f.map(i => words[i].text).join(', ') : '') };
+      onChange();
+    };
+    if(!saved) save();
+    body.innerHTML = '<input class="answer-input" id="enInput" placeholder="Впишите слово и нажмите Enter..." maxlength="80" autocomplete="off">' +
+      '<div class="en-count" id="enCount"></div><div class="en-list" id="enList"></div>';
+    const inp = body.querySelector('#enInput'), cnt = body.querySelector('#enCount'), list = body.querySelector('#enList');
+    const paint = () => {
+      cnt.textContent = 'Найдено: ' + found.size + ' из ' + words.length;
+      list.innerHTML = '';
+      words.forEach(w => {
+        const s = document.createElement('span');
+        if(found.has(w.i)){ s.className = 'en-chip ok'; s.textContent = w.text; }
+        else { s.className = 'en-chip'; s.textContent = '• • •'; }
+        list.appendChild(s);
+      });
+    };
+    const tryMatch = force => {
+      const hits = findMatches(inp.value, words.filter(w => !found.has(w.i)), force);
+      if(!hits.length){
+        if(force && inp.value.trim()){ inp.classList.add('shake'); setTimeout(() => inp.classList.remove('shake'), 350); }
+        return;
+      }
+      hits.forEach(w => found.add(w.i));
+      inp.value = '';
+      paint(); save();
+    };
+    inp.oninput = () => tryMatch(false);
+    inp.onkeydown = e => { if(e.key === 'Enter'){ e.preventDefault(); tryMatch(true); } };
+    paint();
+  }
+
+  // ---- отправка ответов квиза ----
   document.getElementById('submitQuizBtn').onclick = async () => {
     let total = 0;
     const snapshot = {};
     tkQuestions.forEach(q => {
       const ans = tkAnswers[q.id];
       let pts = 0, given = '';
-      if(ans.type === 'choice'){ pts = ans.points; given = ans.text; }
-      else {
+      if(ans.type === 'input'){
         given = ans.value;
         const norm = ans.value.toLowerCase().replace(/[!?.,]/g, '').trim();
         (q.options || []).forEach(o => {
           const oNorm = String(o.text).toLowerCase().replace(/[!?.,]/g, '').trim();
           if(oNorm === norm) pts = Number(o.points) || 0;
         });
+      } else {
+        pts = Number(ans.points) || 0;
+        given = ans.type === 'choice' ? ans.text : (ans.given || ans.text || '');
       }
       total += pts;
       snapshot[q.id] = { qtext: q.question_text, given, points: pts, comment: q.after_comment || '' };
@@ -1556,12 +2734,240 @@
     showQuizResult(res, total, pct);
   };
 
-  function showQuizResult(res, total, pct){
+  // завершение теста без очков (Тирлист, Челлендж)
+  async function finishSimple(snapshot, extraHtml, desc){
+    const res = tkResults[0];
+    if(currentUser){
+      const { data } = await sb.from('user_history')
+        .insert({ user_id: currentUser.id, test_id: tkTest.id, result_id: res.id, answers: snapshot }).select().single();
+      lastHistoryId = data ? data.id : null;
+    }
+    showQuizResult(res, 0, 0, extraHtml, desc);
+  }
+
+  // ---------- Тирлист: прохождение ----------
+  let tierPlay = null;
+  function startTierPlay(){
+    const items = tkQuestions.map((q, i) => ({ i, id: q.id, name: q.question_text, desc: q.question_desc || '', img: q.image_url || '' }));
+    const tiers = (tkCfg.tiers && tkCfg.tiers.length) ? tkCfg.tiers : defaultTiers();
+    tierPlay = { items, tiers, place: {}, seq: [], sel: null, order: shuf(items.map(x => x.i)) };
+    renderTierPlay();
+  }
+  function tierMove(ii, ti){
+    const P = tierPlay;
+    P.seq = P.seq.filter(x => x !== ii);
+    if(ti === null) delete P.place[ii]; else { P.place[ii] = ti; P.seq.push(ii); }
+    P.sel = null;
+    renderTierPlay();
+  }
+  function tierItemEl(it, selected){
+    const d = document.createElement('div');
+    d.className = 'tier-item' + (selected ? ' sel' : '');
+    d.title = it.desc || it.name;
+    d.draggable = true;
+    d.innerHTML = '<img src="' + escapeHtml(it.img) + '" alt=""><small>' + escapeHtml(it.name) + '</small>';
+    d.ondragstart = e => { e.dataTransfer.setData('text/plain', String(it.i)); };
+    d.onclick = e => { e.stopPropagation(); tierPlay.sel = (tierPlay.sel === it.i) ? null : it.i; renderTierPlay(); };
+    return d;
+  }
+  function renderTierPlay(){
+    const P = tierPlay, box = gid('tkQuestions');
+    box.innerHTML = '<div class="swipe-tip" style="margin-bottom:10px">Нажмите картинку, затем строку доски (или перетащите). Описание видно при наведении.</div>';
+    const board = document.createElement('div');
+    board.className = 'tier-board';
+    P.tiers.forEach((t, ti) => {
+      const row = document.createElement('div');
+      row.className = 'tier-row';
+      const lab = document.createElement('div');
+      lab.className = 'tier-label'; lab.style.background = t.color; lab.textContent = t.label;
+      const zone = document.createElement('div');
+      zone.className = 'tier-drop';
+      P.seq.filter(ii => P.place[ii] === ti).forEach(ii => zone.appendChild(tierItemEl(P.items[ii], P.sel === ii)));
+      zone.onclick = () => { if(P.sel !== null) tierMove(P.sel, ti); };
+      zone.ondragover = e => e.preventDefault();
+      zone.ondrop = e => { e.preventDefault(); const ii = Number(e.dataTransfer.getData('text/plain')); if(!isNaN(ii)) tierMove(ii, ti); };
+      row.append(lab, zone);
+      board.appendChild(row);
+    });
+    box.appendChild(board);
+    const poolT = document.createElement('div');
+    poolT.className = 'tier-pool-title'; poolT.textContent = 'Картинки для расстановки';
+    box.appendChild(poolT);
+    const pool = document.createElement('div');
+    pool.className = 'tier-pool';
+    P.order.filter(ii => P.place[ii] === undefined).forEach(ii => pool.appendChild(tierItemEl(P.items[ii], P.sel === ii)));
+    if(!pool.children.length) pool.innerHTML = '<span class="swipe-tip">Все картинки расставлены!</span>';
+    pool.onclick = () => { if(P.sel !== null) tierMove(P.sel, null); };
+    pool.ondragover = e => e.preventDefault();
+    pool.ondrop = e => { e.preventDefault(); const ii = Number(e.dataTransfer.getData('text/plain')); if(!isNaN(ii)) tierMove(ii, null); };
+    box.appendChild(pool);
+    const done = document.createElement('button');
+    done.className = 'btn btn-create'; done.style.marginTop = '14px';
+    const left = P.items.length - Object.keys(P.place).length;
+    done.textContent = left ? 'Осталось расставить: ' + left : 'Готово!';
+    done.disabled = left > 0;
+    done.onclick = finishTier;
+    box.appendChild(done);
+  }
+  function finishTier(){
+    const P = tierPlay;
+    const snapshot = {};
+    P.items.forEach(it => {
+      snapshot[it.id] = { qtext: it.name, given: 'Строка ' + P.tiers[P.place[it.i]].label, points: null, comment: '' };
+    });
+    let html = '<div class="tier-board tier-final">';
+    P.tiers.forEach((t, ti) => {
+      html += '<div class="tier-row"><div class="tier-label" style="background:' + escapeHtml(t.color) + '">' + escapeHtml(t.label) + '</div><div class="tier-drop">' +
+        P.seq.filter(ii => P.place[ii] === ti).map(ii => '<div class="tier-item" title="' + escapeHtml(P.items[ii].name) + '"><img src="' + escapeHtml(P.items[ii].img) + '"><small>' + escapeHtml(P.items[ii].name) + '</small></div>').join('') +
+        '</div></div>';
+    });
+    html += '</div>';
+    finishSimple(snapshot, html, 'Вы расставили картинок: ' + P.items.length + '.');
+  }
+
+  // ---------- Челлендж: прохождение ----------
+  let chPlay = null;
+  function stopChallengeTimer(){ if(chPlay && chPlay.timer){ clearInterval(chPlay.timer); chPlay.timer = null; } }
+  function fmtClock(sec){ sec = Math.max(0, Math.floor(sec)); return Math.floor(sec / 60) + ':' + String(sec % 60).padStart(2, '0'); }
+
+  async function startChallengePlay(){
+    stopChallengeTimer();
+    const cats = tkQuestions.map(q => ({
+      id: q.id, name: q.question_text,
+      words: (q.options || []).map(o => ({ text: o.text, variants: [o.text].concat(o.alts || []), regions: o.regions || [], found: false, hinted: false }))
+    }));
+    chPlay = { cats, hints: Number(tkCfg.hints) || 0, used: 0, limit: (Number(tkCfg.timeLimit) || 0) * 60, t0: Date.now(), done: false, timer: null, hintList: [] };
+    const box = gid('tkQuestions');
+    box.innerHTML =
+      '<div class="ch-wrap"><div class="ch-left">' +
+        '<div class="ch-inputrow"><input id="chInput" class="answer-input" placeholder="Вводите слова..." autocomplete="off" maxlength="80"><div class="ch-timer" id="chTimer">0:00</div></div>' +
+        '<div class="ch-map" id="chMap"></div></div>' +
+      '<div class="ch-right"><div class="ch-total" id="chTotal"></div><div id="chCatsPlay"></div>' +
+        '<div class="ch-hintbox" id="chHintBox"></div>' +
+        '<div class="ch-btns"><button class="btn btn-create" id="chHintBtn"></button><button class="btn btn-ghost" id="chGiveUp" style="display:none">Сдаться</button></div>' +
+      '</div></div>';
+    const mapBox = gid('chMap');
+    if(tkCfg.svg){
+      if(tkCfg.svgType === 'svg'){
+        try {
+          const r = await fetch(tkCfg.svg);
+          const clean = sanitizeSvg(await r.text());
+          if(clean) mapBox.innerHTML = clean; else throw new Error('bad svg');
+        } catch(e){ mapBox.innerHTML = '<img src="' + escapeHtml(tkCfg.svg) + '" style="max-width:100%">'; }
+      } else mapBox.innerHTML = '<img src="' + escapeHtml(tkCfg.svg) + '" style="max-width:100%">';
+    } else mapBox.style.display = 'none';
+    const inp = gid('chInput');
+    inp.oninput = () => chTry(false);
+    inp.onkeydown = e => { if(e.key === 'Enter'){ e.preventDefault(); chTry(true); } };
+    gid('chHintBtn').onclick = chHint;
+    gid('chGiveUp').onclick = () => { if(confirm('Сдаться и посмотреть пропущенные слова?')) chFinish('Сдались'); };
+    chPlay.timer = setInterval(chTick, 500);
+    chTick(); chRender();
+    inp.focus();
+  }
+  function chCounts(){
+    let f = 0, t = 0;
+    chPlay.cats.forEach(c => c.words.forEach(w => { t++; if(w.found) f++; }));
+    return { f, t };
+  }
+  function chTick(){
+    if(!chPlay || chPlay.done) return;
+    const el = gid('chTimer');
+    if(!el){ stopChallengeTimer(); return; }
+    const el_s = (Date.now() - chPlay.t0) / 1000;
+    if(chPlay.limit){
+      const left = chPlay.limit - el_s;
+      el.textContent = fmtClock(left);
+      el.classList.toggle('low', left < 30);
+      if(left <= 0) chFinish('Время вышло');
+    } else el.textContent = fmtClock(el_s);
+  }
+  function chRender(){
+    const { f, t } = chCounts();
+    gid('chTotal').textContent = 'Найдено: ' + f + ' из ' + t;
+    const box = gid('chCatsPlay');
+    box.innerHTML = '';
+    chPlay.cats.forEach(c => {
+      const ff = c.words.filter(w => w.found);
+      const d = document.createElement('div');
+      d.className = 'ch-cat';
+      d.innerHTML = '<div class="ch-cat-h"><b>' + escapeHtml(c.name) + '</b><span>' + ff.length + '/' + c.words.length + '</span></div>' +
+        '<div class="ch-found">' + ff.map(w => '<span class="en-chip ok">' + escapeHtml(w.text) + '</span>').join('') + '</div>';
+      box.appendChild(d);
+    });
+    gid('chHintBox').innerHTML = chPlay.hintList.length
+      ? '<div class="ch-hint-h">Подсказки</div>' + chPlay.hintList.map(h => '<div class="ch-hint"><small>' + escapeHtml(h.cat) + '</small> ' + escapeHtml(h.text) + '</div>').join('')
+      : '';
+    const hb = gid('chHintBtn');
+    if(chPlay.hints > 0){
+      const left = chPlay.hints - chPlay.used;
+      hb.style.display = '';
+      hb.textContent = '💡 Подсказка (осталось ' + left + ')';
+      hb.disabled = left <= 0;
+    } else hb.style.display = 'none';
+    const canGive = f / t >= 0.5 && (chPlay.hints === 0 || chPlay.used >= chPlay.hints);
+    gid('chGiveUp').style.display = canGive ? '' : 'none';
+  }
+  function chTry(force){
+    if(!chPlay || chPlay.done) return;
+    const inp = gid('chInput');
+    const open = [];
+    chPlay.cats.forEach(c => c.words.forEach(w => { if(!w.found) open.push(w); }));
+    const hits = findMatches(inp.value, open, force);
+    if(!hits.length){
+      if(force && inp.value.trim()){ inp.classList.add('shake'); setTimeout(() => inp.classList.remove('shake'), 350); }
+      return;
+    }
+    hits.forEach(w => { w.found = true; chPaint(w); });
+    inp.value = '';
+    chRender();
+    const { f, t } = chCounts();
+    if(f === t) chFinish('Все слова найдены');
+  }
+  function chPaint(w){
+    const svg = gid('chMap') && gid('chMap').querySelector('svg');
+    if(!svg) return;
+    (w.regions || []).forEach(k => paintRegion(svg, k, '#3ddc84'));
+  }
+  function chHint(){
+    if(!chPlay || chPlay.done || chPlay.used >= chPlay.hints) return;
+    const pool = [];
+    chPlay.cats.forEach(c => c.words.forEach(w => { if(!w.found && !w.hinted) pool.push({ c, w }); }));
+    if(!pool.length) return;
+    const pick = pool[Math.floor(Math.random() * pool.length)];
+    pick.w.hinted = true;
+    chPlay.used++;
+    chPlay.hintList.push({ cat: pick.c.name, text: Array.from(pick.w.text).slice(0, 3).join('') + '…' });
+    chRender();
+  }
+  function chFinish(reason){
+    if(!chPlay || chPlay.done) return;
+    chPlay.done = true; stopChallengeTimer();
+    const { f, t } = chCounts();
+    const secs = Math.round((Date.now() - chPlay.t0) / 1000);
+    const missed = reason !== 'Все слова найдены';
+    const snapshot = {};
+    let html = '<div class="ch-summary">';
+    chPlay.cats.forEach(c => {
+      const ff = c.words.filter(w => w.found), mm = c.words.filter(w => !w.found);
+      html += '<div class="ch-cat"><div class="ch-cat-h"><b>' + escapeHtml(c.name) + '</b><span>' + ff.length + '/' + c.words.length + '</span></div><div class="ch-found">' +
+        ff.map(w => '<span class="en-chip ok">' + escapeHtml(w.text) + '</span>').join('') +
+        mm.map(w => '<span class="en-chip miss">' + escapeHtml(w.text) + '</span>').join('') + '</div></div>';
+      snapshot[c.id] = { qtext: c.name, given: ff.length + ' из ' + c.words.length + (ff.length ? ': ' + ff.map(w => w.text).join(', ') : ''),
+                         points: null, comment: mm.length ? 'Не найдено: ' + mm.map(w => w.text).join(', ') : '' };
+    });
+    html += '</div>';
+    finishSimple(snapshot, html, (missed ? reason + '. ' : '') + 'Найдено слов: ' + f + ' из ' + t + ' за ' + fmtClock(secs) + '.');
+  }
+
+
+  function showQuizResult(res, total, pct, extraHtml, descOverride){
     document.getElementById('quizContent').style.display = 'none';
     document.getElementById('quizResultView').style.display = 'block';
     document.getElementById('qrImg').src = (res.image_url && res.image_url.startsWith('http')) ? res.image_url : DEFAULT_AVA + encodeURIComponent(res.title);
     document.getElementById('qrTitle').textContent = res.title;
-    document.getElementById('qrDesc').textContent = (res.description ? res.description + ' ' : '') + 'Вы набрали ' + total + ' очк. (' + pct + '%)';
+    document.getElementById('qrDesc').textContent = descOverride != null ? descOverride : (res.description ? res.description + ' ' : '') + 'Вы набрали ' + total + ' очк. (' + pct + '%)';
+    document.getElementById('qrExtra').innerHTML = extraHtml || '';
     const toStats = document.getElementById('toStatsBtn');
     if(lastHistoryId){
       toStats.style.display = 'block';
@@ -1753,7 +3159,7 @@
       div.className = 'stats-row';
       div.innerHTML = '<div class="sr-q">' + escapeHtml(a.qtext) + '</div>' +
         '<div class="sr-ans">Ваш ответ: <b>' + escapeHtml(a.given || '—') + '</b></div>' +
-        '<div class="sr-pts">+' + a.points + ' очков</div>' +
+        (a.points != null ? '<div class="sr-pts">+' + a.points + ' очков</div>' : '') +
         (a.comment ? '<div class="sr-comment">💬 ' + escapeHtml(a.comment) + '</div>' : '');
       box.appendChild(div);
     });
