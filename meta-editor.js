@@ -851,7 +851,7 @@ function stopPlayPreview(){ if(window.META._stopPlay) window.META._stopPlay(); }
 function openProjectPage(id){
   injectStyles();
   buildPage();
-  if(!window.currentUser){
+  if(!currentUser){
     alert('Войдите в аккаунт, чтобы открыть метаредактор');
     location.hash = '';
     return;
@@ -885,7 +885,7 @@ function openProjectsPage(){
   window.showPage('metaListPage');
   const grid = $('metaProjectsGrid');
   grid.innerHTML = '<p style="color:rgba(255,255,255,.8)">Загрузка…</p>';
-  if(!window.currentUser){ grid.innerHTML = '<p style="color:rgba(255,255,255,.8)">Войдите, чтобы видеть свои проекты</p>'; return; }
+  if(!currentUser){ grid.innerHTML = '<p style="color:rgba(255,255,255,.8)">Войдите, чтобы видеть свои проекты</p>'; return; }
   listMyProjects().then(list => {
     grid.innerHTML = '';
     if(!list.length){ grid.innerHTML = '<p style="color:rgba(255,255,255,.8)">Пока нет проектов. Создайте первый!</p>'; return; }
@@ -1073,6 +1073,20 @@ window.metaRoute = function(h){
   if(typeof renderNav === 'function') tryOverride();
   const t = setInterval(() => { tryOverride(); if(document.getElementById('navBox')) { addBtn(); clearInterval(t); } }, 200);
   setTimeout(addBtn, 1000);
+// --- Синхронизация пользователя ---
+(async function syncUser(){
+  try {
+    const { data } = await sb.auth.getSession();
+    if (data && data.session && data.session.user) {
+      window.currentUser = data.session.user;
+    }
+  } catch(e) {}
+  sb.auth.onAuthStateChange((event, session) => {
+    if (session && session.user) {
+      window.currentUser = session.user;
+    } else {
+      window.currentUser = null;
+    }
+  });
 })();
-
 })();
